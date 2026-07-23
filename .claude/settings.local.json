@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/c/Users/ADM/Desktop/Desenvolvimentos locais/Portfólio Mari Mou\" && mkdir -p src/assets src/components public 2>&1)"
+    ]
+  }
+}

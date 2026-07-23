@@ -1,0 +1,220 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Alexandria', sans-serif;
+  color: #3A3B35;
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* Fundo claro com grid + vinheta radial — Hero e SobreMimTeaser.
+   Opacidade das linhas: 0.15 (mais visível que antes).
+   Vinheta começa em 65% e dissolve até 92% para lãs deixar o grid legível no centro. */
+.bg-grid-light {
+  background-color: #F5FAE2;
+  background-image:
+    radial-gradient(ellipse at center, transparent 65%, #F5FAE2 92%),
+    linear-gradient(rgba(185, 212, 64, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(185, 212, 64, 0.15) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+}
+
+/* Fundo escuro chapado com grid — usado em Serviços e Portfólio */
+.bg-grid-dark {
+  background-color: #303324;
+  background-image:
+    linear-gradient(rgba(185, 212, 64, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(185, 212, 64, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Grids com intensidade reduzida para a página Sobre */
+.bg-grid-light-sobre {
+  background-color: #F5FAE2;
+  background-image:
+    radial-gradient(ellipse at center, transparent 65%, #F5FAE2 92%),
+    linear-gradient(rgba(185, 212, 64, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(185, 212, 64, 0.08) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+}
+
+.bg-grid-dark-sobre {
+  background-color: #303324;
+  background-image:
+    linear-gradient(rgba(185, 212, 64, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(185, 212, 64, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Grid marrom sutil do footer — usa a cor dos botões/texto (near-black, tom
+   quente/amarronzado) a 14% de opacidade (< opacidade dos botões/texto). */
+.bg-grid-footer {
+  background-image:
+    linear-gradient(rgba(58, 59, 53, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(58, 59, 53, 0.14) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Ícones de ferramentas (Claude, Figma, Creative Cloud, Cursor) */
+.tool-icon {
+  cursor: pointer;
+  transition: transform 300ms var(--ease-spring);
+  will-change: transform;
+}
+
+.tool-icon:hover,
+.tool-icon:focus-visible {
+  transform: translateY(-6px) rotate(-4deg) scale(1.05);
+}
+
+.tool-icon[data-side='right']:hover,
+.tool-icon[data-side='right']:focus-visible {
+  transform: translateY(-6px) rotate(4deg) scale(1.05);
+}
+
+/* Botões — efeito de hover único e sutil */
+.btn-pill {
+  transition: transform 150ms var(--ease-out);
+}
+
+.btn-pill:hover,
+.btn-pill:focus-visible {
+  transform: scale(1.03);
+}
+
+/* Carrosséis horizontais com scroll-snap */
+.carousel-track {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-card {
+  scroll-snap-align: start;
+}
+
+/* Fade verde na borda direita dos carrosséis (Serviços e Portfólio) */
+.carousel-fade {
+  position: relative;
+}
+
+.carousel-fade::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 96px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(48, 51, 36, 0), #303324);
+}
+
+/* Snap preciso entre as seções full-screen.
+   - mandatory: cada scroll para EXATAMENTE na próxima seção, sem overshoot.
+   - smooth: a animação de rolagem permanece fluida. */
+html.snap-enabled {
+  scroll-snap-type: y mandatory;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estados iniciais escondidos — revelados via GSAP (ScrollTrigger + SplitText).
+   Só aplicam quando o JS adicionou .gsap-enabled ao <html>; se o JS falhar,
+   o conteúdo aparece normalmente (sem tela em branco). */
+.gsap-enabled [data-split],
+.gsap-enabled .reveal,
+.gsap-enabled .reveal-fade {
+  opacity: 0;
+}
+
+.split-line {
+  will-change: transform;
+}
+
+/* (bolinha do hamburger removida — agora o ícone é 3 linhas / X padrão) */
+
+/* "Riscadinho" — sublinhado verde do link do Hero.
+   Texto preto (igual ao resto da frase), sem hover. O sublinhado é um
+   gradiente que anima a largura na entrada (0% -> 100%), como um risco. */
+.risco {
+  color: #3A3B35;
+  text-decoration: none;
+  background-image: linear-gradient(#B9D440, #B9D440);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 3px; /* estado final (fallback sem JS) */
+  padding-bottom: 2px;
+}
+/* Estado inicial da animação de entrada — só com JS ativo */
+.gsap-enabled .risco {
+  background-size: 0% 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gsap-enabled .risco {
+    background-size: 100% 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+  }
+
+  .gsap-enabled [data-split],
+  .gsap-enabled .reveal,
+  .gsap-enabled .reveal-fade {
+    opacity: 1;
+  }
+}
+
+/* Transição de fade + slide para os cards filtrados do Portfólio */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-slide-in {
+  animation: fadeSlideIn 220ms var(--ease-out);
+}
