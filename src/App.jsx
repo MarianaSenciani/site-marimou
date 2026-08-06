@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+
 import Header from './components/Header.jsx';
 import Hero from './components/Hero.jsx';
 import SobreMimTeaser from './components/SobreMimTeaser.jsx';
@@ -9,6 +10,10 @@ import Servicos from './components/Servicos.jsx';
 import Portfolio from './components/Portfolio.jsx';
 import Footer from './components/Footer.jsx';
 import Sobre from './components/Sobre.jsx';
+
+import AdminApp from './admin/AdminApp.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { CVProvider } from './context/CVContext.jsx';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -40,7 +45,6 @@ export default function App() {
     const handleAnchorClick = (e) => {
       const anchor = e.target.closest('a');
       if (!anchor) return;
-
       const href = anchor.getAttribute('href');
       if (!href) return;
 
@@ -77,7 +81,6 @@ export default function App() {
       } else if (href.startsWith('#')) {
         e.preventDefault();
         const hash = href.substring(1);
-
         if (window.location.pathname !== '/') {
           window.history.pushState({}, '', '/' + href);
           setCurrentPath('/');
@@ -107,6 +110,11 @@ export default function App() {
     // Acessibilidade: sem animação, mostra tudo direto.
     if (reduceMotion) {
       root.classList.remove('gsap-enabled');
+      return undefined;
+    }
+
+    // Se for na área admin, ignora as animações da landing page para não bugar
+    if (currentPath.startsWith('/admin')) {
       return undefined;
     }
 
@@ -195,17 +203,28 @@ export default function App() {
       console.error('Falha ao inicializar animações GSAP:', err);
       return undefined;
     }
-
     return () => {
       ctx && ctx.revert();
     };
   }, [currentPath]); // Re-inicia animações quando a rota muda
 
+  if (currentPath.startsWith('/admin')) {
+    return (
+      <AuthProvider>
+        <CVProvider>
+          <AdminApp currentPath={currentPath} />
+        </CVProvider>
+      </AuthProvider>
+    );
+  }
+
   return (
     <div ref={rootRef} className={`font-alexandria ${currentPath === '/sobre' ? 'bg-[#303324]' : ''}`}>
       <Header currentPath={currentPath} />
       {currentPath === '/sobre' ? (
-        <Sobre />
+        <CVProvider>
+          <Sobre />
+        </CVProvider>
       ) : (
         <>
           <Hero />

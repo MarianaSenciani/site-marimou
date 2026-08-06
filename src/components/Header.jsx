@@ -6,13 +6,16 @@ const WHATSAPP_URL =
 
 export default function Header({ currentPath = '/' }) {
   const isSobre = currentPath === '/sobre';
+
   const navLinks = [
     { label: 'Serviços', href: isSobre ? '/#servicos' : '#servicos' },
     { label: 'Portfólio', href: isSobre ? '/#portfolio' : '#portfolio' },
     // Sempre aponta para a página Sobre completa, não para o teaser
     { label: 'Sobre', href: '/sobre' },
     { label: 'Contato', href: isSobre ? '/#contato' : '#contato' },
+    { label: 'Admin', href: '/admin' },
   ];
+
   const [open, setOpen] = useState(false);
   const hamRef = useRef(null);
   const firstLinkRef = useRef(null);
@@ -22,6 +25,7 @@ export default function Header({ currentPath = '/' }) {
     if (!open) return undefined;
     // preventScroll evita que o foco role a página (que, com scroll-snap, pularia de seção).
     firstLinkRef.current?.focus({ preventScroll: true });
+
     const onKey = (e) => {
       if (e.key === 'Escape') {
         setOpen(false);
@@ -109,6 +113,7 @@ export default function Header({ currentPath = '/' }) {
             </li>
           ))}
         </ul>
+
         <a
           href={WHATSAPP_URL}
           target="_blank"

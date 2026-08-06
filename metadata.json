@@ -1,0 +1,8 @@
+{
+  "name": "Mari Mou Portfolio",
+  "description": "Portfolio for Product Designer and Art Director Mari Mou.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -73,6 +73,7 @@ function ProjectCard({ project }) {
 
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState('Product Design');
+
   const visibleProjects = projects.filter((p) => p.category === activeFilter);
 
   return (

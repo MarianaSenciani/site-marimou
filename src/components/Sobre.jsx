@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useCV } from '../context/CVContext.jsx';
 import sobrePhoto from '../assets/sobre-photo.png';
 
 // Lista de Cursos Complementares com suas categorias para o filtro
@@ -71,6 +72,9 @@ const categories = [
 ];
 
 export default function Sobre() {
+  const { cvData } = useCV();
+  const languages = cvData.pt?.languages || [];
+
   const [activeFilter, setActiveFilter] = useState('Todos');
   const [filteredCursos, setFilteredCursos] = useState(cursosData);
 
@@ -385,42 +389,35 @@ export default function Sobre() {
       <section className="bg-grid-dark-sobre py-16 md:py-24 text-white border-t border-white/5">
         <div className="max-w-[1040px] mx-auto px-6">
           <span className="text-lime font-bold tracking-wider text-xs sm:text-sm uppercase block text-center mb-2 reveal">
-            FERRAMENTAS & COMPETÊNCIAS
+            IDIOMAS
           </span>
           <h2 data-split className="text-white text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12">
-            Com o que trabalho.
+            Línguas que eu falo.
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto reveal">
-            {/* Inglês */}
-            <div className="bg-[#515443]/45 border border-white/10 rounded-3xl p-6 flex items-center justify-between gap-4">
-              <div className="flex gap-4 items-center">
-                <span className="text-3xl shrink-0" role="img" aria-label="Bandeira dos EUA/Reino Unido">
-                  🇺🇸
-                </span>
-                <div>
-                  <h4 className="font-bold text-base sm:text-lg">Inglês</h4>
+            {languages.map((lang, idx) => (
+              <div key={idx} className="bg-[#515443]/45 border border-white/10 rounded-3xl p-6 flex items-center justify-between gap-4">
+                <div className="flex gap-4 items-center">
+                  <div className="shrink-0 w-10 h-10 overflow-hidden rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5">
+                    {lang.code ? (
+                      <img src={`https://flagcdn.com/w40/${lang.code}.png`} alt={lang.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-xl">🌐</span>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-base sm:text-lg">{lang.name}</h4>
+                  </div>
                 </div>
-              </div>
-              <span className="bg-lime text-near-black text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full border border-near-black/5">
-                Bilingual (C1)
-              </span>
-            </div>
-
-            {/* Português */}
-            <div className="bg-[#515443]/45 border border-white/10 rounded-3xl p-6 flex items-center justify-between gap-4">
-              <div className="flex gap-4 items-center">
-                <span className="text-3xl shrink-0" role="img" aria-label="Bandeira do Brasil">
-                  🇧🇷
+                <span className="bg-lime text-near-black text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full border border-near-black/5">
+                  {lang.level}
                 </span>
-                <div>
-                  <h4 className="font-bold text-base sm:text-lg">Português</h4>
-                </div>
               </div>
-              <span className="bg-lime text-near-black text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full border border-near-black/5">
-                Nativo
-              </span>
-            </div>
+            ))}
+            {languages.length === 0 && (
+              <p className="text-center text-white/50 col-span-1 md:col-span-2">Nenhum idioma cadastrado.</p>
+            )}
           </div>
         </div>
       </section>

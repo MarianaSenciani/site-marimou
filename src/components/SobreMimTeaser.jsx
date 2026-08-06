@@ -8,10 +8,8 @@ export default function SobreMimTeaser() {
   return (
     <section id="sobre" className="bg-grid-light min-h-screen snap-start flex flex-col justify-center">
       <div className="max-w-[1040px] w-full mx-auto px-6 pt-0 pb-10 md:pb-12">
-
         {/* ── Desktop: 3 colunas [ícones esq | conteúdo | ícones dir] ── */}
         <div className="hidden md:flex items-center justify-between gap-8">
-
           {/* Coluna esquerda */}
           <div className="flex flex-col items-center justify-center gap-10 shrink-0 w-44">
             <img
@@ -98,7 +96,6 @@ export default function SobreMimTeaser() {
             <img src={toolCursor} alt="Ícone Cursor" data-side="right" tabIndex={0} className="tool-icon reveal-fade w-20" />
           </div>
         </div>
-
       </div>
     </section>
   );

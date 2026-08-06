@@ -11,7 +11,6 @@ export default function Hero() {
 
         {/* Container central: Bitmoji (maior), texto lateral, botão Baixar CV */}
         <div className="relative flex flex-col items-center md:flex-row md:items-center justify-between gap-6 md:gap-4 -mt-4 md:-mt-12">
-
           {/* Texto lateral — posicionado à esquerda no desktop */}
           <p className="reveal order-2 md:order-none text-near-black text-base md:text-lg max-w-[240px] text-center md:text-left">
             {/* Sublinhado verde animado na entrada (ver .risco) */}
