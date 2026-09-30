@@ -1,0 +1,33 @@
+export const initialProjects = [
+  { id: 'fluxo', title: 'Fluxo', category: 'Produto digital', subtitle: 'Finanças com mais leveza.', image: '', tile: 0, year: 'Estudo visual', description: 'Uma exploração de interface para simplificar a relação das pessoas com o dinheiro. Hierarquia clara, dados fáceis de entender e uma experiência que cabe na rotina.', tags: ['UX/UI', 'Mobile', 'Design system'], demo: true },
+  { id: 'forma', title: 'Forma', category: 'Design gráfico', subtitle: 'Uma marca que vai com você.', image: '', tile: 1, year: 'Estudo visual', description: 'Uma proposta de identidade que conecta tipografia expressiva, materiais naturais e aplicações do dia a dia. Da composição gráfica à presença da marca no mundo físico.', tags: ['Branding', 'Identidade visual', 'Embalagem'], demo: true },
+  { id: 'entre-formas', title: 'Entre formas', category: 'Webdesign', subtitle: 'Espaço para novas perspectivas.', image: '', tile: 3, year: 'Estudo visual', description: 'Um conceito de presença digital para um estúdio de arquitetura, com navegação direta, respiro e uma linguagem visual que deixa os projetos em primeiro plano.', tags: ['Webdesign', 'UI', 'Responsivo'], demo: true },
+  { id: 'botanica', title: 'Botânica', category: 'Design digital', subtitle: 'Ideias que florescem.', image: '', tile: 2, year: 'Estudo visual', description: 'Uma direção visual que combina formas orgânicas, cor e composição editorial. Um ponto de partida para desdobramentos de campanha em diferentes formatos.', tags: ['Direção de arte', 'Campanha', 'Editorial'], demo: true },
+];
+
+export const processContent = [
+  { name: 'Produto digital', title: 'um produto digital', intro: 'Do problema certo à solução que faz sentido. Com pesquisa, experimentação e troca em cada etapa.', steps: [
+    ['Descobrir', 'Antes da solução, as pessoas.', 'Converso com o cliente, escuto usuários e investigo o contexto do produto. Reúno referências, dados disponíveis e fricções da jornada para entender o que realmente precisa mudar.', ['Alinhamento inicial', 'Pesquisa com usuários', 'Benchmarking']],
+    ['Definir', 'Transformar descobertas em direção.', 'Organizo os aprendizados, priorizo necessidades e alinho o desafio com o time. Desenho jornadas e fluxos, definindo o escopo e como vamos avaliar se a solução funciona.', ['Jornada do usuário', 'Fluxos', 'Critérios de sucesso']],
+    ['Desenvolver', 'Dar forma, testar e aprender.', 'Exploro alternativas em wireframes, evoluo a interface e construo protótipos navegáveis. Testo tarefas com usuários e uso o feedback para refinar a solução, com atenção à acessibilidade.', ['Wireframes', 'Protótipos', 'Testes de usabilidade']],
+    ['Entregar & evoluir', 'O lançamento é um novo começo.', 'Documento componentes, estados e comportamentos para o desenvolvimento. Acompanho a implementação e, com feedback e métricas disponíveis, identifico os próximos ajustes.', ['Design system', 'Handoff', 'Acompanhamento']],
+  ] },
+  { name: 'Webdesign', title: 'um website', intro: 'Estratégia, conteúdo e uma experiência fluida. Do primeiro clique ao objetivo de cada página.', steps: [
+    ['Entender', 'Cada site começa com um objetivo.', 'Alinho público, proposta de valor, conteúdo e a ação esperada de quem visita. Analiso o site atual, quando existe, e busco referências de navegação e linguagem visual.', ['Briefing', 'Objetivos', 'Referências']],
+    ['Estruturar', 'Um caminho claro para navegar.', 'Organizo as páginas e a hierarquia das informações. Desenho wireframes pensando primeiro no celular e conecto conteúdo, navegação e chamadas para ação.', ['Mapa do site', 'Arquitetura', 'Wireframes']],
+    ['Criar & validar', 'Identidade em cada interação.', 'Desenvolvo layouts responsivos e protótipos, explorando tipografia, imagens e microinterações. Valido a leitura e os caminhos principais, ajustando com o cliente.', ['UI responsiva', 'Protótipo', 'Validação']],
+    ['Publicar & acompanhar', 'Cuidar também dos detalhes finais.', 'Preparo a entrega ou implementação, reviso telas em diferentes dispositivos e verifico links, formulários e acessibilidade. Depois, acompanho os sinais de uso para propor melhorias.', ['Handoff', 'Revisão', 'Análise de uso']],
+  ] },
+  { name: 'Design gráfico', title: 'uma identidade visual', intro: 'Conceito que ganha forma, personalidade e presença. No papel, nos objetos e em cada ponto de contato.', steps: [
+    ['Investigar', 'Conhecer a essência da marca.', 'Entendo a história, o público e o contexto da marca. Alinho objetivos e aplicações previstas, pesquisando referências e o universo visual do segmento.', ['Briefing', 'Pesquisa', 'Referências']],
+    ['Conceituar', 'Uma ideia para orientar tudo.', 'Construo rotas visuais e moodboards, explorando o que a marca quer comunicar. Apresento os caminhos e alinho uma direção antes de desenvolver as peças.', ['Moodboard', 'Conceito', 'Direção de arte']],
+    ['Desenvolver', 'Experimentar a marca no mundo.', 'Exploro tipografia, cor e composição, aplicando o conceito em peças e mockups. Valido legibilidade, consistência e adequação aos formatos com o cliente.', ['Identidade', 'Aplicações', 'Validação']],
+    ['Finalizar', 'Tudo pronto para ganhar vida.', 'Organizo arquivos, especificações e orientações de uso. Para materiais físicos, verifico sangria, cores e requisitos de produção com o fornecedor.', ['Arte-final', 'Guia de uso', 'Arquivos organizados']],
+  ] },
+  { name: 'Design digital', title: 'uma campanha digital', intro: 'Uma boa ideia, muitos formatos. Comunicação visual que conecta marca, mensagem e contexto.', steps: [
+    ['Alinhar', 'Entender a mensagem e o momento.', 'Mapeio o objetivo da campanha, o público e os canais. Reúno conteúdo, referências e requisitos de cada formato para construir um briefing claro.', ['Briefing', 'Canais', 'Pesquisa visual']],
+    ['Explorar', 'Encontrar uma direção marcante.', 'Desenvolvo caminhos criativos, key visuals e uma proposta de linguagem. Alinho conceito, tom e hierarquia da mensagem antes de desdobrar a campanha.', ['Conceito', 'Key visual', 'Roteiro']],
+    ['Criar & desdobrar', 'Consistência sem perder o ritmo.', 'Produzo peças estáticas e, conforme o escopo, animações. Adapto o conceito a diferentes telas e formatos, revisando leitura, ritmo e unidade visual.', ['Social', 'Mídia digital', 'Motion']],
+    ['Entregar & aprender', 'Publicar, observar, ajustar.', 'Entrego as peças organizadas por canal e especificação. A partir dos resultados compartilhados pelo time, proponho novas versões e testes de mensagem ou composição.', ['Exportação', 'Variações', 'Aprendizados']],
+  ] },
+];

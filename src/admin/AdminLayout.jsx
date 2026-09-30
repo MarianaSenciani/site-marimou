@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext.jsx';
 import { useCV } from '../context/CVContext.jsx';
 import AdminPersonalInfo from './AdminPersonalInfo.jsx';
 import AdminSummary from './AdminSummary.jsx';
@@ -12,26 +11,26 @@ import AdminKeywords from './AdminKeywords.jsx';
 import AdminAppearance from './AdminAppearance.jsx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { Upload } from 'lucide-react';
+import { Download, Upload } from 'lucide-react';
 
 export default function AdminLayout({ currentPath }) {
-  const { logout } = useAuth();
-  const { cvData, designData, setCvData } = useCV();
+  const { cvData, designData, setCvData, saveStatus, aiEnabled, autoTranslate, setAutoTranslate } = useCV();
   const [activeTab, setActiveTab] = useState('info');
   const [language, setLanguage] = useState('pt');
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [pdfStatus, setPdfStatus] = useState('');
 
   const tabs = [
-    { id: 'info', label: '👤 Info Pessoal' },
-    { id: 'summary', label: '📝 Resumo' },
-    { id: 'experience', label: '💼 Experiência' },
-    { id: 'education', label: '🎓 Formação' },
-    { id: 'courses', label: '📚 Cursos' },
-    { id: 'skills', label: '⚙️ Habilidades' },
-    { id: 'languages', label: '🌐 Idiomas' },
-    { id: 'keywords', label: '🔑 Keywords' },
-    { id: 'appearance', label: '🎨 Aparência' },
+    { id: 'info', label: 'Dados pessoais' },
+    { id: 'summary', label: 'Resumo' },
+    { id: 'experience', label: 'Experiência' },
+    { id: 'education', label: 'Formação' },
+    { id: 'courses', label: 'Cursos' },
+    { id: 'skills', label: 'Habilidades' },
+    { id: 'languages', label: 'Idiomas' },
+    { id: 'keywords', label: 'Palavras-chave' },
+    { id: 'appearance', label: 'Aparência' },
   ];
 
   const renderContent = () => {
@@ -49,10 +48,10 @@ export default function AdminLayout({ currentPath }) {
     }
   };
 
-  const handleExportPDF = async () => {
+  const handleExportPDF = async (publish = false) => {
     setIsExporting(true);
     const element = document.getElementById('cv-preview');
-    if (!element) return;
+    if (!element) { setIsExporting(false); return; }
 
     try {
       // Small delay to ensure any fonts/images are loaded
@@ -84,13 +83,32 @@ export default function AdminLayout({ currentPath }) {
         });
       }
 
-      pdf.save(`CV_${cvData[language]?.personal?.name?.replace(/\s+/g, '_') || 'Mariana'}_${language.toUpperCase()}.pdf`);
+      if (publish) {
+        const response = await fetch('/api/cv/pdf', { method: 'PUT', headers: { 'Content-Type': 'application/pdf' }, body: pdf.output('blob') });
+        if (!response.ok) throw new Error('Falha ao atualizar o PDF');
+        setPdfStatus('PDF atualizado para download na prévia do site.');
+      } else {
+        pdf.save(`CV_${cvData[language]?.personal?.name?.replace(/\s+/g, '_') || 'Mariana'}_${language.toUpperCase()}.pdf`);
+        setPdfStatus('PDF baixado. Você também pode atualizar o arquivo oferecido no site.');
+      }
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Erro ao gerar PDF. Tente novamente.');
+      setPdfStatus('Não foi possível gerar ou atualizar o PDF. Tente novamente.');
     } finally {
       setIsExporting(false);
     }
+  };
+
+  const handlePublicPDF = async event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf' || file.size > 10 * 1024 * 1024) { setPdfStatus('Escolha um PDF de até 10 MB.'); event.target.value = ''; return; }
+    try {
+      const response = await fetch('/api/cv/pdf', { method: 'PUT', headers: { 'Content-Type': 'application/pdf' }, body: file });
+      if (!response.ok) throw new Error();
+      setPdfStatus('PDF enviado. O botão “Baixar currículo” da prévia já usa este arquivo.');
+    } catch { setPdfStatus('Não foi possível salvar este PDF no servidor local.'); }
+    event.target.value = '';
   };
 
   const handleImportCV = async (e) => {
@@ -115,81 +133,67 @@ export default function AdminLayout({ currentPath }) {
             ...parsedData
           }
         }));
-        alert('CV importado com sucesso!');
+        setPdfStatus('Dados do currículo importados. Revise os campos antes de atualizar o PDF.');
       } else {
-        alert('Falha ao importar CV.');
+        setPdfStatus('Falha ao importar os dados do currículo.');
       }
     } catch (err) {
       console.error(err);
-      alert('Erro ao importar CV.');
+      setPdfStatus('Não foi possível importar os dados do currículo.');
     } finally {
       setIsImporting(false);
+      e.target.value = '';
     }
   };
 
   return (
-    <div className="min-h-screen bg-grid-dark font-alexandria flex text-bg-cream">
-      {/* Sidebar */}
-      <aside className="w-[240px] shrink-0 border-r border-white/10 flex flex-col bg-[#303324]/80 backdrop-blur">
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-xl font-bold text-lime tracking-tight">Admin CV</h1>
-        </div>
+    <div className="admin-cv-page admin-container">
+      <div className="admin-kicker"><span>CONTEÚDO / CURRÍCULO</span><span>03 / 03</span></div>
+      <div className="admin-page-heading"><div><p className="admin-eyebrow">TRAJETÓRIA EM CONSTRUÇÃO</p><h1>Sua história,<br /><em>bem contada.</em></h1></div><p>Edite os dados ao lado da prévia. As mudanças na página Sobre mim aparecem imediatamente; o PDF pode ser atualizado separadamente.</p></div>
+      <div className="admin-cv">
+      <aside className="admin-cv-nav">
+        <div className="admin-cv-nav-heading"><span>SEÇÕES DO CURRÍCULO</span><strong>09</strong></div>
         
-        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+        <nav aria-label="Seções do currículo">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full text-left px-4 py-3 rounded-[12px] text-sm font-medium transition-all duration-150 ${
-                activeTab === tab.id
-                  ? 'bg-lime text-near-black font-bold shadow-sm'
-                  : 'text-white/80 hover:bg-white/10 hover:text-white'
-              }`}
+              className={activeTab === tab.id ? 'is-active' : ''}
+              aria-current={activeTab === tab.id ? 'true' : undefined}
             >
               {tab.label}
             </button>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10 space-y-2">
-          <label className="flex w-full items-center justify-center gap-2 px-4 py-3 text-sm font-bold bg-white/5 hover:bg-white/10 text-white rounded-pill cursor-pointer transition-colors border border-white/10">
+        <div className="admin-cv-nav-tools">
+          <label className={`admin-import-ai ${!aiEnabled ? 'is-disabled' : ''}`}>
             <Upload size={16} />
-            {isImporting ? 'Importando...' : 'Importar PDF CV'}
+            {isImporting ? 'Importando...' : aiEnabled ? 'Importar PDF com Gemini' : 'Importação IA não configurada'}
             <input 
               type="file" 
               accept=".pdf" 
               onChange={handleImportCV}
-              disabled={isImporting}
+              disabled={isImporting || !aiEnabled}
               className="hidden" 
             />
           </label>
           
-          <a href="/admin" className="block w-full text-center px-4 py-2 text-sm text-white/70 hover:text-white transition-colors">
-            Voltar ao Painel
-          </a>
-          <a href="/" className="block w-full text-center px-4 py-2 text-sm text-white/70 hover:text-white transition-colors">
-            Ver site
-          </a>
-          <button
-            onClick={logout}
-            className="w-full px-4 py-3 text-sm font-bold bg-transparent border-2 border-lime text-lime hover:bg-lime hover:text-near-black rounded-pill transition-colors"
-          >
-            Sair
-          </button>
+          <span>IMPORTAR DADOS COM IA EXIGE CHAVE GEMINI.</span>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col max-h-screen overflow-hidden relative">
-        {/* Header */}
-        <header className="h-[72px] shrink-0 border-b border-white/10 flex items-center justify-between px-8 bg-[#303324]/90 backdrop-blur z-10">
-          <h2 className="text-xl font-bold text-white">
-            Editar: {tabs.find((t) => t.id === activeTab)?.label.substring(3)}
+      <main className="admin-cv-main">
+        <div className="admin-cv-status" role="status">{saveStatus || 'Currículo pronto para editar.'}{pdfStatus && <span>{pdfStatus}</span>}{aiEnabled && <label><input type="checkbox" checked={autoTranslate} onChange={e => setAutoTranslate(e.target.checked)} /> Traduzir automaticamente com Gemini</label>}</div>
+        <header className="admin-cv-toolbar">
+          <h2>
+            Editar: {tabs.find((tab) => tab.id === activeTab)?.label}
           </h2>
           
           <div className="flex items-center gap-3">
-            <span className="text-sm font-bold text-white/70 uppercase tracking-widest">Idioma:</span>
-            <div className="flex bg-[#3A3B35] rounded-full p-1 border border-white/10">
+            <span>IDIOMA</span>
+            <div className="admin-language-switch">
               {[
                 { id: 'pt', label: 'PT' },
                 { id: 'en', label: 'EN' },
@@ -198,11 +202,8 @@ export default function AdminLayout({ currentPath }) {
                 <button
                   key={lang.id}
                   onClick={() => setLanguage(lang.id)}
-                  className={`px-4 py-1.5 text-xs font-bold rounded-full transition-colors ${
-                    language === lang.id
-                      ? 'bg-lime text-near-black'
-                      : 'text-white/70 hover:text-white'
-                  }`}
+                  className={language === lang.id ? 'is-active' : ''}
+                  aria-pressed={language === lang.id}
                 >
                   {lang.label}
                 </button>
@@ -211,25 +212,18 @@ export default function AdminLayout({ currentPath }) {
           </div>
         </header>
 
-        {/* Editor & Preview Split */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Editor Area */}
-          <div className="w-1/2 overflow-y-auto p-8 relative z-0">
+        <div className="admin-cv-workspace">
+          <div className="admin-cv-editor">
             {renderContent()}
           </div>
           
-          {/* Preview Area */}
-          <div className="w-1/2 overflow-y-auto p-8 bg-grid-light border-l border-white/10 relative z-0">
-            <div className="mb-6 flex justify-between items-center bg-[#F5FAE2]/90 backdrop-blur p-4 rounded-2xl border border-near-black/10 shadow-sm sticky top-0 z-10">
-              <span className="text-xs font-bold tracking-[0.1em] text-near-black uppercase">Preview do Currículo</span>
-              <button 
-                onClick={handleExportPDF}
-                disabled={isExporting}
-                className="text-xs font-bold text-near-black bg-lime px-4 py-2 rounded-pill hover:scale-105 transition-transform duration-150 disabled:opacity-50 disabled:hover:scale-100"
-              >
-                {isExporting ? 'Exportando...' : 'Exportar PDF'}
-              </button>
+          <div className="admin-cv-preview">
+            <div className="admin-cv-preview-toolbar">
+              <span>PRÉVIA DO CURRÍCULO</span>
+              <div><button onClick={() => handleExportPDF(false)} disabled={isExporting}><Download size={15} /> Baixar PDF</button><button onClick={() => handleExportPDF(true)} disabled={isExporting}>{isExporting ? 'Gerando…' : 'Atualizar PDF do site'}</button></div>
             </div>
+            <div className="admin-cv-pdf-upload"><label><Upload size={15} /> Enviar um PDF pronto<input type="file" accept="application/pdf,.pdf" onChange={handlePublicPDF} hidden /></label><a href="/api/cv/pdf" target="_blank" rel="noreferrer">Ver PDF oferecido no site ↗</a></div>
+            <p className="admin-pdf-note">O PDF gerado pela prévia é visual. Para candidaturas que leem texto automaticamente, envie um PDF pronto com texto selecionável.</p>
             {/* The preview box */}
             <div 
               id="cv-preview" 
@@ -402,6 +396,8 @@ export default function AdminLayout({ currentPath }) {
           </div>
         </div>
       </main>
+      </div>
+      <p className="admin-local-note">PRÉVIA LOCAL <span>•</span> Dados e PDF salvos neste computador. Atualizar o PDF do site não publica alterações na versão hospedada.</p>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import './index.css';
 
 // Marca que o JS está ativo: habilita os estados iniciais escondidos das animações.
 // Se este script não rodar, o conteúdo fica visível normalmente.
-document.documentElement.classList.add('gsap-enabled');
+document.documentElement.classList.remove('gsap-enabled');
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

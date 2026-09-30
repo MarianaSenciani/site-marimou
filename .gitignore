@@ -2,3 +2,11 @@ node_modules/
 dist/
 .DS_Store
 *.log
+.env
+.env.*
+!.env.example
+upstream/
+asset-contact-sheet.jpg
+repo-assets.jpg
+tmp/
+.local-data/

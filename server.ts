@@ -1,17 +1,71 @@
 import express from "express";
 import path from "path";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import multer from "multer";
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import { GoogleGenAI, Type, Schema } from "@google/genai";
-import { createServer as createViteServer } from "vite";
 
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT || 3000);
+  const production = process.env.NODE_ENV === 'production' || process.argv.includes('--production');
 
   app.use(express.json({ limit: "50mb" }));
+  app.use('/api', (req, res, next) => {
+    if (production) return res.status(403).json({ error: 'O editor e suas APIs estão disponíveis apenas na prévia local.' });
+    const origin = req.headers.origin;
+    if (origin && ![`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`].includes(origin)) return res.status(403).json({ error: 'Origem não permitida.' });
+    next();
+  });
+  app.get('/api/config', (_req, res) => res.json({ aiEnabled: !!process.env.GEMINI_API_KEY }));
+
+  const dataDir = path.join(process.cwd(), '.local-data');
+  const readLocal = async (name: string) => {
+    try { return JSON.parse(await readFile(path.join(dataDir, name), 'utf8')); }
+    catch (error: any) { if (error.code === 'ENOENT') return null; throw error; }
+  };
+  const writeLocal = async (name: string, data: unknown) => {
+    await mkdir(dataDir, { recursive: true });
+    const target = path.join(dataDir, name);
+    const temporary = `${target}.${process.pid}.tmp`;
+    await writeFile(temporary, JSON.stringify(data, null, 2), 'utf8');
+    await rename(temporary, target);
+  };
+  const isProject = (item: any) => item && typeof item.id === 'string' && item.id.length > 0 && typeof item.title === 'string' && item.title.trim().length > 0 && typeof item.category === 'string' && Array.isArray(item.tags) && item.tags.every((tag: any) => typeof tag === 'string') && (!item.image || typeof item.image === 'string');
+  app.get('/api/projects', async (_req, res) => {
+    try { res.json({ projects: await readLocal('projects.json') }); }
+    catch { res.status(500).json({ error: 'Não foi possível carregar os projetos.' }); }
+  });
+  app.put('/api/projects', async (req, res) => {
+    const projects = req.body?.projects;
+    if (!Array.isArray(projects) || !projects.every(isProject) || new Set(projects.map((item: any) => item.id)).size !== projects.length) return res.status(400).json({ error: 'Lista de projetos inválida.' });
+    try { await writeLocal('projects.json', projects); res.json({ ok: true }); }
+    catch { res.status(500).json({ error: 'Não foi possível salvar os projetos.' }); }
+  });
+  app.get('/api/cv', async (_req, res) => {
+    try { res.json({ content: await readLocal('cv.json') }); }
+    catch { res.status(500).json({ error: 'Não foi possível carregar o currículo.' }); }
+  });
+  app.put('/api/cv', async (req, res) => {
+    const content = req.body?.content;
+    if (!content || typeof content !== 'object' || !content.cvData?.pt || !content.designData || typeof content.cvData.pt !== 'object') return res.status(400).json({ error: 'Dados do currículo inválidos.' });
+    try { await writeLocal('cv.json', content); res.json({ ok: true }); }
+    catch { res.status(500).json({ error: 'Não foi possível salvar o currículo.' }); }
+  });
+  app.get('/api/cv/pdf', async (_req, res) => {
+    const saved = path.join(dataDir, 'curriculo.pdf');
+    res.set('Cache-Control', 'no-store');
+    try { res.type('application/pdf').send(await readFile(saved)); }
+    catch { res.type('application/pdf').send(await readFile(path.join(process.cwd(), 'public', 'Mariana-Senciani.pdf'))); }
+  });
+  app.put('/api/cv/pdf', express.raw({ type: 'application/pdf', limit: '10mb' }), async (req, res) => {
+    const pdf = req.body;
+    if (!Buffer.isBuffer(pdf) || pdf.length < 5 || pdf.subarray(0, 5).toString() !== '%PDF-') return res.status(400).json({ error: 'Envie um PDF válido.' });
+    try { await mkdir(dataDir, { recursive: true }); await writeFile(path.join(dataDir, 'curriculo.pdf'), pdf); res.json({ ok: true }); }
+    catch { res.status(500).json({ error: 'Não foi possível salvar o PDF.' }); }
+  });
 
   // Initialize Gemini
   let ai: GoogleGenAI | null = null;
@@ -207,7 +261,8 @@ ${pdfText}`;
 
 
   // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
+  if (!production) {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -221,7 +276,7 @@ ${pdfText}`;
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  app.listen(PORT, "127.0.0.1", () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }

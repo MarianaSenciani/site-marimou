@@ -1,33 +1,10 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-
+import { createContext, useContext, useState } from 'react';
 const AuthContext = createContext();
-
+// Device-local editor, not production authentication.
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('adminAuth') === 'true';
-  });
-
-  const login = (username, password) => {
-    if (username === 'Mari_Minds_2002' && password === 'Mariana 2011') {
-      localStorage.setItem('adminAuth', 'true');
-      setIsAuthenticated(true);
-      return true;
-    }
-    return false;
-  };
-
-  const logout = () => {
-    localStorage.removeItem('adminAuth');
-    setIsAuthenticated(false);
-  };
-
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(() => import.meta.env.DEV && sessionStorage.getItem('marimou_local_editor') === 'open');
+  const login = () => { if (!import.meta.env.DEV) return false; sessionStorage.setItem('marimou_local_editor', 'open'); setIsAuthenticated(true); return true; };
+  const logout = () => { sessionStorage.removeItem('marimou_local_editor'); setIsAuthenticated(false); };
+  return <AuthContext.Provider value={{ isAuthenticated, login, logout }}>{children}</AuthContext.Provider>;
 }
-
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);
