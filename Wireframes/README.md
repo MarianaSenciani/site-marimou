@@ -16,3 +16,16 @@ Os arquivos HTML têm links relativos entre si e podem ser abertos a partir dest
 Os arquivos vetoriais necessários para as interações da home estão listados em [ASSETS-ANIMACOES.md](ASSETS-ANIMACOES.md). Cinco prompts para explorar o layout do crachá antes da vetorização estão em [PROMPTS-CRACHA.md](PROMPTS-CRACHA.md). No wireframe, duas puxadas levantam o cartão frontal e revelam o espaço reservado ao QR do WhatsApp; o código ainda é ilustrativo.
 
 Na Home, faixas animadas fazem a passagem entre a hero e os projetos, exibindo etapas do processo e marcas da trajetória. As linhas divisórias retas visíveis nos demais trechos servem apenas para separar blocos neste wireframe: **não fazem parte da direção visual desejada para o site final**.
+
+## Ajustes do site — 11/10/2026
+
+As decisões abaixo substituem as propostas anteriores de interação na Home do site:
+
+- Faixas removidas por enquanto; cada gesto vertical avança uma seção. Seções longas preservam a leitura do conteúdo, e gestos horizontais dos cards e o scroll do chat continuam independentes.
+- Brilho menor e preso à posição do cursor, sem mola; linhas do grid iluminadas ao redor dele.
+- Hero 1 mantém “Oi, sou a Mari” e a personagem central. Textos laterais mais baixos, sem os rótulos introdutórios; ferramentas distribuídas ao redor da personagem.
+- Títulos recebem sublinhado verde no hover; “decisões” ganha cor e movimento. CTAs principais usam botão verde com texto em bold, sem animação por letra.
+- Processo sem números: wireframe montado por partes; barras surgem antes da linha ascendente; linhas conectam os cards conforme o hover ou foco avança.
+- Crachá revela o QR com uma puxada. Cordão vetorial verde, com estrelas verde-escuras, alongado para vir de fora da viewport. Removidos o painel interno com texto, o aviso visual de QR provisório e o botão de repetir. O QR continua ilustrativo até receber o link definitivo.
+- “Pergunte à Mari”: o próprio círculo se expande e mostra o texto à direita do retrato; conversa abre ao clicar. Superfícies translúcidas com glassmorphism discreto.
+- Logo da empresa junto à foto do autor da recomendação. Fundo e organização do footer mantidos.

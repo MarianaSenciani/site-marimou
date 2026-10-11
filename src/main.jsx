@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'lenis/dist/lenis.css';
 import './portfolio/portfolio.css';
 import './portfolio/experience.css';
+import './portfolio/experience-refinements.css';
+import './portfolio/experience-polish.css';
 import App from './App.jsx';
 
 // Marca que o JS está ativo: habilita os estados iniciais escondidos das animações.
