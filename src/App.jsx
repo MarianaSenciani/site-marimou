@@ -3,7 +3,6 @@ import PortfolioSite from './portfolio/PortfolioSite.jsx';
 import { CVProvider } from './context/CVContext.jsx';
 import { ProjectProvider } from './portfolio/ProjectContext.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
-import './portfolio/portfolio.css';
 const AdminApp = import.meta.env.DEV ? lazy(() => import('./admin/AdminApp.jsx')) : null;
 const normalizePath = pathname => pathname === '/adm' ? '/admin' : pathname;
 export default function App() {

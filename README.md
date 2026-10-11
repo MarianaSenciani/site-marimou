@@ -1,8 +1,10 @@
 # Mari Mou — portfólio interativo
 
-Implementação em React + Vite do novo portfólio de Mariana Senciani, a partir da referência visual enviada. Este repositório contém a versão atual do portfólio e do editor local.
+Implementação em React + Vite do novo portfólio de Mariana Senciani, a partir da referência visual enviada. Código recuperado de https://github.com/MarianaSenciani/site-marimou. A cópia original, preservada em `upstream/`, não faz parte do build.
 
 ## Executar
+
+A versão atual integra os wireframes ao site: três heros selecionáveis no header, crachá com os SVGs fornecidos, ferramentas 3D e animações discretas. Consulte [a documentação de integração](docs/site-final-motion.md) para controles, assets, limitações e testes.
 
 ```sh
 npm install
@@ -11,33 +13,36 @@ npm run dev
 
 Prévia: http://localhost:3000. Painel: http://localhost:3000/admin.
 
+Para configurar deploy automático na Hostinger, veja `docs/deploy-hostinger.md`. O build público estático usa `npm run build:web` e publica `dist/`.
+
 ```sh
 npm run build
 npm start
 ```
 
-Checagem das rotas e assets de produção (após o build): `node scripts/verify-production.mjs`. Usa temporariamente a porta 3001 e encerra o processo que criou.
+Checagem das rotas e assets de produção (após o build): `node scripts/verify-production.mjs`. Usa temporariamente a porta 3100 (ou TEST_PORT) e encerra o processo que criou.
 
 O servidor usa a porta 3000 (ou `PORT`) e escuta em `127.0.0.1`. `npm start` serve o build de produção. Este trabalho não foi publicado nem enviado ao GitHub.
 
 ## O que está implementado
 
-- Home escura quadriculada, Alexandria nos títulos e Inter nos textos.
-- Memoji original em PNG, com flutuação e inclinação suave que acompanha o ponteiro. Não é um modelo 3D articulado: olhos e cabelo não são animados separadamente.
-- Carrosséis contínuos de marcas e projetos, com pausa global, pausa ao focar/passar o mouse e respeito à preferência de movimento reduzido.
-- Três cenas em uma seção fixa durante a rolagem. O scroll natural percorre as cenas antes dos processos, com navegação por botões e teclado. Sem bloqueio de roda/touch. Movimento reduzido apresenta uma seção convencional com seleção manual de cenas.
-- Cursor verde e badge contextual, além de link normal para os projetos.
-- Quatro serviços, cada um com quatro etapas e estados abertos/fechados acessíveis. Abas respondem às setas, Home e End.
-- Ícones PNG originais com perspectiva, brilho, informação no foco e resposta ao toque.
-- Página Sobre mim com currículo, experiência expansível e formação. Listagem de projetos com filtros e páginas individuais.
-- Currículo original em `public/Mariana-Senciani.pdf`, contato por e-mail e LinkedIn.
-- Painel com a identidade visual da home, editor de currículo e CRUD local de projetos: criar, listar/buscar, editar, ordenar, excluir, importar/exportar JSON e adicionar capas PNG/JPG/WebP/GIF de até 5 MB.
+- Três heros: Editorial, Decisões e Perfil, com seletor temporário no header.
+- Tema claro/escuro, menu responsivo, contato e seletor PT/EN/ES.
+- Memoji estático com movimento de hover, ferramentas ao redor e explicações no ponteiro/foco/toque.
+- Modelos OBJ/MTL de Claude e GitHub; imagens existentes de Figma e Cursor.
+- Títulos WordPullUp, hover BubbleText, faixas contínuas e entradas suaves ao rolar.
+- Crachá com cordão móvel, queda ao entrar na seção e abertura 3D após duas puxadas.
+- Chat local guiado com StreamingText, dez perguntas por grupo e redimensionamento no desktop.
+- Sicredi, LWSA e LIVO em cards verticais e páginas individuais.
+- Página Sobre com trajetória, currículo e galeria arrastável nos dois sentidos.
+- Pausa global e respeito à preferência de movimento reduzido.
+- Painel local de currículo e projetos preservado; ainda não integrado à edição dos três cases curados.
 
 ## Limites desta prévia
 
 O painel é um editor **local**, disponível somente em desenvolvimento. Projetos e dados do currículo são gravados pelo servidor em `.local-data/`; o navegador mantém uma cópia de apoio em `localStorage`. O PDF escolhido para download na prévia fica em `.local-data/curriculo.pdf`. Essa pasta não entra no Git ou no build. Uma sessão local substitui as credenciais fixas expostas no código antigo; ela não é autenticação para hospedagem. O painel e as APIs de edição ficam desativados no build de produção. Para um CMS publicado será preciso autenticação no servidor, armazenamento durável para conteúdo e arquivos, e autorização.
 
-Os quatro projetos iniciais são **estudos demonstrativos**, com mockups gerados por IA, e estão sinalizados dessa forma. Não são cases comprovados nem resultados de Mariana. Substitua por trabalhos reais e aprovados. Os nomes de marcas foram extraídos do currículo; as assinaturas da faixa são representações tipográficas provisórias, não os arquivos oficiais de logo.
+Os três cases destacados usam o conteúdo discutido com Mariana. Relatórios de comprovação não são publicados. Capas são composições tipográficas provisórias; QR e WhatsApp ainda aguardam o contato definitivo. Chat é uma simulação local. A tradução abrange interface, heros e chat; narrativas longas e linha do tempo ainda precisam de tradução editorial.
 
 Na prévia local, o botão de currículo usa o PDF original até que outro seja enviado ou gerado e atualizado pelo painel. Editar os campos não substitui o PDF automaticamente. O exportador visual preservado rasteriza o currículo; para candidaturas com ATS, prefira enviar um PDF pronto com texto selecionável. O build de produção continua usando `public/Mariana-Senciani.pdf`.
 
@@ -45,12 +50,13 @@ Importação e tradução por Gemini são opcionais: configure `GEMINI_API_KEY` 
 
 ## Arquivos principais
 
-- `src/portfolio/PortfolioSite.jsx`: páginas e interações.
-- `src/portfolio/portfolio.css`: visual e responsividade.
-- `src/portfolio/content.js`: mockups e textos de processo.
-- `src/portfolio/ProjectContext.jsx`: projetos locais.
-- `src/admin/`: painel recuperado.
-- `src/context/CVContext.jsx`: CV e aparência locais.
-- `docs/conteudo-e-fontes.md`: conteúdo sugerido, fontes e próximos ajustes.
+- `src/portfolio/PortfolioExperience.tsx`: composição das páginas, preferências e motion.
+- `src/portfolio/experience.css`: visual e responsividade.
+- `src/portfolio/case-studies.ts`: dados públicos dos três cases.
+- `src/components/ui/`: componentes reutilizáveis de motion.
+- `src/components/streaming-text/`: componente MIT de Bruno Delorence, adaptado ao chat.
+- `src/portfolio/ProjectContext.jsx`, `src/context/CVContext.jsx` e `src/admin/`: editor local.
+- `Wireframes/`: propostas HTML preservadas.
+- `docs/site-final-motion.md`: decisões, assets, limites e validação.
 
-Não há métricas ou resultados profissionais inventados. A frase “Desde 2020” evita uma contagem de anos que envelhece ou depende do mês.
+Verificações: `npm run typecheck`, `npm run build` e `node scripts/verify-experience.mjs` (com a prévia rodando).

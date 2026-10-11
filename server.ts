@@ -276,7 +276,12 @@ ${pdfText}`;
     });
   }
 
-  app.listen(PORT, "127.0.0.1", () => {
+  app.listen(PORT, "127.0.0.1", (error?: Error) => {
+    if (error) {
+      console.error(`Could not start local server on port ${PORT}:`, error.message);
+      process.exitCode = 1;
+      return;
+    }
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }

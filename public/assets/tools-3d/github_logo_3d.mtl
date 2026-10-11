@@ -1,0 +1,11 @@
+newmtl github_blue
+Kd 0.36 0.43 0.77
+Ks 0.12 0.12 0.18
+Ns 60
+illum 2
+
+newmtl github_white
+Kd 0.97 0.97 0.97
+Ks 0.15 0.15 0.15
+Ns 80
+illum 2

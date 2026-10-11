@@ -1,0 +1,472 @@
+/* Streaming text (streaming-text.tsx): a soft grey stage, or at night a charcoal one, with the
+   answer in a 380 px column in its middle. Sizes are the component's own (13 px answer, 12 px
+   details); the column narrows with the stage on a phone, and the stage grows taller when the
+   sources list opens.
+
+   Colours are the tokens below, light-dark(light, dark): the component takes the color-scheme it
+   inherits from the page (light unless the page says otherwise), or the one its colorScheme prop
+   sets (data-color-scheme). */
+
+.root {
+  /* The stage, raised and inset surfaces on it. */
+  --canvas: oklch(96.1% 0.002 247.84);
+  --surface: oklch(100% 0 0);
+  --inset: oklch(97.9% 0.002 247.839);
+  /* The words: the answer, the details, the quiet icons. */
+  --ink: oklch(24.7% 0.006 258.361);
+  --ink-2: oklch(50.6% 0.01 264.477);
+  --ink-3: oklch(69.5% 0.009 264.505);
+  /* Hovered rows and buttons. */
+  --hover: oklch(97% 0.002 247.839);
+  --hover-2: oklch(93.3% 0.003 247.86);
+  /* Hairlines: the stage's edge, the chips', the rule under each follow-up. */
+  --line: oklch(94.6% 0.003 264.542);
+  /* The ring around each tile on the sources button. */
+  --ring: oklch(21% 0.034 263.436 / 0.1);
+  --focus: #387bff;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  container-type: inline-size;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 272px;
+  padding: 12px;
+  overflow: hidden;
+  overflow: clip;
+  border-radius: 14px;
+  background: var(--canvas);
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.14px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+@supports (color: light-dark(#fff, #000)) {
+  .root {
+    --canvas: light-dark(oklch(96.1% 0.002 247.84), oklch(23.1% 0.004 264.487));
+    --surface: light-dark(oklch(100% 0 0), oklch(26% 0.006 271.191));
+    --inset: light-dark(oklch(97.9% 0.002 247.839), oklch(24.3% 0.004 264.492));
+    --ink: light-dark(oklch(24.7% 0.006 258.361), oklch(96.4% 0.002 247.839));
+    --ink-2: light-dark(oklch(50.6% 0.01 264.477), oklch(73.1% 0.008 260.731));
+    --ink-3: light-dark(oklch(69.5% 0.009 264.505), oklch(54.1% 0.01 264.484));
+    --hover: light-dark(oklch(97% 0.002 247.839), oklch(28.9% 0.006 271.22));
+    --hover-2: light-dark(oklch(93.3% 0.003 247.86), oklch(31.8% 0.007 274.747));
+    --line: light-dark(oklch(94.6% 0.003 264.542), oklch(30.8% 0.006 258.354));
+    --ring: light-dark(oklch(21% 0.034 263.436 / 0.1), oklch(100% 0 0 / 0.08));
+  }
+}
+.root[data-color-scheme='light'] {
+  color-scheme: light;
+}
+.root[data-color-scheme='dark'] {
+  color-scheme: dark;
+}
+.root[data-color-scheme='system'] {
+  color-scheme: light dark;
+}
+:where(.root) *,
+:where(.root) *::before,
+:where(.root) *::after {
+  box-sizing: border-box;
+}
+:where(.root) :where(p, ul) {
+  margin: 0;
+  padding: 0;
+}
+:where(.root) :where(ul) {
+  list-style: none;
+}
+:where(.root) :where(button, a) {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+:where(.root) :where(button) {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+.root :where(button, a):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.frame {
+  width: 100%;
+  max-width: 480px;
+}
+.message {
+  width: 100%;
+  max-width: 380px;
+  min-height: 248px;
+  margin: 0 auto;
+}
+
+/* The answer. */
+.answer {
+  font-size: 13px;
+  line-height: 1.625;
+  color: var(--ink);
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+.word {
+  display: inline;
+}
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 12px;
+  margin-left: 2px;
+  border-radius: 999px;
+  background: var(--ink);
+  transform: translateY(2px);
+  animation: fade-in 150ms ease-out both;
+}
+
+/* A citation: the source's tile and domain, on an inset chip. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 18px;
+  margin-right: 4px;
+  padding: 0 3px;
+  border-radius: 5px;
+  vertical-align: middle;
+  background: var(--inset);
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--ink-2);
+  font-family: JetBrains, 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  font-size: 10.5px;
+  line-height: 1.625;
+  white-space: nowrap;
+  translate: 0 -1px;
+  transition:
+    color 150ms var(--ease),
+    background-color 150ms var(--ease);
+  animation: pop-in 250ms var(--ease-out) both;
+}
+
+/* Tiles: square art clipped to a round square or a disc. */
+.chipTile,
+.avatar,
+.rowTile {
+  display: block;
+  flex: none;
+  overflow: hidden;
+}
+.chipTile svg,
+.avatar svg,
+.rowTile svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.chipTile {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+.letter {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--ink-3);
+  color: var(--canvas);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6em;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Message actions and the sources button. */
+.actions,
+.followUps {
+  transition: opacity 400ms var(--ease);
+}
+.message[data-streaming] .actions,
+.message[data-streaming] .followUps {
+  opacity: 0;
+  pointer-events: none;
+}
+.message[data-streaming] .actions:has(:focus-visible),
+.message[data-streaming] .followUps:has(:focus-visible) {
+  opacity: 1;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 8px;
+}
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  color: var(--ink-3);
+  transition:
+    color 100ms var(--ease),
+    background-color 100ms var(--ease);
+}
+.action svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+}
+.action[aria-pressed='true'] {
+  color: var(--ink);
+}
+.sourcesButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  padding: 2px 4px;
+  border-radius: 6px;
+  text-align: left;
+  transition: background-color 150ms var(--ease);
+}
+.stack {
+  display: flex;
+}
+.avatar {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--ring);
+}
+.avatar + .avatar {
+  margin-left: -4px;
+}
+.count {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* The sources list, folded into a grid row of 0fr until it opens. */
+.fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 300ms var(--ease-out),
+    opacity 300ms var(--ease-out);
+}
+.fold[data-open] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.foldInner {
+  min-height: 0;
+  overflow: hidden;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--inset);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.5;
+  transition:
+    color 150ms var(--ease),
+    background-color 150ms var(--ease);
+}
+.rowTile {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+.rowName {
+  position: relative;
+  display: inline-block;
+  min-width: 0;
+}
+/* The name's underline draws in from the left on hover or focus. */
+.rowName::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.row:focus-visible .rowName::after {
+  transform: scaleX(1);
+}
+.rowDomain {
+  flex: none;
+  margin-left: auto;
+  color: var(--ink-3);
+  font-family: JetBrains, 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+/* Follow-ups. */
+.followUps {
+  margin-top: 10px;
+}
+.followUpsLabel {
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.followUpList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+}
+.followUp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: calc(100% + 12px);
+  margin: 0 -6px;
+  padding: 6px;
+  border-bottom: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--ink);
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-align: left;
+  transition: background-color 100ms var(--ease);
+  animation: fade-up 350ms var(--ease-out) both;
+}
+.followUp svg {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  color: var(--ink-3);
+}
+.message[data-streaming] .followUp {
+  opacity: 0;
+  animation: none;
+}
+.message[data-streaming] .followUp:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .chip:hover {
+    background: var(--hover);
+    color: var(--ink);
+  }
+  .action:hover {
+    background: var(--hover-2);
+    color: var(--ink-2);
+  }
+  .action[aria-pressed='true']:hover {
+    color: var(--ink);
+  }
+  .sourcesButton:hover {
+    background: var(--hover);
+  }
+  .row:hover {
+    background: var(--hover);
+    color: var(--ink);
+  }
+  .row:hover .rowName::after {
+    transform: scaleX(1);
+  }
+  .followUp:hover {
+    background: var(--hover-2);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret,
+  .chip,
+  .followUp {
+    animation: none;
+  }
+  .actions,
+  .followUps,
+  .fold,
+  .rowName::after {
+    transition: none;
+  }
+}
+
+/* Mari Mou adaptation. Registry source and MIT notice are preserved alongside this file. */
+.root {
+  --canvas: transparent;
+  --surface: var(--surface-raised, #292d21);
+  --inset: var(--surface-raised, #292d21);
+  --ink: var(--ivory, #f2f1e8);
+  --ink-2: var(--muted, #a3a699);
+  --ink-3: var(--muted, #a3a699);
+  --hover: var(--surface-raised, #292d21);
+  --hover-2: var(--surface-raised, #292d21);
+  --line: transparent;
+  --focus: var(--lime, #bddb42);
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: inherit;
+}
+.frame, .message { max-width: none; min-height: 0; }
+.answer { font-size: 14px; line-height: 1.8; }
