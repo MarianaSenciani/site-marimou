@@ -24,7 +24,9 @@ Depois da conexão, push em `main` dispara um novo build e, se aprovado, atualiz
 
 ## Estado
 
-Configuração preparada localmente. Login e conexão com a conta ainda pendentes; não há URL publicada nem integração automática confirmada.
+Publicado em 14/10/2026: https://site-marimou.vercel.app/
+
+Projeto Vercel: `mariana-c425/site-marimou`, conectado a `MarianaSenciani/site-marimou`, com produção em `main`. Deployment inicial confirmado como Ready para o commit `705d418`. Home e acesso direto a `/projetos/sicredi` validados no domínio público. Painel da Vercel confirma que push em `main` atualiza produção.
 
 O plano Hobby é destinado a uso pessoal não comercial. A escolha de seguir com Vercel não autoriza contratação de plano pago. Não aceitar upgrade, inserir cartão ou iniciar cobrança sem instrução específica.
 
