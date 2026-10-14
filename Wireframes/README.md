@@ -29,3 +29,5 @@ As decisões abaixo substituem as propostas anteriores de interação na Home do
 - Crachá revela o QR com uma puxada. Cordão vetorial verde, com estrelas verde-escuras, alongado para vir de fora da viewport. Removidos o painel interno com texto, o aviso visual de QR provisório e o botão de repetir. O QR continua ilustrativo até receber o link definitivo.
 - “Pergunte à Mari”: o próprio círculo se expande e mostra o texto à direita do retrato; conversa abre ao clicar. Superfícies translúcidas com glassmorphism discreto.
 - Logo da empresa junto à foto do autor da recomendação. Fundo e organização do footer mantidos.
+
+Atualização do crachá: os novos SVGs de Assets/Cracha substituem as artes anteriores. Há um único cartão com frente e verso; puxar e soltar alterna as faces com giro de 180° no eixo vertical. A presilha e o cordão continuam conectados. O espaço do verso mantém o QR ilustrativo até receber o link definitivo. As margens das exportações são ajustadas apenas nas cópias públicas, sem alterar os originais.

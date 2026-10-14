@@ -1,14 +1,14 @@
 // Public summaries approved during ideation. Supporting reports remain private.
 export const caseStudies = [
   { id: 'sicredi', brand: 'Sicredi', title: 'Informação financeira que começa pela escuta.', subtitle: 'Pesquisa para orientar canais, linguagem e a ordem das informações nas páginas.',
-    category: 'Pesquisa & experiência web', year: '2024 — 2025', role: 'Pesquisa, arquitetura e design, pela Sioux', platform: 'Web · landing pages',
-    tags: ['Research', 'UX', 'Web'], metric: '257 mil+', metricLabel: 'sessões em duas landing pages', color: 'sage',
+    category: 'Pesquisa & experiência web', year: '2024 · 3 meses', role: 'Pesquisa, arquitetura e design, pela Sioux', platform: 'Web · landing pages',
+    tags: ['Research', 'UX', 'Web'], metric: '+260 mil', metricLabel: 'sessões nas três URLs · jan–jun/2025', color: 'sage',
     points: ['Escuta de gerentes e públicos locais para entender hábitos e dúvidas.', 'Escolha dos canais junto aos times de estratégia, redação e mídia.', 'Arquitetura e sequência do conteúdo orientadas pelo diagnóstico.'],
     chapters: [
       ['O contexto', 'Levar informação sem presumir familiaridade digital.', 'O desafio era aproximar informações sobre serviços financeiros de públicos do Centro-Norte com diferentes níveis de familiaridade digital. Antes de desenhar páginas, investigamos as dúvidas das pessoas e como elas buscavam orientação.'],
       ['Pesquisa', 'A escuta veio antes da interface.', 'Participei da investigação com gerentes, clientes e empreendedores, em colaboração com estratégia, redação e mídia. Esse trabalho ajudou a definir a abordagem e a escolher canais adequados ao contexto.'],
       ['Arquitetura', 'Organizar a informação para facilitar o próximo passo.', 'As descobertas orientaram a hierarquia e a ordem do conteúdo nas landing pages. Conduzi o design das páginas com orientação do meu gestor, buscando uma comunicação compreensível e caminhos claros para conhecer os serviços e entrar em contato.'],
-      ['Resultados', 'Alcance e qualidade da visita.', 'As duas landing pages somaram 257.417 sessões. A permanência média registrada no material do projeto passou de 21 para 28 segundos. Sessões não equivalem a pessoas únicas, e permanência não é uma medida de retenção. Os resultados refletem o trabalho conjunto de pesquisa, conteúdo, design e mídia.'],
+      ['Resultados', 'Continuidade de uso.', 'Dados posteriores de jan–jun/2025 registraram mais de 260 mil sessões nas URLs PJ, Agro e Cuiabá, cerca de 96% de acesso mobile e 592 sessões com ação de contato. O somatório não deduplica sessões entre URLs e não representa pessoas únicas nem contas abertas.'],
     ],
   },
   { id: 'lwsa', brand: 'LWSA', title: 'Uma marca para acompanhar a expansão.', subtitle: 'Pesquisa e direção visual na evolução de Locaweb Company para LWSA.',

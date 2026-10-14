@@ -1,0 +1,2 @@
+# Preserve editable Illustrator assets without line-ending conversion or text diffs.
+*.ai binary
