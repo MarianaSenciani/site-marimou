@@ -28,7 +28,6 @@ export function CharacterOrbit() {
   return <div className={`character-orbit ${open ? 'is-exploring' : ''}`} onPointerEnter={e => { clearTimeout(leaveTimer.current); if (e.pointerType === 'mouse') setOpen(true); }}
     onPointerLeave={e => { if (e.pointerType === 'mouse') { leaveTimer.current = setTimeout(() => { setOpen(false); setTip(null); }, 180); } }}
     onFocus={e => { if (e.target.matches(':focus-visible')) setOpen(true); }} onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) { setOpen(false); setTip(null); } }}>
-    <div className="character-halo" aria-hidden="true" />
     <motion.button className="character-trigger" aria-expanded={open} aria-label={t('Explorar minhas ferramentas', 'Explore my tools', 'Explorar mis herramientas')}
       onClick={() => { setOpen(true); setTip(null); }} animate={paused ? {} : { rotate: open ? -2 : 0, scale: open ? 1.015 : 1 }} transition={{ type: 'spring', stiffness: 150, damping: 18 }}>
       <img className="character-image" src="/assets/memoji-neutral.png" width="1086" height="1448" alt={t('Memoji da Mari, com cabelos vermelhos', 'Mari’s Memoji with red hair', 'Memoji de Mari con pelo rojo')} {...{ fetchpriority: 'high' }} />
@@ -58,7 +57,7 @@ export function HeroExperience({ onVisibility }: { onVisibility: (visible: boole
       <WordPullUp id="hero-heading" className="hero-first-title" paused={paused} words={t('OI, SOU A MARI', 'HI, I’M MARI', 'HOLA, SOY MARI')} />
       <div className="hero-first-stage">
         <motion.div className="hero-first-intro hero-first-side" initial={paused ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .45 }}>
-          <p className="hero-first-role">Product Designer <span>&amp;</span><br/>Product Owner.</p>
+          <p className="hero-first-role"><span className="hero-role-line">Product Designer <span className="hero-role-ampersand">&amp;</span></span><br/>Product Owner.</p>
           <p className="hero-first-description">{t('Conecto pesquisa, design e visão de produto para criar experiências digitais que fazem sentido para as pessoas.', 'I connect research, design, and product thinking to create digital experiences that make sense to people.', 'Conecto investigación, diseño y visión de producto para crear experiencias digitales que tengan sentido para las personas.')}</p>
         </motion.div>
         <div className="hero-character-block"><CharacterOrbit /></div>

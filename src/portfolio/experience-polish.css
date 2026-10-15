@@ -323,3 +323,23 @@
 .badge-clip-art { transform: translateX(-50%) translateZ(3px); }
 .badge-face-back .badge-qr-placeholder { top: 31%; left: 26%; width: 48%; }
 .physical-badge-card:focus-visible { outline: 2px solid var(--lime); outline-offset: 8px; border-radius: 20px; }
+
+/* Keep the role's ampersand on its first line, including wide desktop layouts. */
+.experience-site .hero-first-role > .hero-role-line { display: inline-block; white-space: nowrap; color: inherit; }
+.experience-site .hero-first-role .hero-role-ampersand { color: var(--lime); }
+.experience-site .hero-first-intro { max-width: 290px; }
+
+/* The launcher grows to its label's intrinsic width instead of reserving empty space. */
+.experience-site .mari-chat-launch { width: auto; min-width: 62px; padding-inline: 6px; }
+@media (hover: hover) and (pointer: fine) {
+  .experience-site .mari-chat-launch:hover,
+  .experience-site .mari-chat-launch:focus-visible { width: auto; }
+  .mari-chat-launch:hover > span,
+  .mari-chat-launch:focus-visible > span { max-width: 180px; }
+}
+.experience-site .mari-chat { resize: none; }
+.experience-site .chat-topics button[aria-pressed=true] { background: #bddb42; color: #1b1d15; font-weight: 700; }
+@media (max-width: 600px) {
+  .experience-site .hero-first-role { font-size: clamp(14px, 3.6vw, 20px); }
+  .experience-site .mari-chat-launch { width: 56px; min-width: 56px; }
+}

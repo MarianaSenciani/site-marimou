@@ -1,4 +1,4 @@
-import { ArrowUpRight, Mail } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
 import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
@@ -15,8 +15,8 @@ export function SiteFooter() {
   const { t } = useExperience();
   return <footer className="site-footer restored-footer"><div className="wrap footer-wireframe-grid">
     <div className="footer-brand"><a href="/" className="wordmark">mari<span>mou</span><i>✳</i></a><h2>{t('Vamos conversar, vamos construir algo juntos.','Let’s talk. Let’s build something together.','Conversemos, construyamos algo juntos.')}</h2><p>{t('Experiência, produto e ideias digitais com espaço para colaboração.','Experience, product and digital ideas with room for collaboration.','Experiencia, producto e ideas digitales con espacio para colaborar.')}</p></div>
-    <nav className="footer-column" aria-label={t('Seções do site','Site sections','Secciones del sitio')}><strong>{t('Explorar','Explore','Explorar')}</strong><a href="/">Home<ArrowUpRight size={15}/></a><a href="/projetos">{t('Projetos','Projects','Proyectos')}<ArrowUpRight size={15}/></a><a href="/sobre">{t('Sobre mim','About me','Sobre mí')}<ArrowUpRight size={15}/></a></nav>
-    <nav className="footer-column" aria-label={t('Contato e redes','Contact and social','Contacto y redes')}><strong>{t('Contato e redes','Contact and social','Contacto y redes')}</strong><a href={linkedin} target="_blank" rel="noreferrer">LinkedIn<ArrowUpRight size={15}/></a><a href="https://www.whatsapp.com/" target="_blank" rel="noreferrer" title="Link provisório">WhatsApp<ArrowUpRight size={15}/></a><a href={email}>E-mail<Mail size={15}/></a></nav>
+    <nav className="footer-column" aria-label={t('Seções do site','Site sections','Secciones del sitio')}><strong>{t('Explorar','Explore','Explorar')}</strong><a href="/">Home</a><a href="/projetos">{t('Projetos','Projects','Proyectos')}</a><a href="/sobre">{t('Sobre mim','About me','Sobre mí')}</a></nav>
+    <nav className="footer-column" aria-label={t('Contato e redes','Contact and social','Contacto y redes')}><strong>{t('Contato e redes','Contact and social','Contacto y redes')}</strong><a href={linkedin} target="_blank" rel="noreferrer">LinkedIn<ArrowUpRight size={15}/></a><a href="https://www.whatsapp.com/" target="_blank" rel="noreferrer" title="Link provisório">WhatsApp<ArrowUpRight size={15}/></a><a href={email}>E-mail<ArrowUpRight size={15} aria-hidden="true"/></a></nav>
     <div className="footer-bottom"><span>{t('Feito com intenção, curiosidade e café.','Made with intention, curiosity, and coffee.','Hecho con intención, curiosidad y café.')}</span><span>© {new Date().getFullYear()} Mariana Senciani</span></div>
   </div></footer>;
 }
