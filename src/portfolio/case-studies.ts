@@ -24,7 +24,7 @@ export const caseStudies = [
   },
   { id: 'livo', brand: 'LIVO', title: 'Menos fricção entre escolher e comprar.', subtitle: 'Análise heurística para entender e melhorar o fluxo de compra do e-commerce.',
     category: 'UX & e-commerce', year: '2022 — 2023', role: 'Análise heurística, testes e revisão de interfaces', platform: 'Web · e-commerce',
-    tags: ['Heurísticas', 'User flow', 'UX'], metric: '42% → 20%', metricLabel: 'taxa de abandono de carrinho', color: 'blush',
+    tags: ['Heurísticas', 'User flow', 'UX'], metric: '42% → 20%', metricLabel: 'abandono de carrinho · após 2 meses', color: 'blush',
     points: ['Análise da jornada, da escolha do produto à finalização da compra.', 'Testes assistidos para entender onde as pessoas desistiam.', 'Revisão de categorias, cores e telas conforme o diagnóstico.'],
     chapters: [
       ['O contexto', 'O caminho até a compra precisava de atenção.', 'Pessoas adicionavam produtos sem avançar para o carrinho ou chegavam ao checkout sem concluir a compra. O objetivo foi entender as fricções ao longo do fluxo, antes de propor novas telas.'],

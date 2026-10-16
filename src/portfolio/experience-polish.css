@@ -18,12 +18,12 @@
 .pill svg { transition: transform .25s ease; }
 .pill:hover svg { transform: translate(2px, -2px); }
 
-/* Keep the header's space in the document while reducing its on-screen footprint. */
+/* Keep the header's space in the document while changing its scroll treatment. */
 .experience-site .experience-header { display: block; height: 66px; min-height: 66px; padding: 0; pointer-events: none; background: transparent; }
 .header-full { height: 100%; display: grid; grid-template-columns: 1fr auto 1fr; gap: 25px; align-items: center; pointer-events: auto; transition: opacity .25s, transform .25s, visibility .25s; }
-.experience-header.is-collapsed .header-full { opacity: 0; transform: translateY(-10px); visibility: hidden; pointer-events: none; }
+
 .compact-menu { position: fixed; top: 17px; right: 25px; padding-bottom: 10px; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .25s, visibility .25s; }
-.is-collapsed .compact-menu { visibility: visible; opacity: 1; pointer-events: auto; }
+
 .compact-menu-trigger { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--hairline); background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(12px); box-shadow: 0 8px 30px #0002; color: var(--ivory); }
 .compact-menu-trigger svg { transition: transform .3s; }
 .compact-menu-trigger:hover svg { transform: rotate(-6deg); }
@@ -342,4 +342,45 @@
 @media (max-width: 600px) {
   .experience-site .hero-first-role { font-size: clamp(14px, 3.6vw, 20px); }
   .experience-site .mari-chat-launch { width: 56px; min-width: 56px; }
+}
+
+/* Desktop navigation remains complete; the floating treatment starts on scroll. */
+.experience-site .experience-header { top: 0; padding-inline: 28px; pointer-events: auto; box-shadow: none; transition: top .3s ease, background .3s ease, box-shadow .3s ease; }
+.experience-site .experience-header.is-scrolled { top: 12px; padding: 0 28px; border-radius: 16px; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(16px); box-shadow: 0 8px 28px #0002; }
+.experience-site .experience-header .compact-menu { display: none; }
+.header-full .experience-header-actions { padding-right: 0; }
+@media (max-width: 800px) {
+  .experience-site .experience-header,
+  .experience-site .experience-header.is-scrolled { top: 0; padding: 0; background: transparent; backdrop-filter: none; box-shadow: none; }
+  .experience-site .experience-header .compact-menu { display: block; visibility: visible; opacity: 1; pointer-events: auto; }
+  .experience-header.is-scrolled .header-full { opacity: 0; transform: translateY(-10px); visibility: hidden; pointer-events: none; }
+  .header-full .experience-header-actions { padding-right: 58px; }
+}
+@media (max-width: 600px) {
+  .header-full .experience-header-actions { padding-right: 45px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-site .experience-header { transition: none; }
+}
+
+/* Consistent breathing room around the conversation and its launcher. */
+.experience-site { --chat-edge: 24px; --chat-launcher-size: 62px; --chat-gap: 24px; }
+.experience-site .mari-chat-launch { right: var(--chat-edge); bottom: var(--chat-edge); height: var(--chat-launcher-size); }
+.experience-site .mari-chat,
+.experience-site .mari-chat.is-wide { right: var(--chat-edge); bottom: calc(var(--chat-edge) + var(--chat-launcher-size) + var(--chat-gap)); max-height: calc(100dvh - var(--chat-edge) - var(--chat-launcher-size) - var(--chat-gap) - 20px); }
+.experience-site .mari-chat > form { align-items: center; gap: 16px; padding: 16px 20px 18px; }
+.experience-site .mari-chat input { height: 44px; padding: 10px 12px; box-sizing: border-box; border: 1px solid var(--hairline); border-radius: 12px; }
+.experience-site .mari-chat input:focus-visible { outline-offset: 2px; border-radius: 12px; }
+.experience-site .mari-chat form button { width: 44px; height: 44px; border-radius: 12px; }
+@media (hover: hover) and (pointer: fine) {
+  .experience-site .mari-chat-launch:hover,
+  .experience-site .mari-chat-launch:focus-visible { padding-right: 16px; }
+  .mari-chat-launch:hover > span,
+  .mari-chat-launch:focus-visible > span { margin-left: 12px; }
+}
+@media (max-width: 600px) {
+  .experience-site { --chat-edge: 16px; --chat-launcher-size: 56px; --chat-gap: 18px; }
+  .experience-site .mari-chat,
+  .experience-site .mari-chat.is-wide { width: calc(100% - 2 * var(--chat-edge)); max-width: calc(100% - 2 * var(--chat-edge)); }
+  .experience-site .mari-chat > form { gap: 12px; padding: 14px 16px 16px; }
 }

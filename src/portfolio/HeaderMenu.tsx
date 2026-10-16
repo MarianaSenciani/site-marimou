@@ -10,7 +10,7 @@ function LanguageFlag({ language }: { language: Language }) {
 }
 
 export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: string; onToggleMotion: () => void; motionDisabled: boolean }) {
-  const { hero, setHero, theme, setTheme, lang, setLang, t } = useExperience();
+  const { theme, setTheme, lang, setLang, t } = useExperience();
   const paused = useMotionPaused();
   const [menu, setMenu] = useState(false), [scrolled, setScrolled] = useState(false);
   const ref = useRef<HTMLElement>(null);
@@ -23,12 +23,11 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
     return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', escape); };
   }, []);
   const controls = () => <>
-    {path === '/' && <details className="header-dropdown hero-selector"><summary>Hero {hero}/3<ChevronDown size={12} /></summary><div className="header-dropdown-panel">{[t('Editorial', 'Editorial', 'Editorial'), t('Decisões', 'Decisions', 'Decisiones'), t('Perfil', 'Profile', 'Perfil')].map((name, i) => <button key={name} aria-pressed={hero === i + 1} onClick={event => { setHero(i + 1); event.currentTarget.closest('details')!.open = false; }}>0{i + 1} · {name}</button>)}</div></details>}
     <a className="pill primary header-talk" href="/#contato" onClick={() => setMenu(false)}>{t('Falar comigo', 'Let’s talk', 'Hablemos')}<ArrowUpRight size={14} /></a>
     <details className="header-dropdown language-selector"><summary aria-label={t('Selecionar idioma', 'Select language', 'Elegir idioma')}><LanguageFlag language={lang} /><ChevronDown size={11} /></summary><div className="header-dropdown-panel">{(['pt', 'en', 'es'] as Language[]).map(code => <button key={code} lang={code} aria-pressed={lang === code} onClick={event => { setLang(code); event.currentTarget.closest('details')!.open = false; }}>{({ pt: '🇧🇷 Português', en: '🇬🇧 English', es: '🇪🇸 Español' })[code]}</button>)}</div></details>
     <button className="theme-control" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={theme === 'dark' ? t('Ativar tema claro', 'Use light theme', 'Activar tema claro') : t('Ativar tema escuro', 'Use dark theme', 'Activar tema oscuro')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button>
   </>;
-  return <header ref={ref} className={`experience-header wrap ${scrolled ? 'is-collapsed' : ''}`}>
+  return <header ref={ref} className={`experience-header wrap ${scrolled ? 'is-scrolled' : ''}`}>
     <div className="header-full">
       <a href="/" className="wordmark" aria-label="Mari Mou — início">mari<span>mou</span><i>✳</i></a>
       <nav className="experience-nav" aria-label={t('Navegação principal', 'Main navigation', 'Navegación principal')}>
@@ -36,7 +35,7 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
       </nav>
       <div className="experience-header-actions">{controls()}</div>
     </div>
-    <div className={`compact-menu ${menu ? 'is-open' : ''}`} onPointerEnter={event => { if (event.pointerType === 'mouse' && matchMedia('(min-width: 801px) and (hover: hover)').matches) setMenu(true); }} onPointerLeave={event => { if (event.pointerType === 'mouse' && !event.currentTarget.contains(document.activeElement)) setMenu(false); }}>
+    <div className={`compact-menu ${menu ? 'is-open' : ''}`}>
       <button className="compact-menu-trigger" aria-label={t('Menu de navegação', 'Navigation menu', 'Menú de navegación')} aria-expanded={menu} aria-controls="compact-navigation" onClick={() => setMenu(!menu)}>{menu ? <X size={21} /> : <Menu size={21} />}</button>
       <div id="compact-navigation" className="compact-menu-panel" {...(!menu ? { inert: '' } : {})}>
         <a href="/" className="compact-menu-brand">mari mou <span>✳</span></a>
