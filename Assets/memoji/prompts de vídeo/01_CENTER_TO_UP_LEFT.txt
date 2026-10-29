@@ -1,0 +1,26 @@
+Use the uploaded CENTER image as the exact STARTING FRAME and the uploaded UP-LEFT image as the exact FINAL POSE reference, when the video tool supports both references. Make ONE continuous, simple head-pose animation of the SAME character. Do not create a second character, morph between two different heads, cut, fade or cross-dissolve between still images.
+
+POSE SEQUENCE:
+CENTER → direct intermediate UP-LEFT diagonal → UP-LEFT → HOLD UP-LEFT.
+
+The floating head begins facing straight toward the camera. Then it moves ONCE, smoothly and directly, to the exact UP-LEFT pose shown in its uploaded destination reference. The target reference takes priority over approximate angles. No second destination. On reaching the destination, freeze BOTH the head pose and eye direction completely and hold unchanged until the final frame.
+
+MOTION:
+Simultaneously rotate the face toward SCREEN-LEFT and pitch the chin UP. Begin and end both components together. Travel on one direct diagonal path, roughly 20–25° of moderate perceived diagonal pose change; use the uploaded UP-LEFT reference as the authority for the final angle. Keep the skull upright, with no sideways lean or head roll.
+YAW = toward screen-left; PITCH = upward; ROLL = 0°.
+The eyes change direction in synchrony with the head and settle on the SAME final target. No independent eye scanning. Both movement components, when applicable, start at the same instant and finish at the same instant.
+
+TRAJECTORY AND STOP:
+This is NOT scanning, tracking, watching a moving object, following the cursor, or an arc. No intermediate cardinal-direction stop. No TOP pose. No UP-RIGHT pose. No sweep across the upper area. No overshoot. No rebound. No return to center. No blinking or facial-expression animation. No extra head movements after the destination. Hold completely still after reaching the final pose.
+
+EXACT CHARACTER AND COMPOSITION:
+Maintain the identical stylized 3D floating-head avatar from the CENTER reference: same facial geometry and identity, voluminous wavy burgundy hair, burgundy eyes, eyebrows, silver septum ring, two vertically aligned lower-lip/chin piercing beads, small stud earrings, skin tone, calm neutral expression, hair volume, shading, soft luminous studio lighting and render style. Do not add glasses, facial hair or accessories not present in the image. Keep the floating head centered in the EXACT same screen position and image scale at all times. The camera is LOCKED. No pan, zoom, orbit, shake, reframing, perspective jump or crop change. Hair follows the same head rotation naturally without wind, independent animation or shape morphing.
+
+CRITICAL ANATOMY LIMIT:
+ONLY the floating head and its existing surrounding hair are allowed. NEVER create or expose a neck, neck stump, shoulders, torso, clothing, body or anatomy behind/below the jaw. Keep the area beneath the face hidden naturally by the existing hair. Do not crop off the hair or introduce new elements.
+
+BACKGROUND / OUTPUT:
+Prefer an actually transparent background with alpha ONLY if the chosen video generation/export workflow genuinely supports transparent video. Otherwise use perfectly UNIFORM, SOLID, PURE BLACK (#000000) in EVERY frame for later background removal. No gradient, floor, texture, cast shadow, glow halo, fake checkerboard or background flicker. Do not falsely render checkerboard pixels as 'transparency'. Preserve crisp, consistent hair edges and soft editorial lighting, without wet or sweaty skin.
+
+FINAL FRAME = EXACT UP-LEFT REFERENCE ORIENTATION, FIXED AND STILL.
+CENTER → direct intermediate UP-LEFT diagonal → UP-LEFT → HOLD UP-LEFT.
