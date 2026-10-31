@@ -9,7 +9,7 @@ function LanguageFlag({ language }: { language: Language }) {
   </svg>;
 }
 
-export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: string; onToggleMotion: () => void; motionDisabled: boolean }) {
+export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: string; onToggleMotion: () => void; motionDisabled?: boolean }) {
   const { theme, setTheme, lang, setLang, t } = useExperience();
   const paused = useMotionPaused();
   const [menu, setMenu] = useState(false), [scrolled, setScrolled] = useState(false);
@@ -22,10 +22,11 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
     document.addEventListener('pointerdown', close); document.addEventListener('keydown', escape);
     return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', escape); };
   }, []);
-  const controls = () => <>
+  const controls = (isMobile = false) => <>
     <a className="pill primary header-talk" href="/#contato" onClick={() => setMenu(false)}>{t('Falar comigo', 'Let’s talk', 'Hablemos')}<ArrowUpRight size={14} /></a>
     <details className="header-dropdown language-selector"><summary aria-label={t('Selecionar idioma', 'Select language', 'Elegir idioma')}><LanguageFlag language={lang} /><ChevronDown size={11} /></summary><div className="header-dropdown-panel">{(['pt', 'en', 'es'] as Language[]).map(code => <button key={code} lang={code} aria-pressed={lang === code} onClick={event => { setLang(code); event.currentTarget.closest('details')!.open = false; }}>{({ pt: '🇧🇷 Português', en: '🇬🇧 English', es: '🇪🇸 Español' })[code]}</button>)}</div></details>
     <button className="theme-control" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={theme === 'dark' ? t('Ativar tema claro', 'Use light theme', 'Activar tema claro') : t('Ativar tema escuro', 'Use dark theme', 'Activar tema oscuro')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button>
+    {!isMobile && <button className="theme-control motion-control" onClick={onToggleMotion} aria-pressed={paused} aria-label={paused ? t('Retomar motions e animações', 'Resume motion & animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')} title={paused ? t('Retomar motions e animações', 'Resume motion & animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')}>{paused ? <Play size={18} /> : <Pause size={18} />}</button>}
   </>;
   return <header ref={ref} className={`experience-header wrap ${scrolled ? 'is-scrolled' : ''}`}>
     <div className="header-full">
@@ -33,7 +34,7 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
       <nav className="experience-nav" aria-label={t('Navegação principal', 'Main navigation', 'Navegación principal')}>
         <a href="/projetos" aria-current={path.startsWith('/projetos') ? 'page' : undefined}>{t('Projetos', 'Projects', 'Proyectos')}</a><a href="/sobre" aria-current={path === '/sobre' ? 'page' : undefined}>{t('Sobre mim', 'About me', 'Sobre mí')}</a>
       </nav>
-      <div className="experience-header-actions">{controls()}</div>
+      <div className="experience-header-actions">{controls(false)}</div>
     </div>
     <div className={`compact-menu ${menu ? 'is-open' : ''}`}>
       <button className="compact-menu-trigger" aria-label={t('Menu de navegação', 'Navigation menu', 'Menú de navegación')} aria-expanded={menu} aria-controls="compact-navigation" onClick={() => setMenu(!menu)}>{menu ? <X size={21} /> : <Menu size={21} />}</button>
@@ -43,8 +44,11 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
           <a href="/projetos" onClick={() => setMenu(false)}>{t('Projetos', 'Projects', 'Proyectos')}<ArrowUpRight size={19}/></a>
           <a href="/sobre" onClick={() => setMenu(false)}>{t('Sobre mim', 'About me', 'Sobre mí')}<ArrowUpRight size={19}/></a>
         </nav>
-        <div className="compact-menu-options">{controls()}</div>
-        <button className="menu-motion-control" onClick={onToggleMotion} disabled={motionDisabled} aria-pressed={paused}>{paused ? <Play size={14}/> : <Pause size={14}/>} {paused ? t('Retomar animações', 'Resume animations', 'Reanudar animaciones') : t('Pausar animações', 'Pause animations', 'Pausar animaciones')}</button>
+        <div className="compact-menu-options">{controls(true)}</div>
+        <button className="menu-motion-control" onClick={onToggleMotion} aria-pressed={paused} aria-label={paused ? t('Retomar motions e animações', 'Resume motion & animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')}>
+          {paused ? <Play size={15}/> : <Pause size={15}/>}
+          <span>{paused ? t('Retomar animações', 'Resume animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')}</span>
+        </button>
       </div>
     </div>
   </header>;
