@@ -41,8 +41,12 @@
 .compact-menu-options .header-dropdown-panel { position: relative; top: auto; right: auto; margin-top: 6px; min-width: 0; box-shadow: none; }
 .compact-menu-options .hero-selector .header-dropdown-panel { left: auto; }
 .compact-menu-options .language-selector .header-dropdown-panel { position: absolute; right: 0; min-width: 165px; }
-.menu-motion-control { display: flex; align-items: center; gap: 7px; margin-top: 23px; padding: 0; font-size: 10px; color: var(--muted); background: transparent; border: 0; }
-.menu-motion-control:disabled { opacity: .5; }
+.motion-control { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid transparent; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; transition: color .2s, background-color .2s, border-color .2s; }
+.motion-control:hover { color: var(--ivory); background: var(--surface-raised); border-color: var(--hairline); }
+.motion-control[aria-pressed="true"] { color: var(--lime); background: color-mix(in srgb, var(--lime) 12%, transparent); border-color: color-mix(in srgb, var(--lime) 35%, transparent); }
+.menu-motion-control { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; padding: 10px 16px; font-size: 11px; font-weight: 500; color: var(--muted); background: color-mix(in srgb, var(--surface-raised, #24271d) 80%, transparent); border: 1px solid var(--hairline); border-radius: 999px; cursor: pointer; width: 100%; transition: color .2s, border-color .2s, background-color .2s; }
+.menu-motion-control:hover { color: var(--ivory); border-color: var(--lime); }
+.menu-motion-control[aria-pressed="true"] { color: var(--lime); border-color: var(--lime); background: color-mix(in srgb, var(--lime) 12%, transparent); }
 .experience-back-top { right: auto; left: 23px; bottom: 23px; width: 40px; height: 40px; backdrop-filter: blur(10px); }
 
 /* Ribbons get their own breathing room; rotated edges remain visible. */
@@ -169,7 +173,7 @@
   .header-full .wordmark { font-size: 22px; }
   .header-full .wordmark i { font-size: 24px; }
   .header-full .experience-header-actions { display: flex; padding-right: 45px; }
-  .header-full .hero-selector, .header-full .language-selector, .header-full .theme-control { display: none; }
+  .header-full .hero-selector, .header-full .language-selector, .header-full .theme-control, .header-full .motion-control { display: none; }
   .experience-site .header-full .header-talk { padding: 10px 12px; font-size: 9px; }
   .compact-menu { right: 15px; top: 12px; }
   .compact-menu-trigger { width: 40px; height: 40px; }
@@ -296,9 +300,40 @@
   .experience-site .mari-chat-launch { width: 56px; padding: 5px 6px; }
   .experience-site .contact-text-cta { font-size: 11px; }
 }
-.motion-paused .wire-part, .motion-paused .chart-bar { opacity: 1; transform: none; animation: none !important; }
-.motion-paused .chart-line { stroke-dashoffset: 0; animation: none !important; }
-.motion-paused .ambient-grid-highlight { display: none; }
+/* Motion paused global overrides: instant states, zero transition, no continuous animation */
+html.motion-paused,
+html.motion-paused *,
+html.motion-paused *::before,
+html.motion-paused *::after,
+.portfolio-site.motion-paused,
+.portfolio-site.motion-paused *,
+.portfolio-site.motion-paused *::before,
+.portfolio-site.motion-paused *::after {
+  animation: none !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+
+html.motion-paused .wire-part,
+.portfolio-site.motion-paused .wire-part,
+html.motion-paused .chart-bar,
+.portfolio-site.motion-paused .chart-bar {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.motion-paused .chart-line,
+.portfolio-site.motion-paused .chart-line {
+  stroke-dashoffset: 0 !important;
+}
+
+html.motion-paused .ambient-grid-glow,
+.portfolio-site.motion-paused .ambient-grid-glow,
+html.motion-paused .ambient-grid-highlight,
+.portfolio-site.motion-paused .ambient-grid-highlight {
+  display: none !important;
+}
 @media (prefers-reduced-motion: reduce) { .ambient-grid-highlight { display: none; } .wire-part { opacity: 1; } .chart-bar { transform: none; } .chart-line { stroke-dashoffset: 0; } }
 .process-connections { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 2; pointer-events: none; }
 .process-connections path { fill: none; stroke: var(--lime); stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset .65s cubic-bezier(.22,1,.36,1), opacity .2s; }

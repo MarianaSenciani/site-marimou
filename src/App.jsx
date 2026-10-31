@@ -20,7 +20,7 @@ export default function App() {
       window.history.pushState({}, '', url.pathname + url.hash);
       setPath(url.pathname);
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        if (url.hash) document.getElementById(url.hash.slice(1))?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+        if (url.hash) document.getElementById(url.hash.slice(1))?.scrollIntoView({ behavior: (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-paused')) ? 'instant' : 'smooth' });
         else window.scrollTo({ top: 0, behavior: 'instant' });
       }));
     };
