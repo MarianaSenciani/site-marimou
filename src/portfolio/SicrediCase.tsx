@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
 import { animate, motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, MessageCircle, Monitor, Rocket, Smartphone } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, MessageCircle, Rocket } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { Reveal } from '@/components/ui/reveal';
@@ -38,9 +38,10 @@ function ChapterTitle({ children, id }: { children: string; id?: string }) {
 
 function Metric({ metric, index = 0 }: { metric: typeof metrics[number]; index?: number }) {
   const ref = useRef<HTMLDivElement>(null), visible = useInView(ref, { once: true, amount: .5 });
-  const paused = useMotionPaused(), [number, setNumber] = useState(metric.value);
+  const paused = useMotionPaused(), [number, setNumber] = useState(paused ? metric.value : 0);
   useEffect(() => {
-    if (!visible || paused) { setNumber(metric.value); return; }
+    if (paused) { setNumber(metric.value); return; }
+    if (!visible) return;
     const controls = animate(0, metric.value, { duration: 1.1, delay: index * .1, ease: 'easeOut', onUpdate: value => setNumber(Math.round(value)) });
     return () => controls.stop();
   }, [visible, paused, metric.value, index]);
@@ -72,8 +73,15 @@ function Phone({ campaign, className = '', variant = 'default', playOnHover = fa
   return <div className={`sc-phone sc-phone-${variant} ${className}`}>{variant === 'android' ? <span className="sc-phone-camera" aria-hidden="true" /> : <span className="sc-phone-speaker" aria-hidden="true" />}<CaseVideo campaign={campaign} device="mobile" playOnHover={playOnHover} /><span className="sc-phone-home" aria-hidden="true" /></div>;
 }
 
-function BrowserFrame({ children, className = '', label = 'Sicredi · landing page', safari = false }: { children: ReactNode; className?: string; label?: string; safari?: boolean }) {
-  return <div className={`sc-browser ${className}`}><div className="sc-browser-bar" aria-hidden="true">{safari ? <><span className="sc-safari-controls"><i/><i/><i/></span><span className="sc-safari-navigation">‹　›</span><span className="sc-safari-address">{label}</span><span className="sc-safari-actions">↗　＋</span></> : <><span>● ● ●</span><span>{label}</span><Monitor size={12}/></>}</div>{children}</div>;
+/** Single desktop frame (dark Safari-style) shared by every desktop mockup in the case. */
+/** Bold highlight that animates once the phrase is read on screen. */
+function Emphasis({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+  const ref = useRef<HTMLElement>(null), on = useInView(ref, { once: true, amount: 1 }), paused = useMotionPaused();
+  return <strong ref={ref} className={`sc-emphasis ${on || paused ? 'is-on' : ''}`} style={{ transitionDelay: `${delay}s` }}>{children}</strong>;
+}
+
+function BrowserFrame({ children, className = '', label = 'Sicredi · landing page' }: { children: ReactNode; className?: string; label?: string }) {
+  return <div className={`sc-browser ${className}`}><div className="sc-browser-bar" aria-hidden="true"><span className="sc-safari-controls"><i/><i/><i/></span><span className="sc-safari-navigation">‹　›</span><span className="sc-safari-address">{label}</span><span className="sc-safari-actions">↗　＋</span></div>{children}</div>;
 }
 
 function HeroVisual() {
@@ -81,7 +89,7 @@ function HeroVisual() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const y = useTransform(scrollYProgress, [0, 1], [22, -22]), phoneY = useTransform(scrollYProgress, [0, 1], [40, -38]);
   return <div ref={ref} className="sc-hero-art" aria-label="Composição das experiências Sicredi em desktop e mobile">
-    <motion.div className="sc-hero-desktop" style={{ y: paused ? 0 : y }}><BrowserFrame className="sc-hero-browser" safari><CaseVideo campaign="pj" device="desktop" eager /></BrowserFrame></motion.div>
+    <motion.div className="sc-hero-desktop" style={{ y: paused ? 0 : y }}><BrowserFrame className="sc-hero-browser"><CaseVideo campaign="pj" device="desktop" eager /></BrowserFrame></motion.div>
     <motion.div className="sc-hero-phone" style={{ y: paused ? 0 : phoneY }}><Phone campaign="agro" variant="android" /></motion.div>
     <span className="sc-art-caption">Uma estrutura. Diferentes contextos.</span>
   </div>;
@@ -96,17 +104,16 @@ function useScene(count: number) {
 }
 
 function Roadmap() {
-  const { ref, active, setActive, progress } = useScene(3), paused = useMotionPaused();
+  const [active, setActive] = useState(0), paused = useMotionPaused();
   return <section id="sc-roadmap" className="sc-chapter sc-roadmap wrap">
-    <ChapterTitle>Três meses, com uma função diferente em cada etapa.</ChapterTitle>
     <p className="sc-lead">O primeiro mês foi dedicado a entender o comportamento das pessoas. No segundo, transformamos os aprendizados em páginas e colocamos a solução no ar. O terceiro ficou voltado para acompanhar o uso e ajustar o que fosse necessário.</p>
-    <div ref={ref} className={`sc-roadmap-scene ${paused ? 'sc-still' : ''}`}><div className="sc-roadmap-sticky">
-      <div className="sc-roadmap-line" aria-hidden="true"><motion.div style={{ scaleX: paused ? 1 : progress }} /></div>
-      <div className="sc-months">{phases.map((phase, i) => <article key={phase.title} className={active === i ? 'is-active' : ''}>
+    <div className="sc-roadmap-track">
+      <div className="sc-roadmap-line" aria-hidden="true"><motion.div initial={paused ? false : { scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true, amount: .5 }} transition={{ duration: paused ? 0 : 1.4, ease: 'easeInOut' }} /></div>
+      <div className="sc-months">{phases.map((phase, i) => <motion.article key={phase.title} className={active === i ? 'is-active' : ''} initial={paused ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} transition={{ duration: paused ? 0 : .6, delay: paused ? 0 : i * .18 }}>
         <button onClick={() => setActive(i)} aria-pressed={active === i} aria-label={`Mês ${i + 1}: ${phase.title}`}><span className="sc-month-dot"/><span>Mês 0{i + 1}</span></button>
         <h3>{phase.title}</h3><p>{phase.description}</p><ol>{phase.steps.map((step, index) => <li key={step}><span>{step}</span>{index < phase.steps.length - 1 && <ArrowRight size={12} aria-hidden="true"/>}</li>)}</ol>
-      </article>)}</div><p className="sc-scene-note">2024 · Pesquisa → estrutura → acompanhamento</p>
-    </div></div>
+      </motion.article>)}</div>
+    </div>
   </section>;
 }
 
@@ -117,10 +124,11 @@ function Flow({ title, steps, emphasis = false }: { title: string; steps: string
 
 function PageArchitecture() {
   const { ref, active, setActive } = useScene(4), paused = useMotionPaused();
-  return <section id="sc-estrutura" className="sc-chapter wrap">
-    <ChapterTitle>A estrutura seguia a forma como as pessoas diziam procurar informação.</ChapterTitle>
-    <p className="sc-lead">Nas entrevistas, um padrão apareceu com frequência: primeiro entender a proposta, depois descobrir o que era possível fazer e só então aprofundar os detalhes. A página foi organizada nessa mesma ordem.</p>
+  return <section id="sc-estrutura" className="sc-chapter sc-architecture wrap">
     <div ref={ref} className={`sc-architecture-scene ${paused ? 'sc-still' : ''}`}><div className="sc-architecture-sticky">
+      <div className="sc-architecture-head"><ChapterTitle>A estrutura seguia a forma como as pessoas diziam procurar informação.</ChapterTitle>
+      <p className="sc-lead">Nas entrevistas, um padrão apareceu com frequência: primeiro entender a proposta, depois descobrir o que era possível fazer e só então aprofundar os detalhes. A página foi organizada nessa mesma ordem.</p></div>
+      <div className="sc-architecture-body">
       {/* Conceptual page anatomy, deliberately separate from the real screenshots. */}
       <BrowserFrame className="sc-anatomy" label="Estrutura da experiência"><div className="sc-anatomy-page">{architecture.map(([title], i) => <button key={title} onClick={() => setActive(i)} aria-pressed={active === i} className={`sc-anatomy-block sc-anatomy-${i} ${active === i ? 'is-active' : ''}`}>
         <span className="sc-anatomy-label">0{i + 1} · {title}</span>
@@ -133,34 +141,44 @@ function PageArchitecture() {
         {architecture.map(([title, body], i) => <article key={title} className={active === i ? 'is-active' : ''}><span className="sc-stage-number">0{i + 1}</span><h3>{title}</h3><p>{body}</p></article>)}
         <span className="sc-scene-note">A ordem do conteúdo faz parte da experiência.</span>
       </div>
+      </div>
     </div></div>
   </section>;
 }
 
 function CampaignGallery() {
-  const [active, setActive] = useState(0), [device, setDevice] = useState<'desktop' | 'mobile'>('desktop');
+  const [active, setActive] = useState(0);
   const campaign = campaigns[active], paused = useMotionPaused();
-  return <section id="sc-campanhas" className="sc-chapter wrap">
+  return <section id="sc-campanhas" className="sc-chapter sc-campaigns wrap">
     <ChapterTitle>A mesma base, adaptada para quatro campanhas.</ChapterTitle>
     <p className="sc-lead">PJ e Agro usaram praticamente a mesma estrutura. Nas campanhas de Amazonas e Cuiabá, mantivemos a lógica de conteúdo, mas com mais liberdade visual para acompanhar o contexto esportivo.</p>
-    <div className="sc-gallery-controls"><div className="sc-campaign-tabs" role="group" aria-label="Escolher campanha">{campaigns.map((item, i) => <button key={item.id} aria-pressed={active === i} onClick={() => setActive(i)}>{item.name}<ArrowUpRight size={14}/></button>)}</div><div className="sc-device-tabs" role="group" aria-label="Escolher dispositivo"><button aria-pressed={device === 'desktop'} onClick={() => setDevice('desktop')} aria-label="Desktop"><Monitor size={17}/></button><button aria-pressed={device === 'mobile'} onClick={() => setDevice('mobile')} aria-label="Mobile"><Smartphone size={17}/></button></div></div>
-    <motion.div key={`stage-${campaign.id}-${device}`} initial={paused ? false : { opacity: .3, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: paused ? 0 : .5 }} className="sc-campaign-stage" style={{ '--campaign-accent': campaign.accent } as React.CSSProperties}>
+    <div className="sc-gallery-controls"><div className="sc-campaign-tabs" role="group" aria-label="Escolher campanha">{campaigns.map((item, i) => <button key={item.id} aria-pressed={active === i} onClick={() => setActive(i)}>{item.name}<ArrowUpRight size={14}/></button>)}</div></div>
+    <motion.div key={`stage-${campaign.id}`} initial={paused ? false : { opacity: .3, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: paused ? 0 : .5 }} className="sc-campaign-stage" style={{ '--campaign-accent': campaign.accent } as React.CSSProperties}>
       <div className="sc-campaign-info"><span>{campaign.description}</span><h3>{campaign.name}</h3><p>{campaign.body}</p><span className="sc-campaign-count">0{active + 1} / 04</span></div>
-      {campaign.id === 'amazonas' ? <div className="sc-missing-art"><span aria-hidden="true">✳</span><strong>Amazonas</strong><p>Visual da campanha a incluir.</p>{/* ASSET PENDENTE: screenshots e gravações reais da LP Amazonas; não reutilizar outra campanha. */}</div> : <div className={`sc-campaign-media is-${device}`}>
-        {device === 'desktop' ? <BrowserFrame><CampaignScreenshot campaign={campaign.id}/></BrowserFrame> : <Phone campaign={campaign.id} />}
-        <div className="sc-campaign-secondary">{device === 'desktop' ? <Phone campaign={campaign.id} /> : <BrowserFrame><CaseVideo campaign={campaign.id} device="desktop" /></BrowserFrame>}</div>
+      {campaign.id === 'amazonas' ? <div className="sc-missing-art"><span aria-hidden="true">✳</span><strong>Amazonas</strong><p>Visual da campanha a incluir.</p>{/* ASSET PENDENTE: screenshots e gravações reais da LP Amazonas; não reutilizar outra campanha. */}</div> : <div className="sc-campaign-media">
+        <BrowserFrame><CampaignScreenshot campaign={campaign.id}/></BrowserFrame>
+        <div className="sc-campaign-secondary"><Phone campaign={campaign.id} /></div>
       </div>}
     </motion.div>
   </section>;
 }
 
 function CampaignScreenshot({ campaign }: { campaign: string }) {
-  const [position, setPosition] = useState(0);
-  const move = (delta: number) => setPosition(current => Math.max(0, Math.min(100, current + delta)));
-  return <div className="sc-campaign-screenshot" tabIndex={0} aria-label="Role dentro da tela para percorrer a landing page" onWheel={event => {
-    const next = Math.max(0, Math.min(100, position + event.deltaY * .08));
-    if (next !== position) { event.preventDefault(); event.stopPropagation(); setPosition(next); }
-  }} onKeyDown={event => {
+  const [position, setPosition] = useState(0), position_ = useRef(0), frame = useRef<HTMLDivElement>(null);
+  const update = (value: number) => { position_.current = value; setPosition(value); };
+  useEffect(() => { position_.current = 0; setPosition(0); }, [campaign]);
+  useEffect(() => {
+    const node = frame.current; if (!node) return;
+    // Native, non-passive listener: the page keeps its scroll until the screen reaches either end.
+    const onWheel = (event: WheelEvent) => {
+      const next = Math.max(0, Math.min(100, position_.current + event.deltaY * .08));
+      if (next !== position_.current) { event.preventDefault(); update(next); }
+    };
+    node.addEventListener('wheel', onWheel, { passive: false });
+    return () => node.removeEventListener('wheel', onWheel);
+  }, []);
+  const move = (delta: number) => update(Math.max(0, Math.min(100, position_.current + delta)));
+  return <div ref={frame} className="sc-campaign-screenshot" tabIndex={0} aria-label="Role dentro da tela para percorrer a landing page" onKeyDown={event => {
     if (event.key === 'ArrowDown') { event.preventDefault(); move(8); }
     if (event.key === 'ArrowUp') { event.preventDefault(); move(-8); }
   }}><motion.img loading="lazy" src={`${mediaRoot}${campaign}-desktop.png`} alt={`Detalhes da landing page ${campaign}. Role dentro da tela para percorrer o conteúdo.`} animate={{ objectPosition: `50% ${position}%` }} transition={{ duration: .25, ease: 'easeOut' }}/><span className="sc-screen-scroll-hint">Scroll na tela</span></div>;
@@ -221,8 +239,8 @@ export function SicrediCase() {
     {/* ITERATION: show the decision sequence; private reports never enter the public assets. */}
     <section id="sc-acompanhamento" className="sc-chapter wrap"><ChapterTitle>Os dados mostraram quando a estrutura precisava mudar.</ChapterTitle><p className="sc-lead">Depois de algumas alterações pedidas pelo cliente, percebi uma queda no tempo de leitura. Revisei a estrutura da página com o time de redação, reorganizamos alguns trechos e acompanhei o comportamento depois da mudança. A nova versão foi mantida porque os dados melhoraram.</p><div className="sc-iteration">{[['Mudança','Ajustes de conteúdo / estrutura solicitados pelo cliente.'],['Sinal','Queda observada no tempo de leitura / retenção.'],['Hipótese','A nova organização podia estar dificultando a leitura.'],['Iteração','Reorganização do conteúdo e revisão dos textos.'],['Validação','Os indicadores melhoraram depois dos ajustes.']].map(([title, body], i) => <Reveal key={title} delay={i * .12}><span className="sc-iteration-dot"/><h3>{title}</h3><p>{body}</p>{i === 4 && <Rocket className="sc-validation-rocket" aria-hidden="true"/>}</Reveal>)}</div></section>
     {/* IMPACT: later continuity of use, never claimed as 2024 conversion or unique users. */}
-    <section id="sc-impacto" className="sc-impact sc-chapter"><Reveal className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><p className="sc-lead">Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</p><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><p className="sc-caption">{usageNote}</p><p className="sc-caption">592 sessões com o evento “Entre em contato conosco”.</p></Reveal></section>
-    <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><Reveal><p className="sc-lead">Esse projeto me mostrou, na prática, que o trabalho de Product Design pode começar antes da primeira tela. Aqui, a principal decisão foi entender onde a informação deveria estar e como ela deveria ser apresentada para aquele público.</p><p>Também foi um projeto em que aprendi a usar os dados como parte da conversa com o cliente. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e discutir o que estava acontecendo de forma mais objetiva.</p></Reveal></section>
+    <section id="sc-impacto" className="sc-impact sc-chapter"><Reveal className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><p className="sc-lead">Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</p><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><div className="sc-impact-notes"><Reveal className="sc-impact-box" delay={.1}><span>Período e fonte</span><p>{usageNote}</p></Reveal><Reveal className="sc-impact-box sc-impact-box-accent" delay={.2}><strong>592</strong><p>sessões com o evento “Entre em contato conosco”.</p></Reveal></div></Reveal></section>
+    <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><Reveal delay={.1}><p className="sc-lead">Esse projeto me mostrou, na prática, que o trabalho de Product Design <Emphasis>pode começar antes da primeira tela</Emphasis>. Aqui, a principal decisão foi <Emphasis delay={.15}>entender onde a informação deveria estar</Emphasis> e como ela deveria ser apresentada para aquele público.</p></Reveal><Reveal delay={.2}><p className="sc-lead">Também foi um projeto em que aprendi a <Emphasis>usar os dados como parte da conversa com o cliente</Emphasis>. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e <Emphasis delay={.15}>discutir o que estava acontecendo de forma mais objetiva</Emphasis>.</p></Reveal></section>
     <div className="sc-ending wrap"><a href="/#contato" className="pill primary">Vamos construir algo juntos?<ArrowUpRight size={17}/></a><a className="sc-next" href="/projetos/lwsa">Próximo case · LWSA<ArrowUpRight size={19}/></a></div>
   </main>;
 }

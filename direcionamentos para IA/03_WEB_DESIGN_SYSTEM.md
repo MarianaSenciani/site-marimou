@@ -49,6 +49,13 @@ Este modelo de componentes é uma **formalização sugerida** sobre padrões de 
 9. **Não usar o avatar/memoji em materiais fora do site.**
 10. **Não apresentar valores estimados como dados medidos.** Sinalizar sempre `observed`, `proposed`, ou `unverified`.
 
+## 4.1 Padrões definidos pela Mariana durante a evolução do case Sicredi
+Regras explícitas da Mariana (status: `approved-by-user`, aplicadas primeiro no case Sicredi):
+- **Badges seletoras e seletores de conteúdo** (navegação de capítulos, abas de campanha, passos numerados) seguem o mesmo padrão da navegação de capítulos: formato pílula (ou círculo, para números), contorno verde-lima a ~58% de opacidade, texto `muted`; hover/foco com texto e contorno lima; estado ativo preenchido em lima com texto escuro e peso 700.
+- **Mockups desktop** usam sempre a mesma moldura escura estilo Safari (`BrowserFrame`), sem variantes claras.
+- **Títulos e subtítulos de seção** ocupam, no máximo, a largura do container de texto.
+- **Seletores redundantes** (por exemplo, alternar desktop/mobile quando ambos já aparecem) devem ser evitados.
+
 ## 5. Tokens e implementação
 Consultar `02_DESIGN_TOKENS.json`. É um arquivo inicial com valores observados e nomes semânticos **propostos**, não um espelho de variáveis Figma. Ao implementar, converter os tokens para CSS custom properties e criar camada de componentes; não mapear `observedDesktop.heroFontSize` diretamente para todas as larguras.
 
