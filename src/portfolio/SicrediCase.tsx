@@ -66,13 +66,13 @@ function CaseVideo({ campaign, device, eager = false }: { campaign: string; devi
   </div>;
 }
 
-function Phone({ campaign, className = '' }: { campaign: string; className?: string }) {
+function Phone({ campaign, className = '', variant = 'default' }: { campaign: string; className?: string; variant?: 'default' | 'android' }) {
   // No external phone frame was supplied. This CSS shell preserves the entire recorded viewport.
-  return <div className={`sc-phone ${className}`}><span className="sc-phone-speaker" aria-hidden="true" /><CaseVideo campaign={campaign} device="mobile" /><span className="sc-phone-home" aria-hidden="true" /></div>;
+  return <div className={`sc-phone sc-phone-${variant} ${className}`}>{variant === 'android' ? <span className="sc-phone-camera" aria-hidden="true" /> : <span className="sc-phone-speaker" aria-hidden="true" />}<CaseVideo campaign={campaign} device="mobile" /><span className="sc-phone-home" aria-hidden="true" /></div>;
 }
 
-function BrowserFrame({ children, className = '', label = 'Sicredi · landing page' }: { children: ReactNode; className?: string; label?: string }) {
-  return <div className={`sc-browser ${className}`}><div className="sc-browser-bar" aria-hidden="true"><span>● ● ●</span><span>{label}</span><Monitor size={12}/></div>{children}</div>;
+function BrowserFrame({ children, className = '', label = 'Sicredi · landing page', safari = false }: { children: ReactNode; className?: string; label?: string; safari?: boolean }) {
+  return <div className={`sc-browser ${className}`}><div className="sc-browser-bar" aria-hidden="true">{safari ? <><span className="sc-safari-controls"><i/><i/><i/></span><span className="sc-safari-navigation">‹　›</span><span className="sc-safari-address">{label}</span><span className="sc-safari-actions">↗　＋</span></> : <><span>● ● ●</span><span>{label}</span><Monitor size={12}/></>}</div>{children}</div>;
 }
 
 function HeroVisual() {
@@ -80,8 +80,8 @@ function HeroVisual() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const y = useTransform(scrollYProgress, [0, 1], [22, -22]), phoneY = useTransform(scrollYProgress, [0, 1], [40, -38]);
   return <div ref={ref} className="sc-hero-art" aria-label="Composição das experiências Sicredi em desktop e mobile">
-    <span className="sc-art-orbit" aria-hidden="true"/><motion.div className="sc-hero-desktop" style={{ y: paused ? 0 : y }}><BrowserFrame className="sc-hero-browser"><CaseVideo campaign="pj" device="desktop" eager /></BrowserFrame></motion.div>
-    <motion.div className="sc-hero-phone" style={{ y: paused ? 0 : phoneY }}><Phone campaign="agro" /></motion.div>
+    <motion.div className="sc-hero-desktop" style={{ y: paused ? 0 : y }}><BrowserFrame className="sc-hero-browser" safari><CaseVideo campaign="pj" device="desktop" eager /></BrowserFrame></motion.div>
+    <motion.div className="sc-hero-phone" style={{ y: paused ? 0 : phoneY }}><Phone campaign="agro" variant="android" /></motion.div>
     <span className="sc-art-caption">Uma estrutura. Diferentes contextos.</span>
   </div>;
 }
