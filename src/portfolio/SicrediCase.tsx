@@ -80,9 +80,8 @@ function HeroVisual() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const y = useTransform(scrollYProgress, [0, 1], [22, -22]), phoneY = useTransform(scrollYProgress, [0, 1], [40, -38]);
   return <div ref={ref} className="sc-hero-art" aria-label="Composição das experiências Sicredi em desktop e mobile">
-    <span className="sc-art-orbit" aria-hidden="true"/><motion.div className="sc-hero-desktop" style={{ y: paused ? 0 : y }}><BrowserFrame><div className="sc-hero-capture"><img src={`${mediaRoot}pj-desktop.png`} alt="Primeira dobra e benefícios da landing page PJ"/></div></BrowserFrame></motion.div>
+    <span className="sc-art-orbit" aria-hidden="true"/><motion.div className="sc-hero-desktop" style={{ y: paused ? 0 : y }}><BrowserFrame className="sc-hero-browser"><CaseVideo campaign="pj" device="desktop" eager /></BrowserFrame></motion.div>
     <motion.div className="sc-hero-phone" style={{ y: paused ? 0 : phoneY }}><Phone campaign="agro" /></motion.div>
-    <motion.div className="sc-hero-mini" style={{ y: paused ? 0 : y }}><Phone campaign="cuiaba" /></motion.div>
     <span className="sc-art-caption">Uma estrutura. Diferentes contextos.</span>
   </div>;
 }
