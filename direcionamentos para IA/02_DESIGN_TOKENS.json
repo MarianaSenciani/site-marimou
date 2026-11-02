@@ -1,0 +1,40 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "meta": {
+    "brand": "Mari Mou",
+    "source": "Figma Site Mari Mou 2",
+    "status": "observed-plus-proposed-mapping",
+    "warning": "Color values and observed typography are factual; semantic roles and scale proposals require review. No native Figma variables/styles were detected."
+  },
+  "color": {
+    "raw": {
+      "offWhite": {"$type":"color", "$value":"#F2F1E8"},
+      "lime": {"$type":"color", "$value":"#BDDB42"},
+      "sage": {"$type":"color", "$value":"#AEB39D"},
+      "ink": {"$type":"color", "$value":"#1B1D15"},
+      "darkGreen": {"$type":"color", "$value":"#23271C"},
+      "oliveDark": {"$type":"color", "$value":"#303625"}
+    },
+    "semanticProposal": {
+      "background": {"$type":"color", "$value":"{color.raw.offWhite}"},
+      "foreground": {"$type":"color", "$value":"{color.raw.ink}"},
+      "accent": {"$type":"color", "$value":"{color.raw.lime}"},
+      "muted": {"$type":"color", "$value":"{color.raw.sage}"}
+    }
+  },
+  "fontFamily": {
+    "display": {"$type":"fontFamily", "$value":"Alexandria"},
+    "body": {"$type":"fontFamily", "$value":"Inter"}
+  },
+  "observedDesktop": {
+    "canvasWidth": {"$type":"dimension", "$value":"1520.8px"},
+    "heroFontSize": {"$type":"dimension", "$value":"170px"},
+    "heroLineHeight": {"$type":"dimension", "$value":"170px"},
+    "heroLetterSpacing": {"$type":"dimension", "$value":"-14.45px"},
+    "sectionTitleFontSize": {"$type":"dimension", "$value":"42px"},
+    "sectionTitleLineHeight": {"$type":"dimension", "$value":"49.56px"},
+    "projectCardRadius": {"$type":"dimension", "$value":"20px"},
+    "pillRadius": {"$type":"dimension", "$value":"100px"}
+  },
+  "pending": ["responsive breakpoints", "mobile type ramp", "semantic states", "spacing scale", "shadow scale", "motion durations", "focus-ring", "dark-mode mappings"]
+}
