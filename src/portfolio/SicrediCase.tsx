@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
 import { animate, motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, MessageCircle, Monitor, Smartphone } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, MessageCircle, Monitor, Rocket, Smartphone } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { Reveal } from '@/components/ui/reveal';
@@ -30,6 +30,7 @@ const campaigns = [
   { id: 'amazonas', name: 'Amazonas', description: 'Adaptação expressiva', body: 'A lógica de conteúdo adaptada ao contexto esportivo.', accent: '#cbbb93' },
   { id: 'cuiaba', name: 'Cuiabá', description: 'Adaptação expressiva', body: 'Mais liberdade visual para acompanhar o contexto do clube.', accent: '#b7d69b' },
 ];
+const chapters = [['Roadmap','sc-roadmap'],['Pesquisa','sc-pesquisa'],['Estratégia','sc-estrategia'],['Estrutura','sc-estrutura'],['Campanhas','sc-campanhas'],['Impacto','sc-impacto']] as const;
 
 function ChapterTitle({ children, id }: { children: string; id?: string }) {
   return <WordPullUp as="h2" id={id} words={children} paused={useMotionPaused()} className="sc-title" />;
@@ -47,28 +48,28 @@ function Metric({ metric, index = 0 }: { metric: typeof metrics[number]; index?:
 }
 
 /** Load media near its scene, and stop playback outside it or when motion is paused. */
-function CaseVideo({ campaign, device, eager = false }: { campaign: string; device: 'desktop' | 'mobile'; eager?: boolean }) {
+function CaseVideo({ campaign, device, eager = false, playOnHover = false }: { campaign: string; device: 'desktop' | 'mobile'; eager?: boolean; playOnHover?: boolean }) {
   const ref = useRef<HTMLDivElement>(null), video = useRef<HTMLVideoElement>(null);
   const near = useInView(ref, { margin: '250px 0px' }), visible = useInView(ref, { amount: .12 });
-  const paused = useMotionPaused(), [loaded, setLoaded] = useState(eager), [failed, setFailed] = useState(false);
+  const paused = useMotionPaused(), [loaded, setLoaded] = useState(eager), [failed, setFailed] = useState(false), [active, setActive] = useState(false);
   useEffect(() => { if (near) setLoaded(true); }, [near]);
   useEffect(() => {
     const playback = () => {
       if (!video.current) return;
-      if (visible && !paused && !document.hidden) void video.current.play().catch(() => { /* Poster remains visible if autoplay is unavailable. */ });
+      if (visible && !paused && !document.hidden && (!playOnHover || active)) void video.current.play().catch(() => { /* Poster remains visible if autoplay is unavailable. */ });
       else video.current.pause();
     };
     playback(); document.addEventListener('visibilitychange', playback);
     return () => { document.removeEventListener('visibilitychange', playback); video.current?.pause(); };
-  }, [visible, paused, loaded, campaign, device]);
-  return <div ref={ref} className={`sc-media-screen sc-media-${device}`}>
-    {failed || !loaded ? <img loading="lazy" src={`${mediaRoot}${campaign}-${device}.png`} alt={`Landing page ${campaign}, versão ${device}`} /> : <video ref={video} src={`${mediaRoot}${campaign}-${device}.mp4`} poster={`${mediaRoot}${campaign}-${device}.png`} muted loop playsInline autoPlay={!paused && visible} preload="metadata" aria-label={`Gravação da landing page ${campaign}, versão ${device}`} onError={() => setFailed(true)} />}
+  }, [visible, paused, loaded, campaign, device, playOnHover, active]);
+  return <div ref={ref} className={`sc-media-screen sc-media-${device} ${active ? 'is-playing' : ''}`} tabIndex={playOnHover ? 0 : undefined} onPointerEnter={() => setActive(true)} onPointerLeave={() => setActive(false)} onFocus={() => setActive(true)} onBlur={() => setActive(false)}>
+    {failed || !loaded ? <img loading="lazy" src={`${mediaRoot}${campaign}-${device}.png`} alt={`Landing page ${campaign}, versão ${device}`} /> : <video ref={video} src={`${mediaRoot}${campaign}-${device}.mp4`} poster={`${mediaRoot}${campaign}-${device}.png`} muted loop playsInline autoPlay={!paused && visible && (!playOnHover || active)} preload="metadata" aria-label={`Gravação da landing page ${campaign}, versão ${device}`} onError={() => setFailed(true)} />}
   </div>;
 }
 
-function Phone({ campaign, className = '', variant = 'default' }: { campaign: string; className?: string; variant?: 'default' | 'android' }) {
+function Phone({ campaign, className = '', variant = 'default', playOnHover = false }: { campaign: string; className?: string; variant?: 'default' | 'android'; playOnHover?: boolean }) {
   // No external phone frame was supplied. This CSS shell preserves the entire recorded viewport.
-  return <div className={`sc-phone sc-phone-${variant} ${className}`}>{variant === 'android' ? <span className="sc-phone-camera" aria-hidden="true" /> : <span className="sc-phone-speaker" aria-hidden="true" />}<CaseVideo campaign={campaign} device="mobile" /><span className="sc-phone-home" aria-hidden="true" /></div>;
+  return <div className={`sc-phone sc-phone-${variant} ${className}`}>{variant === 'android' ? <span className="sc-phone-camera" aria-hidden="true" /> : <span className="sc-phone-speaker" aria-hidden="true" />}<CaseVideo campaign={campaign} device="mobile" playOnHover={playOnHover} /><span className="sc-phone-home" aria-hidden="true" /></div>;
 }
 
 function BrowserFrame({ children, className = '', label = 'Sicredi · landing page', safari = false }: { children: ReactNode; className?: string; label?: string; safari?: boolean }) {
@@ -111,7 +112,7 @@ function Roadmap() {
 
 function Flow({ title, steps, emphasis = false }: { title: string; steps: string[]; emphasis?: boolean }) {
   const paused = useMotionPaused();
-  return <div className={`sc-flow ${emphasis ? 'sc-flow-chosen' : ''}`}><h3>{title}</h3><ol>{steps.map((step, i) => <motion.li key={step} initial={paused ? false : { opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: paused ? 0 : .45, delay: paused ? 0 : i * .09 }}><span>{step}</span>{i < steps.length - 1 && <ArrowDown size={15} aria-hidden="true"/>}</motion.li>)}</ol></div>;
+  return <div className={`sc-flow ${emphasis ? 'sc-flow-chosen' : ''}`}><motion.h3 initial={paused ? false : { opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: paused ? 0 : .45 }}>{title}</motion.h3><ol>{steps.map((step, i) => <motion.li key={step} initial={paused ? false : { opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: paused ? 0 : .45, delay: paused ? 0 : i * .09 }}><span>{step}</span>{i < steps.length - 1 && <ArrowDown size={15} aria-hidden="true"/>}</motion.li>)}</ol></div>;
 }
 
 function PageArchitecture() {
@@ -138,7 +139,6 @@ function PageArchitecture() {
 
 function CampaignGallery() {
   const [active, setActive] = useState(0), [device, setDevice] = useState<'desktop' | 'mobile'>('desktop');
-  const [showRecording, setShowRecording] = useState(false);
   const campaign = campaigns[active], paused = useMotionPaused();
   return <section id="sc-campanhas" className="sc-chapter wrap">
     <ChapterTitle>A mesma base, adaptada para quatro campanhas.</ChapterTitle>
@@ -147,36 +147,58 @@ function CampaignGallery() {
     <motion.div key={`stage-${campaign.id}-${device}`} initial={paused ? false : { opacity: .3, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: paused ? 0 : .5 }} className="sc-campaign-stage" style={{ '--campaign-accent': campaign.accent } as React.CSSProperties}>
       <div className="sc-campaign-info"><span>{campaign.description}</span><h3>{campaign.name}</h3><p>{campaign.body}</p><span className="sc-campaign-count">0{active + 1} / 04</span></div>
       {campaign.id === 'amazonas' ? <div className="sc-missing-art"><span aria-hidden="true">✳</span><strong>Amazonas</strong><p>Visual da campanha a incluir.</p>{/* ASSET PENDENTE: screenshots e gravações reais da LP Amazonas; não reutilizar outra campanha. */}</div> : <div className={`sc-campaign-media is-${device}`}>
-        {device === 'desktop' ? <BrowserFrame>{showRecording ? <CaseVideo campaign={campaign.id} device="desktop" /> : <CampaignScreenshot campaign={campaign.id}/>}</BrowserFrame> : <Phone campaign={campaign.id} />}
+        {device === 'desktop' ? <BrowserFrame><CampaignScreenshot campaign={campaign.id}/></BrowserFrame> : <Phone campaign={campaign.id} />}
         <div className="sc-campaign-secondary">{device === 'desktop' ? <Phone campaign={campaign.id} /> : <BrowserFrame><CaseVideo campaign={campaign.id} device="desktop" /></BrowserFrame>}</div>
       </div>}
     </motion.div>
-    {campaign.id !== 'amazonas' && <div className="sc-gallery-links">{device === 'desktop' && <button className="sc-recording-toggle" aria-pressed={showRecording} onClick={() => setShowRecording(!showRecording)}>{showRecording ? 'Ver telas' : 'Ver gravação desktop'}<Monitor size={14}/></button>}<details className="sc-full-capture" key={`capture-${campaign.id}-${device}`}><summary>Ver a página completa · {campaign.name} / {device}<ArrowDown size={15}/></summary><img loading="lazy" src={`${mediaRoot}${campaign.id}-${device}.png`} alt={`Screenshot completo da landing page ${campaign.name} em ${device}`} /></details></div>}
   </section>;
 }
 
 function CampaignScreenshot({ campaign }: { campaign: string }) {
-  const ref = useRef<HTMLDivElement>(null), paused = useMotionPaused();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.3', 'end 0.3'] });
-  const position = useTransform(scrollYProgress, [0, 1], ['50% 0%', '50% 100%']);
-  return <div ref={ref} className="sc-campaign-screenshot"><motion.img loading="lazy" src={`${mediaRoot}${campaign}-desktop.png`} alt={`Detalhes da landing page ${campaign}. O recorte acompanha a leitura do case.`} style={{ objectPosition: paused ? '50% 0%' : position }}/></div>;
+  const [position, setPosition] = useState(0);
+  const move = (delta: number) => setPosition(current => Math.max(0, Math.min(100, current + delta)));
+  return <div className="sc-campaign-screenshot" tabIndex={0} aria-label="Role dentro da tela para percorrer a landing page" onWheel={event => {
+    const next = Math.max(0, Math.min(100, position + event.deltaY * .08));
+    if (next !== position) { event.preventDefault(); event.stopPropagation(); setPosition(next); }
+  }} onKeyDown={event => {
+    if (event.key === 'ArrowDown') { event.preventDefault(); move(8); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); move(-8); }
+  }}><motion.img loading="lazy" src={`${mediaRoot}${campaign}-desktop.png`} alt={`Detalhes da landing page ${campaign}. Role dentro da tela para percorrer o conteúdo.`} animate={{ objectPosition: `50% ${position}%` }} transition={{ duration: .25, ease: 'easeOut' }}/><span className="sc-screen-scroll-hint">Scroll na tela</span></div>;
 }
 
 function MobileScene() {
-  const ref = useRef<HTMLDivElement>(null), paused = useMotionPaused();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const left = useTransform(scrollYProgress, [0, 1], [35, -35]), right = useTransform(scrollYProgress, [0, 1], [-20, 30]);
-  return <section id="sc-mobile" className="sc-mobile-section sc-chapter wrap"><div className="sc-mobile-copy"><ChapterTitle>O celular era o principal ponto de acesso.</ChapterTitle><p className="sc-lead">Nos dados posteriores do Clarity, cerca de 96% das sessões analisadas vieram de dispositivos móveis. Isso reforça por que a experiência precisava funcionar bem no celular desde o início.</p><Metric metric={metrics[1]}/><p className="sc-caption">Dados posteriores de uso — jan–jun/2025.</p></div><div ref={ref} className="sc-mobile-composition"><motion.div className="sc-mobile-background sc-mobile-left" style={{ y: paused ? 0 : left }}><img loading="lazy" src={`${mediaRoot}pj-mobile.png`} alt="Interface mobile da campanha PJ"/></motion.div><motion.div className="sc-mobile-background sc-mobile-right" style={{ y: paused ? 0 : right }}><img loading="lazy" src={`${mediaRoot}cuiaba-mobile.png`} alt="Interface mobile da campanha Cuiabá"/></motion.div><Phone campaign="agro" /><span className="sc-mobile-callout"><Smartphone size={16}/>Informação para consultar de novo.</span></div></section>;
+  const mobileMetric = { ...metrics[1], label: 'acessos mobile, dados posteriores de uso — jan–jun/2025' };
+  return <section id="sc-mobile" className="sc-mobile-section sc-chapter wrap"><div className="sc-mobile-copy"><ChapterTitle>O celular era o principal ponto de acesso.</ChapterTitle><p className="sc-lead">Nos dados posteriores do Clarity, cerca de 96% das sessões analisadas vieram de dispositivos móveis. Isso reforça por que a experiência precisava funcionar bem no celular desde o início.</p><Metric metric={mobileMetric}/></div><div className="sc-mobile-composition" aria-label="Três campanhas mobile; passe o mouse para reproduzir"><Phone campaign="pj" variant="android" playOnHover /><Phone campaign="agro" variant="android" playOnHover /><Phone campaign="cuiaba" variant="android" playOnHover /></div></section>;
 }
 
 export function SicrediCase() {
-  const paused = useMotionPaused();
+  const paused = useMotionPaused(), [activeChapter, setActiveChapter] = useState('sc-roadmap'), [shortcutsVisible, setShortcutsVisible] = useState(false);
+  const chapterLock = useRef<string | null>(null);
+  const goToChapter = (event: ReactMouseEvent<HTMLAnchorElement>, id: string) => {
+    event.preventDefault();
+    chapterLock.current = id;
+    setActiveChapter(id);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.setTimeout(() => { chapterLock.current = null; }, 1500);
+  };
   useEffect(() => { document.title = 'Sicredi Centro-Norte · pesquisa e experiência digital — Mari Mou'; }, []);
+  useEffect(() => {
+    const updateNavigation = () => {
+      const nav = document.querySelector('.sc-chapter-nav');
+      if (nav) setShortcutsVisible(window.scrollY >= nav.getBoundingClientRect().top + window.scrollY - 80);
+      const current = chapters.map(([, id]) => document.getElementById(id)).filter(Boolean)
+        .filter(node => node!.getBoundingClientRect().top <= window.innerHeight * .42).at(-1);
+      if (current && !chapterLock.current) setActiveChapter(current.id);
+    };
+    updateNavigation(); window.addEventListener('scroll', updateNavigation, { passive: true });
+    return () => window.removeEventListener('scroll', updateNavigation);
+  }, []);
   return <main id="main-content" lang="pt-BR" className={`sicredi-case ${paused ? 'sc-motion-paused' : ''}`}>
     {/* HERO: explain the problem and show exactly three later-use highlights. */}
     <header className="sc-hero wrap"><a href="/projetos" className="sc-back"><ArrowLeft size={16}/>Todos os projetos</a><p className="sc-project-name">Sicredi Centro-Norte · 2024</p><WordPullUp className="sc-heading" paused={paused} words="Como transformamos pesquisa de campo em uma experiência digital para o Sicredi Centro-Norte."/><p className="sc-hero-lead">Durante três meses, atuei como Product Designer no projeto. Começamos investigando como as pessoas da região buscavam informações financeiras e, a partir das entrevistas, mudamos a estratégia: em vez de concentrar tudo nas redes sociais, criamos landing pages dedicadas para cada campanha.</p><div className="sc-hero-proof"><div className="sc-hero-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><HeroVisual/></div><p className="sc-caption sc-hero-caption">Dados posteriores de uso, registrados entre jan–jun/2025. Eles mostram a continuidade das experiências depois dos três meses de projeto em 2024.</p></header>
     <div className="wrap sc-overview"><dl className="sc-facts">{[['Meu papel', 'Product Designer'], ['Período', '2024 · 3 meses'], ['Plataforma', 'Web / Mobile'], ['Escopo', 'Research, síntese, jornada, UI e otimização']].map(([title, body]) => <div key={title}><dt>{title}</dt><dd>{body}</dd></div>)}</dl><div className="sc-at-glance">{[['Desafio', 'Descobrir qual formato funcionaria melhor para explicar produtos financeiros a um público com hábitos digitais diferentes dos que imaginávamos no início.'], ['Meu papel', 'Criei roteiro de entrevistas, participei da pesquisa, sintetizei dados, estruturei personas e jornada e fui responsável pelo design das quatro landing pages.'], ['Caminho escolhido', 'A pesquisa mostrou que a rede social funcionava melhor para atrair. A explicação precisava acontecer em uma página própria, com mais contexto e caminhos claros para continuar.']].map(([title, body]) => <Reveal key={title}><h3>{title}</h3><p>{body}</p></Reveal>)}</div></div>
-    <nav className="sc-chapter-nav" aria-label="Capítulos do case Sicredi"><div className="wrap">{[['Roadmap','sc-roadmap'],['Pesquisa','sc-pesquisa'],['Estratégia','sc-estrategia'],['Estrutura','sc-estrutura'],['Campanhas','sc-campanhas'],['Impacto','sc-impacto']].map(([title,id]) => <a href={`#${id}`} key={id}>{title}</a>)}</div></nav>
+    <nav className="sc-chapter-nav" aria-label="Capítulos do case Sicredi"><div className="wrap">{chapters.map(([title,id]) => <a href={`#${id}`} key={id} onClick={event => goToChapter(event, id)} aria-current={activeChapter === id ? 'location' : undefined}>{title}</a>)}</div></nav>
+    <aside className={`sc-chapter-shortcuts ${shortcutsVisible ? 'is-visible' : ''}`} aria-label="Atalhos dos capítulos">{chapters.map(([title,id]) => <a href={`#${id}`} key={id} onClick={event => goToChapter(event, id)} aria-label={title} data-label={title} aria-current={activeChapter === id ? 'location' : undefined}/>)}</aside>
     <Roadmap/>
     {/* DISCOVERY: evidence that changed the channel, not a methods checklist. */}
     <section id="sc-pesquisa" className="sc-chapter wrap"><div className="sc-initial-hypothesis"><Reveal><ChapterTitle>No começo, a aposta era usar as redes sociais como principal canal.</ChapterTitle><p className="sc-lead">O projeto começou junto aos times de design e mídia paga. A ideia era usar banners, posts e vídeos curtos para apresentar as ofertas e levar as pessoas direto para o atendimento.</p></Reveal><div className="sc-hypothesis-note"><MessageCircle size={27}/><p>Esse mesmo canal também funcionaria para explicar produtos financeiros com mais detalhes?</p></div></div><div className="sc-research-editorial"><Reveal className="sc-interview-count"><strong>150</strong><span>entrevistas</span><ArrowDown size={25}/><p>Clientes + colaboradores + pessoas da região</p></Reveal><div><ChapterTitle>As entrevistas mudaram o rumo do projeto.</ChapterTitle><p className="sc-lead">Falamos com cerca de 150 pessoas entre clientes, colaboradores do Sicredi e moradores da região, incluindo comerciantes, freelancers e pequenos empreendedores.</p><div className="sc-insights">{[
@@ -197,9 +219,9 @@ export function SicrediCase() {
     </section>
     <PageArchitecture/><CampaignGallery/><MobileScene/>
     {/* ITERATION: show the decision sequence; private reports never enter the public assets. */}
-    <section id="sc-acompanhamento" className="sc-chapter wrap"><ChapterTitle>Os dados mostraram quando a estrutura precisava mudar.</ChapterTitle><p className="sc-lead">Depois de algumas alterações pedidas pelo cliente, percebi uma queda no tempo de leitura. Revisei a estrutura da página com o time de redação, reorganizamos alguns trechos e acompanhei o comportamento depois da mudança. A nova versão foi mantida porque os dados melhoraram.</p><div className="sc-iteration">{[['Mudança','Ajustes de conteúdo / estrutura solicitados pelo cliente.'],['Sinal','Queda observada no tempo de leitura / retenção.'],['Hipótese','A nova organização podia estar dificultando a leitura.'],['Iteração','Reorganização do conteúdo e revisão dos textos.'],['Validação','Os indicadores melhoraram depois dos ajustes.']].map(([title, body], i) => <Reveal key={title} delay={i * .09}><span className="sc-iteration-dot"/><h3>{title}</h3><p>{body}</p></Reveal>)}</div></section>
+    <section id="sc-acompanhamento" className="sc-chapter wrap"><ChapterTitle>Os dados mostraram quando a estrutura precisava mudar.</ChapterTitle><p className="sc-lead">Depois de algumas alterações pedidas pelo cliente, percebi uma queda no tempo de leitura. Revisei a estrutura da página com o time de redação, reorganizamos alguns trechos e acompanhei o comportamento depois da mudança. A nova versão foi mantida porque os dados melhoraram.</p><div className="sc-iteration">{[['Mudança','Ajustes de conteúdo / estrutura solicitados pelo cliente.'],['Sinal','Queda observada no tempo de leitura / retenção.'],['Hipótese','A nova organização podia estar dificultando a leitura.'],['Iteração','Reorganização do conteúdo e revisão dos textos.'],['Validação','Os indicadores melhoraram depois dos ajustes.']].map(([title, body], i) => <Reveal key={title} delay={i * .12}><span className="sc-iteration-dot"/><h3>{title}</h3><p>{body}</p>{i === 4 && <Rocket className="sc-validation-rocket" aria-hidden="true"/>}</Reveal>)}</div></section>
     {/* IMPACT: later continuity of use, never claimed as 2024 conversion or unique users. */}
-    <section id="sc-impacto" className="sc-impact sc-chapter"><div className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><p className="sc-lead">Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</p><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><p className="sc-caption">{usageNote}</p><p className="sc-caption">592 sessões com o evento “Entre em contato conosco”.</p></div></section>
+    <section id="sc-impacto" className="sc-impact sc-chapter"><Reveal className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><p className="sc-lead">Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</p><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><p className="sc-caption">{usageNote}</p><p className="sc-caption">592 sessões com o evento “Entre em contato conosco”.</p></Reveal></section>
     <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><Reveal><p className="sc-lead">Esse projeto me mostrou, na prática, que o trabalho de Product Design pode começar antes da primeira tela. Aqui, a principal decisão foi entender onde a informação deveria estar e como ela deveria ser apresentada para aquele público.</p><p>Também foi um projeto em que aprendi a usar os dados como parte da conversa com o cliente. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e discutir o que estava acontecendo de forma mais objetiva.</p></Reveal></section>
     <div className="sc-ending wrap"><a href="/#contato" className="pill primary">Vamos construir algo juntos?<ArrowUpRight size={17}/></a><a className="sc-next" href="/projetos/lwsa">Próximo case · LWSA<ArrowUpRight size={19}/></a></div>
   </main>;
