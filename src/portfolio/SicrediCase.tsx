@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
 import { animate, motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, MessageCircle, Rocket } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
@@ -223,6 +223,18 @@ export function SicrediCase() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     window.setTimeout(() => { chapterLock.current = null; }, 1500);
   };
+  useLayoutEffect(() => {
+    // Prevent the browser/Fast Refresh from restoring an obsolete position inside a changed sticky scene.
+    if (window.location.hash) return;
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    const frame = window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.history.scrollRestoration = previous;
+    };
+  }, []);
   useEffect(() => { document.title = 'Sicredi Centro-Norte · pesquisa e experiência digital — Mari Mou'; }, []);
   useEffect(() => {
     const updateNavigation = () => {
