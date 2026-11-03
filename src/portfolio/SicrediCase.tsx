@@ -104,11 +104,12 @@ function useScene(count: number) {
 
 function Roadmap() {
   const ref = useRef<HTMLElement>(null), paused = useMotionPaused();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 90%', 'end 45%'] });
-  const lineProgress = useTransform(scrollYProgress, [0, .88], [0, 1]);
+  // Pinned scene: month 1 on entry, month 2 on the second scroll step, month 3 on the third; then the page releases.
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const lineProgress = useTransform(scrollYProgress, [0, .78], [0, 1]);
   const [active, setActive] = useState(0);
-  useMotionValueEvent(scrollYProgress, 'change', progress => setActive(Math.min(2, Math.floor(progress * 3.35))));
-  return <section ref={ref} id="sc-roadmap" className="sc-chapter sc-roadmap wrap">
+  useMotionValueEvent(scrollYProgress, 'change', progress => setActive(progress >= .72 ? 2 : progress >= .34 ? 1 : 0));
+  return <section ref={ref} id="sc-roadmap" className={`sc-roadmap ${paused ? 'sc-still' : ''}`}><div className="sc-roadmap-sticky"><div className="wrap">
     <SectionLead>O primeiro mês foi dedicado a entender o comportamento das pessoas. No segundo, transformamos os aprendizados em páginas e colocamos a solução no ar. O terceiro ficou voltado para acompanhar o uso e ajustar o que fosse necessário.</SectionLead>
     <div className="sc-roadmap-track">
       <div className="sc-roadmap-line" aria-hidden="true"><motion.div style={{ scaleX: paused ? 1 : lineProgress }} /></div>
@@ -117,7 +118,7 @@ function Roadmap() {
         <h3>{phase.title}</h3><p>{phase.description}</p><ol>{phase.steps.map((step, index) => <li key={step}><span>{step}</span>{index < phase.steps.length - 1 && <ArrowRight size={12} aria-hidden="true"/>}</li>)}</ol>
       </motion.article>)}</div>
     </div>
-  </section>;
+  </div></div></section>;
 }
 
 function PrincipleSection() {
@@ -127,6 +128,12 @@ function PrincipleSection() {
   const opacity = useTransform(scrollYProgress, [0, .72], [0, 1]);
   const scale = useTransform(scrollYProgress, [0, 1], [.94, 1]);
   return <section ref={ref} className="sc-principle"><motion.div className="wrap" style={paused ? undefined : { y, opacity, scale }}><p>A rede social continuaria importante para atrair.</p><ChapterTitle>A explicação, porém, precisava acontecer em outro lugar.</ChapterTitle></motion.div></section>;
+}
+
+function Ending() {
+  const paused = useMotionPaused();
+  const item = (delay: number) => ({ initial: paused ? false as const : { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: .6 }, transition: { duration: paused ? 0 : .6, delay: paused ? 0 : delay, ease: [.22, 1, .36, 1] as const } });
+  return <div className="sc-ending"><motion.a href="/#contato" className="pill primary" {...item(.15)}>Vamos construir algo juntos?<ArrowUpRight size={17}/></motion.a><motion.a className="sc-next" href="/projetos/lwsa" {...item(.45)}>Próximo case · LWSA<ArrowUpRight size={19}/></motion.a></div>;
 }
 
 function Flow({ title, steps, emphasis = false }: { title: string; steps: string[]; emphasis?: boolean }) {
@@ -257,7 +264,6 @@ export function SicrediCase() {
     <section id="sc-acompanhamento" className="sc-chapter wrap"><ChapterTitle>Os dados mostraram quando a estrutura precisava mudar.</ChapterTitle><SectionLead>Depois de algumas alterações pedidas pelo cliente, percebi uma queda no tempo de leitura. Revisei a estrutura da página com o time de redação, reorganizamos alguns trechos e acompanhei o comportamento depois da mudança. A nova versão foi mantida porque os dados melhoraram.</SectionLead><div className="sc-iteration">{[['Mudança','Ajustes de conteúdo / estrutura solicitados pelo cliente.'],['Sinal','Queda observada no tempo de leitura / retenção.'],['Hipótese','A nova organização podia estar dificultando a leitura.'],['Iteração','Reorganização do conteúdo e revisão dos textos.'],['Validação','Os indicadores melhoraram depois dos ajustes.']].map(([title, body], i) => <Reveal key={title} delay={i * .12}><span className="sc-iteration-dot"/><h3>{title}</h3><p>{body}</p>{i === 4 && <span className="sc-validation-launch" aria-hidden="true"><Rocket fill="currentColor"/></span>}</Reveal>)}</div></section>
     {/* IMPACT: later continuity of use, never claimed as 2024 conversion or unique users. */}
     <section id="sc-impacto" className="sc-impact sc-chapter"><div className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><SectionLead>Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</SectionLead><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><Reveal className="sc-impact-box" delay={.1}><span>Período e fonte</span><p>{usageNote}</p></Reveal></div></section>
-    <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><SectionLead>Esse projeto me mostrou, na prática, que o trabalho de Product Design pode começar antes da primeira tela. Aqui, a principal decisão foi entender onde a informação deveria estar e como ela deveria ser apresentada para aquele público.</SectionLead><SectionLead>Também foi um projeto em que aprendi a usar os dados como parte da conversa com o cliente. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e discutir o que estava acontecendo de forma mais objetiva.</SectionLead></section>
-    <div className="sc-ending wrap"><a href="/#contato" className="pill primary">Vamos construir algo juntos?<ArrowUpRight size={17}/></a><a className="sc-next" href="/projetos/lwsa">Próximo case · LWSA<ArrowUpRight size={19}/></a></div>
+    <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><SectionLead>Esse projeto me mostrou, na prática, que o trabalho de Product Design pode começar antes da primeira tela. Aqui, a principal decisão foi entender onde a informação deveria estar e como ela deveria ser apresentada para aquele público.</SectionLead><SectionLead>Também foi um projeto em que aprendi a usar os dados como parte da conversa com o cliente. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e discutir o que estava acontecendo de forma mais objetiva.</SectionLead><Ending/></section>
   </main>;
 }
