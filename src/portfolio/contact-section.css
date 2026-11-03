@@ -1,0 +1,45 @@
+.experience-site .contact-redesign{padding:clamp(28px,5vw,72px);margin-block:48px 80px;min-height:0;text-align:left}
+.contact-redesign h2{text-align:left!important}
+.experience-site .contact-redesign .contact-lead{color:var(--muted);font-size:15px;line-height:1.8}
+.contact-redesign .meeting-duration{color:var(--muted)}
+.contact-redesign .contact-text-cta{font-size:14px;max-width:100%;white-space:normal;text-align:left}
+.contact-redesign .contact-text-cta:focus-visible{outline:2px solid var(--ivory);outline-offset:5px}
+.contact-motion-paused .contact-composition *{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.contact-redesign .contact-composition *{animation:none!important;transition:none!important}}
+@media(max-width:760px){.experience-site .contact-redesign{margin-block:24px 48px;padding:28px 22px}}
+.experience-site .contact-option-2{background:transparent;border:0;border-radius:0;overflow:visible}
+.contact-option-2 .contact-composition{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);gap:clamp(32px,6vw,88px);align-items:center}
+.contact-option-2 .contact-copy{display:flex;flex-direction:column;align-items:flex-start;gap:24px;min-width:0}
+.experience-site .contact-option-2 .contact-copy h2{margin:0!important;line-height:1.18}
+.experience-site .contact-option-2 .contact-copy .contact-lead{margin:0!important;max-width:560px}
+.contact-option-2 .contact-copy .meeting-duration{order:4;margin:0;font-size:12px}
+.contact-option-2 .contact-copy .contact-text-cta{order:3;margin:0}
+.contact-phone-scene{margin:0;justify-self:center;width:min(100%,320px);min-width:0}
+.contact-phone{position:relative;border:5px solid #303625;border-radius:44px;background:#1b1d15;color:#f2f1e8;box-shadow:0 0 0 1px #aeb39d55,0 30px 60px #0003;overflow:hidden;font-family:Inter,sans-serif}
+.phone-status{position:relative;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:11px;font-weight:600}
+.phone-status>i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:85px;height:22px;border-radius:20px;background:#11130e}
+.phone-status>span:last-child{display:flex;gap:4px;align-items:center}
+.phone-chat-header{display:flex;gap:10px;align-items:center;padding:10px 14px 15px;background:#23271c;border-bottom:1px solid #aeb39d22}
+.phone-chat-header img{width:38px;height:38px;object-fit:contain;border-radius:50%;background:#303625}
+.phone-chat-header>div{flex:1;min-width:0}
+.phone-chat-header strong{display:block;font-size:13px;font-weight:600;color:#f2f1e8}
+.phone-chat-header small{display:block;font-size:10px;color:#aeb39d;margin-top:3px}
+.phone-chat-header>svg{flex:none;color:#aeb39d}
+.phone-chat-body{height:390px;padding:16px 12px;background-image:radial-gradient(#aeb39d12 1px,transparent 1px);background-size:15px 15px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.phone-date{font-size:9px;color:#aeb39d;background:#23271c;padding:4px 12px;border-radius:6px}
+.phone-messages{display:flex;flex-direction:column;gap:10px;list-style:none;margin:0;padding:0;width:100%}
+.phone-message{max-width:90%;padding:10px 11px 6px;font-size:11.5px;font-weight:400;line-height:1.55;border-radius:12px;text-align:left}
+.phone-message.sent{align-self:flex-end;background:#bddb42;color:#1b1d15;border-top-right-radius:3px}
+.phone-message.received{align-self:flex-start;background:#303625;color:#f2f1e8;border-top-left-radius:3px}
+.phone-message-time{display:flex;justify-content:flex-end;align-items:center;gap:4px;font-size:8px;margin-top:4px;opacity:.75}
+.phone-typing{display:flex;gap:4px;padding:12px 14px;border-radius:12px;background:#303625}
+.phone-typing.sent{align-self:flex-end}.phone-typing.received{align-self:flex-start}
+.phone-typing i{height:5px;width:5px;border-radius:50%;background:#aeb39d;animation:phone-dot 1s ease-in-out infinite}
+.phone-typing i:nth-child(2){animation-delay:.15s}.phone-typing i:nth-child(3){animation-delay:.3s}
+.phone-composer{display:flex;align-items:center;gap:12px;padding:12px 14px;color:#aeb39d;background:#23271c}
+.phone-composer>span{flex:1;border-radius:20px;background:#303625;padding:9px 12px;font-size:11px}
+.phone-home{height:4px;width:100px;margin:10px auto;background:#aeb39d;border-radius:4px}
+.contact-phone-scene figcaption{text-align:center;color:var(--muted);font-size:11px;margin-top:20px;line-height:1.6}
+.contact-phone-scene figcaption small{display:block;font-size:9px;opacity:.8;margin-top:4px}
+@keyframes phone-dot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-3px);opacity:1}}
+@media(max-width:800px){.contact-option-2 .contact-composition{display:flex;flex-direction:column;gap:40px}.contact-option-2 .contact-copy{order:0;gap:20px}.contact-option-2 .contact-phone-scene{order:1;align-self:center}.experience-site .contact-option-2{padding-inline:0}.contact-option-2 .contact-copy .contact-lead{order:initial}}
