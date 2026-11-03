@@ -6,10 +6,11 @@ export function useChapterScroll(home: boolean, paused: boolean) {
   const controller = useRef<Lenis | null>(null);
   useEffect(() => {
     document.documentElement.classList.toggle('home-chapters', home);
-    const lenis = paused ? null : new Lenis({ autoRaf: true, smoothWheel: !home, lerp: .14, anchors: { offset: 0 } });
+    // Home gestures are handled below; Lenis only animates the requested slides.
+    const lenis = paused ? null : new Lenis({ autoRaf: true, smoothWheel: !home, virtualScroll: () => !home, lerp: .14, anchors: { offset: 0 } });
     controller.current = lenis;
     if (!home) return () => { lenis?.destroy(); controller.current = null; document.documentElement.classList.remove('home-chapters'); };
-    let lockedUntil = 0, lastWheel = 0, accumulated = 0;
+    let lockedUntil = 0, lastWheel = 0, accumulated = 0, lastDirection = 0;
     const nested = (target: EventTarget | null) => target instanceof Element && !!target.closest('[data-lenis-prevent], .compact-menu-panel, input, textarea, select, [contenteditable="true"]');
     const advance = (direction: number) => {
       const nodes = Array.from(document.querySelectorAll<HTMLElement>('#main-content > *, .site-footer'));
@@ -20,25 +21,31 @@ export function useChapterScroll(home: boolean, paused: boolean) {
       let destination = direction > 0 ? Math.min(next ?? scrollY, scrollY + innerHeight) : Math.max(next, scrollY - innerHeight);
       if (direction < 0 && Math.abs(scrollY - next) < 5) destination = tops[Math.max(0, current - 1)];
       if (Math.abs(destination - scrollY) < 2) return;
-      lockedUntil = performance.now() + (paused ? 280 : 950);
-      if (lenis) lenis.scrollTo(destination, { duration: .85, easing: progress => 1 - Math.pow(1 - progress, 3), lock: true });
+      lockedUntil = performance.now() + (paused ? 180 : 700);
+      if (lenis) lenis.scrollTo(destination, { duration: .7, easing: progress => 1 - Math.pow(1 - progress, 3), force: true });
       else window.scrollTo({ top: destination, behavior: 'instant' });
     };
     const wheel = (event: WheelEvent) => {
       if (event.ctrlKey || event.shiftKey || nested(event.target) || Math.abs(event.deltaX) > Math.abs(event.deltaY) || !event.deltaY) return;
       event.preventDefault();
       const now = performance.now(), idle = now - lastWheel > 180;
+      const direction = Math.sign(event.deltaY), reversed = lastDirection !== 0 && direction !== lastDirection;
       lastWheel = now;
-      if (now < lockedUntil) return;
-      if (idle) accumulated = 0;
-      else if (accumulated === Infinity) return; // Ignore the inertial tail of the same gesture.
+      lastDirection = direction;
+      // A new gesture or a direction change can interrupt the current slide.
+      if (idle || reversed) accumulated = 0;
+      if (now < lockedUntil && !idle && !reversed) return;
+      if (accumulated === Infinity) return; // Ignore the inertial tail of the same gesture.
       accumulated += event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
       if (Math.abs(accumulated) >= 18) { advance(Math.sign(accumulated)); accumulated = Infinity; }
     };
     const key = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || nested(event.target) || (event.target instanceof Element && event.target.closest('button,a'))) return;
       const direction = ['ArrowDown', 'PageDown', ' '].includes(event.key) ? (event.shiftKey ? -1 : 1) : ['ArrowUp', 'PageUp'].includes(event.key) ? -1 : 0;
-      if (direction) { event.preventDefault(); if (performance.now() >= lockedUntil) advance(direction); }
+      if (direction) {
+        event.preventDefault();
+        if (performance.now() >= lockedUntil || direction !== lastDirection) { lastDirection = direction; advance(direction); }
+      }
     };
     let touch: { x: number; y: number; chapter: boolean } | null = null;
     const touchStart = (event: TouchEvent) => {
