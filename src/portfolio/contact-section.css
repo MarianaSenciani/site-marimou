@@ -1,4 +1,4 @@
-.experience-site .contact-redesign{padding:clamp(28px,5vw,72px);margin-block:48px 80px;min-height:0;text-align:left}
+.experience-site .contact-redesign{box-sizing:border-box;padding:clamp(28px,5vw,72px);padding-block:96px 40px;margin-block:0;min-height:100svh;display:grid;align-content:center;text-align:left}
 .contact-redesign h2{text-align:left!important}
 .experience-site .contact-redesign .contact-lead{color:var(--muted);font-size:15px;line-height:1.8}
 .contact-redesign .meeting-duration{color:var(--muted)}
@@ -6,8 +6,10 @@
 .contact-redesign .contact-text-cta:focus-visible{outline:2px solid var(--ivory);outline-offset:5px}
 .contact-motion-paused .contact-composition *{animation:none!important;transition:none!important}
 @media(prefers-reduced-motion:reduce){.contact-redesign .contact-composition *{animation:none!important;transition:none!important}}
-@media(max-width:760px){.experience-site .contact-redesign{margin-block:24px 48px;padding:28px 22px}}
+@media(max-width:760px){.experience-site .contact-redesign{padding:88px 22px 40px}}
 .experience-site .contact-option-2{background:transparent;border:0;border-radius:0;overflow:visible}
+.portfolio-site.experience-site .site-footer.restored-footer{background-image:linear-gradient(#4a591f30 1px,transparent 1px),linear-gradient(90deg,#4a591f30 1px,transparent 1px);background-size:40px 40px}
+.restored-footer .footer-bottom{justify-content:flex-end}
 .contact-option-2 .contact-composition{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);gap:clamp(32px,6vw,88px);align-items:center}
 .contact-option-2 .contact-copy{display:flex;flex-direction:column;align-items:flex-start;gap:24px;min-width:0}
 .experience-site .contact-option-2 .contact-copy h2{margin:0!important;line-height:1.18}
