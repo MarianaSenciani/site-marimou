@@ -91,7 +91,6 @@ function HeroVisual() {
   return <div ref={ref} className="sc-hero-art" aria-label="Composição das experiências Sicredi em desktop e mobile">
     <motion.div className="sc-hero-desktop" style={{ y: paused ? 0 : y }}><BrowserFrame className="sc-hero-browser"><CaseVideo campaign="pj" device="desktop" eager /></BrowserFrame></motion.div>
     <motion.div className="sc-hero-phone" style={{ y: paused ? 0 : phoneY }}><Phone campaign="agro" variant="android" /></motion.div>
-    <span className="sc-art-caption">Uma estrutura. Diferentes contextos.</span>
   </div>;
 }
 
@@ -104,17 +103,30 @@ function useScene(count: number) {
 }
 
 function Roadmap() {
-  const [active, setActive] = useState(0), paused = useMotionPaused();
-  return <section id="sc-roadmap" className="sc-chapter sc-roadmap wrap">
+  const ref = useRef<HTMLElement>(null), paused = useMotionPaused();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 90%', 'end 45%'] });
+  const lineProgress = useTransform(scrollYProgress, [0, .88], [0, 1]);
+  const [active, setActive] = useState(0);
+  useMotionValueEvent(scrollYProgress, 'change', progress => setActive(Math.min(2, Math.floor(progress * 3.35))));
+  return <section ref={ref} id="sc-roadmap" className="sc-chapter sc-roadmap wrap">
     <SectionLead>O primeiro mês foi dedicado a entender o comportamento das pessoas. No segundo, transformamos os aprendizados em páginas e colocamos a solução no ar. O terceiro ficou voltado para acompanhar o uso e ajustar o que fosse necessário.</SectionLead>
     <div className="sc-roadmap-track">
-      <div className="sc-roadmap-line" aria-hidden="true"><motion.div initial={paused ? false : { scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true, amount: .5 }} transition={{ duration: paused ? 0 : 1.4, ease: 'easeInOut' }} /></div>
-      <div className="sc-months">{phases.map((phase, i) => <motion.article key={phase.title} className={active === i ? 'is-active' : ''} initial={paused ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} transition={{ duration: paused ? 0 : .6, delay: paused ? 0 : i * .18 }}>
+      <div className="sc-roadmap-line" aria-hidden="true"><motion.div style={{ scaleX: paused ? 1 : lineProgress }} /></div>
+      <div className="sc-months">{phases.map((phase, i) => <motion.article key={phase.title} className={`${active === i ? 'is-active' : ''} ${active > i ? 'is-complete' : ''}`} initial={paused ? false : { opacity: .18, y: 28 }} animate={{ opacity: paused || active >= i ? 1 : .18, y: paused || active >= i ? 0 : 28 }} transition={{ duration: paused ? 0 : .55, ease: [.22, 1, .36, 1] }}>
         <button onClick={() => setActive(i)} aria-pressed={active === i} aria-label={`Mês ${i + 1}: ${phase.title}`}><span className="sc-month-dot"/><span>Mês 0{i + 1}</span></button>
         <h3>{phase.title}</h3><p>{phase.description}</p><ol>{phase.steps.map((step, index) => <li key={step}><span>{step}</span>{index < phase.steps.length - 1 && <ArrowRight size={12} aria-hidden="true"/>}</li>)}</ol>
       </motion.article>)}</div>
     </div>
   </section>;
+}
+
+function PrincipleSection() {
+  const ref = useRef<HTMLElement>(null), paused = useMotionPaused();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 88%', 'center center'] });
+  const y = useTransform(scrollYProgress, [0, 1], [150, 0]);
+  const opacity = useTransform(scrollYProgress, [0, .72], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [.94, 1]);
+  return <section ref={ref} className="sc-principle"><motion.div className="wrap" style={paused ? undefined : { y, opacity, scale }}><p>A rede social continuaria importante para atrair.</p><ChapterTitle>A explicação, porém, precisava acontecer em outro lugar.</ChapterTitle></motion.div></section>;
 }
 
 function Flow({ title, steps, emphasis = false }: { title: string; steps: string[]; emphasis?: boolean }) {
@@ -169,13 +181,18 @@ function CampaignScreenshot({ campaign }: { campaign: string }) {
   useEffect(() => { position_.current = 0; setPosition(0); }, [campaign]);
   useEffect(() => {
     const node = frame.current; if (!node) return;
-    // Native, non-passive listener: the page keeps its scroll until the screen reaches either end.
+    // Capture the native wheel before the page can consume it while the cursor is over the mockup.
     const onWheel = (event: WheelEvent) => {
+      if (!(event.target instanceof Node) || !node.contains(event.target)) return;
       const next = Math.max(0, Math.min(100, position_.current + event.deltaY * .08));
-      if (next !== position_.current) { event.preventDefault(); update(next); }
+      if (next !== position_.current) {
+        event.preventDefault();
+        event.stopPropagation();
+        update(next);
+      }
     };
-    node.addEventListener('wheel', onWheel, { passive: false });
-    return () => node.removeEventListener('wheel', onWheel);
+    document.addEventListener('wheel', onWheel, { passive: false, capture: true });
+    return () => document.removeEventListener('wheel', onWheel, { capture: true });
   }, []);
   const move = (delta: number) => update(Math.max(0, Math.min(100, position_.current + delta)));
   return <div ref={frame} className="sc-campaign-screenshot" tabIndex={0} aria-label="Role dentro da tela para percorrer a landing page" onKeyDown={event => {
@@ -213,7 +230,7 @@ export function SicrediCase() {
   }, []);
   return <main id="main-content" lang="pt-BR" className={`sicredi-case ${paused ? 'sc-motion-paused' : ''}`}>
     {/* HERO: explain the problem and show exactly three later-use highlights. */}
-    <header className="sc-hero wrap"><a href="/projetos" className="sc-back"><ArrowLeft size={16}/>Todos os projetos</a><p className="sc-project-name">Sicredi Centro-Norte · 2024</p><WordPullUp className="sc-heading" paused={paused} words="Como transformamos pesquisa de campo em uma experiência digital para o Sicredi Centro-Norte."/><p className="sc-hero-lead">Durante três meses, atuei como Product Designer no projeto. Começamos investigando como as pessoas da região buscavam informações financeiras e, a partir das entrevistas, mudamos a estratégia: em vez de concentrar tudo nas redes sociais, criamos landing pages dedicadas para cada campanha.</p><div className="sc-hero-proof"><div className="sc-hero-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><HeroVisual/></div><p className="sc-caption sc-hero-caption">Dados posteriores de uso, registrados entre jan–jun/2025. Eles mostram a continuidade das experiências depois dos três meses de projeto em 2024.</p></header>
+    <header className="sc-hero wrap"><a href="/projetos" className="sc-back"><ArrowLeft size={16}/>Todos os projetos</a><p className="sc-project-name">Sicredi Centro-Norte · 2024</p><WordPullUp className="sc-heading" paused={paused} words="Como transformamos pesquisa de campo em uma experiência digital para o Sicredi Centro-Norte."/><p className="sc-hero-lead">Durante três meses, atuei como Product Designer no projeto. Começamos investigando como as pessoas da região buscavam informações financeiras e, a partir das entrevistas, mudamos a estratégia: em vez de concentrar tudo nas redes sociais, criamos landing pages dedicadas para cada campanha.</p><div className="sc-hero-proof"><div className="sc-hero-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><HeroVisual/></div></header>
     <div className="wrap sc-overview"><dl className="sc-facts">{[['Meu papel', 'Product Designer'], ['Período', '2024 · 3 meses'], ['Plataforma', 'Web / Mobile'], ['Escopo', 'Research, síntese, jornada, UI e otimização']].map(([title, body]) => <div key={title}><dt>{title}</dt><dd>{body}</dd></div>)}</dl><div className="sc-at-glance">{[['Desafio', 'Descobrir qual formato funcionaria melhor para explicar produtos financeiros a um público com hábitos digitais diferentes dos que imaginávamos no início.'], ['Meu papel', 'Criei roteiro de entrevistas, participei da pesquisa, sintetizei dados, estruturei personas e jornada e fui responsável pelo design das quatro landing pages.'], ['Caminho escolhido', 'A pesquisa mostrou que a rede social funcionava melhor para atrair. A explicação precisava acontecer em uma página própria, com mais contexto e caminhos claros para continuar.']].map(([title, body]) => <Reveal key={title}><h3>{title}</h3><p>{body}</p></Reveal>)}</div></div>
     <nav className="sc-chapter-nav" aria-label="Capítulos do case Sicredi"><div className="wrap">{chapters.map(([title,id]) => <a href={`#${id}`} key={id} onClick={event => goToChapter(event, id)} aria-current={activeChapter === id ? 'location' : undefined}>{title}</a>)}</div></nav>
     <aside className={`sc-chapter-shortcuts ${shortcutsVisible ? 'is-visible' : ''}`} aria-label="Atalhos dos capítulos">{chapters.map(([title,id]) => <a href={`#${id}`} key={id} onClick={event => goToChapter(event, id)} aria-label={title} data-label={title} aria-current={activeChapter === id ? 'location' : undefined}/>)}</aside>
@@ -230,7 +247,7 @@ export function SicrediCase() {
         { name: 'João Carlos', initials: 'JC', profile: 'Agro · produtor rural', body: 'Produtor rural e representante de um público que precisava comparar opções financeiras ligadas ao ciclo agrícola, com pouco interesse em linguagem excessivamente técnica.', needs: ['Procura crédito alinhado ao ciclo da produção.', 'Tem familiaridade digital moderada.', 'Valoriza orientação próxima e informação direta.'] },
       ].map((person, i) => <Reveal key={person.name} delay={i * .1} className="sc-persona"><div className="sc-persona-top"><span className="sc-persona-portrait" role="img" aria-label={`Retrato de ${person.name} a incluir`}>{person.initials}</span><div><span>{person.profile}</span><h3>{person.name}</h3><small>Perfil sintetizado</small></div></div><p>{person.body}</p><ul>{person.needs.map(need => <li key={need}>{need}</li>)}</ul></Reveal>)}</div>
     </section>
-    <section className="sc-principle"><div className="wrap"><Reveal><p>A rede social continuaria importante para atrair.</p><ChapterTitle>A explicação, porém, precisava acontecer em outro lugar.</ChapterTitle></Reveal></div></section>
+    <PrincipleSection/>
     {/* STRATEGY: compare experience choices, without inventing an experiment result. */}
     <section id="sc-estrategia" className="sc-chapter wrap"><ChapterTitle>Foi daí que surgiu a ideia das landing pages.</ChapterTitle><SectionLead>Com esse aprendizado, passamos a trabalhar também com o time de tecnologia. A proposta foi criar páginas dedicadas para cada campanha, com contexto suficiente para a pessoa entender a oferta antes de falar com o atendimento.</SectionLead><div className="sc-flow-comparison"><Flow title="Hipótese inicial" steps={['Mídia / Social', 'Post ou vídeo', 'WhatsApp', 'Bot genérico / dúvidas']}/><ArrowRight className="sc-flow-arrow" aria-hidden="true"/><Flow title="Direção após o discovery" emphasis steps={['Mídia paga', 'Landing page dedicada', 'Oferta + benefícios + FAQ', 'Abrir conta / WhatsApp']}/></div>
       <div className="sc-flow-test"><div><ChapterTitle>A landing page passou a responder as dúvidas antes do WhatsApp.</ChapterTitle><SectionLead>Em vez de mandar a pessoa direto para um bot de triagem, a página explicava o produto, respondia dúvidas frequentes e deixava mais claro qual seria o próximo passo.</SectionLead></div><div className="sc-flow-routes"><p><span>Fluxo A</span>Anúncio → WhatsApp → Bot → dúvidas</p><p><span>Fluxo B</span>Anúncio → Landing page → oferta → benefícios → FAQ → abrir conta / WhatsApp</p><small>Uma decisão de experiência: responder às dúvidas antes de chegar ao atendimento.</small></div></div>
