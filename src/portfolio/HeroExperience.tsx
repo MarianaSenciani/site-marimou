@@ -6,11 +6,13 @@ import { WordPullUp } from '@/components/ui/word-pull-up';
 import { BubbleText } from '@/components/ui/bubble-text';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { useExperience } from './experience-context';
+import { HeroBrands } from './HeroBrands';
 const ToolModel = lazy(() => import('./ToolModel'));
 
 export function CharacterOrbit() {
   const { t } = useExperience();
   const paused = useMotionPaused();
+  const [smileReady, setSmileReady] = useState(false);
   const [open, setOpen] = useState(false), [loaded, setLoaded] = useState(false), [tip, setTip] = useState<string | null>(null);
   const tipX = useMotionValue(0), tipY = useMotionValue(0);
   const leaveTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -29,8 +31,10 @@ export function CharacterOrbit() {
     onPointerLeave={e => { if (e.pointerType === 'mouse') { leaveTimer.current = setTimeout(() => { setOpen(false); setTip(null); }, 180); } }}
     onFocus={e => { if (e.target.matches(':focus-visible')) setOpen(true); }} onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) { setOpen(false); setTip(null); } }}>
     <motion.button className="character-trigger" aria-expanded={open} aria-label={t('Explorar minhas ferramentas', 'Explore my tools', 'Explorar mis herramientas')}
-      onClick={() => { setOpen(true); setTip(null); }} animate={paused ? {} : { rotate: open ? -2 : 0, scale: open ? 1.015 : 1 }} transition={{ type: 'spring', stiffness: 150, damping: 18 }}>
+      onClick={() => { setOpen(true); setTip(null); }} animate={{ rotate: 0, scale: !paused && open ? 1.015 : 1 }} transition={{ type: 'spring', stiffness: 150, damping: 18 }}>
       <img className="character-image" src="/assets/memoji-neutral.png" width="1086" height="1448" alt={t('Memoji da Mari, com cabelos vermelhos', 'Mari’s Memoji with red hair', 'Memoji de Mari con pelo rojo')} {...{ fetchpriority: 'high' }} />
+      {/* Keep the base fully opaque so the grid never bleeds through the expression transition. */}
+      <motion.img className="character-image" src="/assets/memoji-wink-closed-smile.png" width="1086" height="1448" alt="" aria-hidden="true" draggable={false} style={{ filter: 'none', maskImage: 'url(/assets/memoji-expression-mask.svg)', maskSize: 'contain', maskPosition: 'center', maskRepeat: 'no-repeat' }} onLoad={() => setSmileReady(true)} initial={false} animate={{ opacity: open && smileReady ? 1 : 0 }} transition={{ duration: paused ? 0 : .22, ease: 'easeInOut' }} />
     </motion.button>
     <div className="tools-orbit" {...(!open ? { inert: '' } : {})} aria-hidden={!open}>
       {tools.map((tool, i) => <motion.button key={tool.id} type="button" className={`orbit-tool orbit-tool-${i}`} tabIndex={open ? 0 : -1}
@@ -67,6 +71,7 @@ export function HeroExperience({ onVisibility }: { onVisibility: (visible: boole
         </motion.div>
       </div>
     </>}
+    {hero === 1 && <HeroBrands />}
     {hero === 2 && <>
       <div className="hero-decision-top"><span>Mariana Senciani / {role}</span><span>02 / {t('Decisões de produto','Product decisions','Decisiones de producto')}</span></div>
       <div className="hero-decision-stage"><div className="decision-character-frame"><CharacterOrbit/></div><div className="hero-decision-note"><p className="hero-role">{t('Do problema ao próximo passo','From the problem to the next step','Del problema al siguiente paso')}</p><WordPullUp id="hero-heading" paused={paused} words={t('Entre a ideia e o produto, existe uma decisão importante.', 'Between an idea and a product, there is a decision to make.', 'Entre una idea y un producto, hay una decisión importante.')} /><p>{t('É nesse ponto que eu atuo: conecto pesquisa, experiência e prioridades de negócio para o time saber o que vale construir agora.', 'That is where I work: connecting research, experience, and business priorities so the team knows what is worth building now.', 'Ahí es donde trabajo: conecto investigación, experiencia y prioridades de negocio para decidir qué vale construir ahora.')}</p><a className="pill primary" href="#explorar">{t('Veja como isso aparece nos projetos', 'See this in my projects', 'Mira cómo se refleja en mis proyectos')}<ArrowDown size={17} /></a></div></div>
