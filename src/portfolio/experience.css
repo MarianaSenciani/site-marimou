@@ -2,6 +2,12 @@
 .portfolio-site.experience-site{--dark:#1b1d15;--ivory:#f2f1e8;--lime:#bddb42;--muted:#aeb39d;--surface:#23271c;--surface-raised:#303625;--hairline:#a6bb6133;--page-padding:clamp(22px,5vw,80px);background-color:var(--dark);background-image:linear-gradient(rgba(161,178,94,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(161,178,94,.065) 1px,transparent 1px);background-size:54px 54px;color:var(--ivory);overflow:clip;min-height:100vh;cursor:auto;color-scheme:dark}
 .portfolio-site.experience-site[data-theme=light]{--dark:#f5f6ee;--ivory:#292e21;--lime:#647b16;--muted:#606953;--surface:#e9eddf;--surface-raised:#dce3cf;--hairline:#5a722633;color-scheme:light;background-image:linear-gradient(#5a722612 1px,transparent 1px),linear-gradient(90deg,#5a722612 1px,transparent 1px)}
 .experience-site .wrap{width:min(1280px,calc(100% - 2 * var(--page-padding)));margin-inline:auto}
+/* Case chapters switch to a solid canvas after their sub-navigation; the vertical clip keeps the full-bleed fill from covering the hero above. */
+.experience-site :is(.sc-chapter-nav,.lv-chapter-nav,.case-chapter-nav) ~ :not(.sc-chapter-shortcuts){
+  background-color:var(--dark);
+  box-shadow:0 0 0 100vmax var(--dark);
+  clip-path:inset(0 -100vmax);
+}
 .experience-site a,.experience-site button,.experience-site summary{cursor:pointer}.experience-site a:hover,.experience-site button:hover{cursor:pointer}
 .experience-site button{touch-action:manipulation}.experience-site :is(h1,h2,h3){text-wrap:balance}.experience-site :is(section,main)[id]{scroll-margin-top:110px}
 .experience-site .pill.primary{background:#bddb42;color:#202718;border:0}.experience-site .pill.primary:hover{background:#d0ea72}.experience-site .text-link{font-size:13px;line-height:1.5;color:var(--ivory);width:fit-content}.experience-site .text-link:hover{color:var(--lime)}
