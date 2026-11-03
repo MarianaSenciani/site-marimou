@@ -36,16 +36,22 @@ function ChapterTitle({ children, id }: { children: string; id?: string }) {
   return <WordPullUp as="h2" id={id} words={children} paused={useMotionPaused()} className="sc-title" />;
 }
 
+function SectionLead({ children, className = '' }: { children: ReactNode; className?: string }) {
+  const paused = useMotionPaused();
+  return <motion.p className={`sc-lead ${className}`} initial={paused ? false : { opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .45 }} transition={{ duration: paused ? 0 : .65, delay: paused ? 0 : .12, ease: [.22, 1, .36, 1] }}>{children}</motion.p>;
+}
+
 function Metric({ metric, index = 0 }: { metric: typeof metrics[number]; index?: number }) {
-  const ref = useRef<HTMLDivElement>(null), visible = useInView(ref, { once: true, amount: .5 });
+  const ref = useRef<HTMLDivElement>(null), visible = useInView(ref, { once: true, amount: .9 });
   const paused = useMotionPaused(), [number, setNumber] = useState(paused ? metric.value : 0);
   useEffect(() => {
     if (paused) { setNumber(metric.value); return; }
     if (!visible) return;
-    const controls = animate(0, metric.value, { duration: 1.1, delay: index * .1, ease: 'easeOut', onUpdate: value => setNumber(Math.round(value)) });
+    setNumber(0);
+    const controls = animate(0, metric.value, { duration: 1.45, delay: index * .14, ease: 'easeOut', onUpdate: value => setNumber(Math.round(value)) });
     return () => controls.stop();
   }, [visible, paused, metric.value, index]);
-  return <div ref={ref} className="sc-metric"><strong aria-label={`${metric.prefix}${metric.value}${metric.suffix}`}><span aria-hidden="true">{metric.prefix}{number}{metric.suffix}</span></strong><span>{metric.label}</span></div>;
+  return <motion.div ref={ref} className="sc-metric" initial={paused ? false : { opacity: 0, y: 22 }} animate={visible || paused ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }} transition={{ duration: paused ? 0 : .55, delay: paused ? 0 : index * .1 }}><strong aria-label={`${metric.prefix}${metric.value}${metric.suffix}`}><span aria-hidden="true"><span>{metric.prefix}{number}</span>{metric.suffix && <small>{metric.suffix}</small>}</span></strong><span>{metric.label}</span></motion.div>;
 }
 
 /** Load media near its scene, and stop playback outside it or when motion is paused. */
@@ -74,12 +80,6 @@ function Phone({ campaign, className = '', variant = 'default', playOnHover = fa
 }
 
 /** Single desktop frame (dark Safari-style) shared by every desktop mockup in the case. */
-/** Bold highlight that animates once the phrase is read on screen. */
-function Emphasis({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
-  const ref = useRef<HTMLElement>(null), on = useInView(ref, { once: true, amount: 1 }), paused = useMotionPaused();
-  return <strong ref={ref} className={`sc-emphasis ${on || paused ? 'is-on' : ''}`} style={{ transitionDelay: `${delay}s` }}>{children}</strong>;
-}
-
 function BrowserFrame({ children, className = '', label = 'Sicredi · landing page' }: { children: ReactNode; className?: string; label?: string }) {
   return <div className={`sc-browser ${className}`}><div className="sc-browser-bar" aria-hidden="true"><span className="sc-safari-controls"><i/><i/><i/></span><span className="sc-safari-navigation">‹　›</span><span className="sc-safari-address">{label}</span><span className="sc-safari-actions">↗　＋</span></div>{children}</div>;
 }
@@ -106,7 +106,7 @@ function useScene(count: number) {
 function Roadmap() {
   const [active, setActive] = useState(0), paused = useMotionPaused();
   return <section id="sc-roadmap" className="sc-chapter sc-roadmap wrap">
-    <p className="sc-lead">O primeiro mês foi dedicado a entender o comportamento das pessoas. No segundo, transformamos os aprendizados em páginas e colocamos a solução no ar. O terceiro ficou voltado para acompanhar o uso e ajustar o que fosse necessário.</p>
+    <SectionLead>O primeiro mês foi dedicado a entender o comportamento das pessoas. No segundo, transformamos os aprendizados em páginas e colocamos a solução no ar. O terceiro ficou voltado para acompanhar o uso e ajustar o que fosse necessário.</SectionLead>
     <div className="sc-roadmap-track">
       <div className="sc-roadmap-line" aria-hidden="true"><motion.div initial={paused ? false : { scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true, amount: .5 }} transition={{ duration: paused ? 0 : 1.4, ease: 'easeInOut' }} /></div>
       <div className="sc-months">{phases.map((phase, i) => <motion.article key={phase.title} className={active === i ? 'is-active' : ''} initial={paused ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} transition={{ duration: paused ? 0 : .6, delay: paused ? 0 : i * .18 }}>
@@ -127,7 +127,7 @@ function PageArchitecture() {
   return <section id="sc-estrutura" className="sc-chapter sc-architecture wrap">
     <div ref={ref} className={`sc-architecture-scene ${paused ? 'sc-still' : ''}`}><div className="sc-architecture-sticky">
       <div className="sc-architecture-head"><ChapterTitle>A estrutura seguia a forma como as pessoas diziam procurar informação.</ChapterTitle>
-      <p className="sc-lead">Nas entrevistas, um padrão apareceu com frequência: primeiro entender a proposta, depois descobrir o que era possível fazer e só então aprofundar os detalhes. A página foi organizada nessa mesma ordem.</p></div>
+      <SectionLead>Nas entrevistas, um padrão apareceu com frequência: primeiro entender a proposta, depois descobrir o que era possível fazer e só então aprofundar os detalhes. A página foi organizada nessa mesma ordem.</SectionLead></div>
       <div className="sc-architecture-body">
       {/* Conceptual page anatomy, deliberately separate from the real screenshots. */}
       <BrowserFrame className="sc-anatomy" label="Estrutura da experiência"><div className="sc-anatomy-page">{architecture.map(([title], i) => <button key={title} onClick={() => setActive(i)} aria-pressed={active === i} className={`sc-anatomy-block sc-anatomy-${i} ${active === i ? 'is-active' : ''}`}>
@@ -151,13 +151,13 @@ function CampaignGallery() {
   const campaign = campaigns[active], paused = useMotionPaused();
   return <section id="sc-campanhas" className="sc-chapter sc-campaigns wrap">
     <ChapterTitle>A mesma base, adaptada para quatro campanhas.</ChapterTitle>
-    <p className="sc-lead">PJ e Agro usaram praticamente a mesma estrutura. Nas campanhas de Amazonas e Cuiabá, mantivemos a lógica de conteúdo, mas com mais liberdade visual para acompanhar o contexto esportivo.</p>
+    <SectionLead>PJ e Agro usaram praticamente a mesma estrutura. Nas campanhas de Amazonas e Cuiabá, mantivemos a lógica de conteúdo, mas com mais liberdade visual para acompanhar o contexto esportivo.</SectionLead>
     <div className="sc-gallery-controls"><div className="sc-campaign-tabs" role="group" aria-label="Escolher campanha">{campaigns.map((item, i) => <button key={item.id} aria-pressed={active === i} onClick={() => setActive(i)}>{item.name}<ArrowUpRight size={14}/></button>)}</div></div>
     <motion.div key={`stage-${campaign.id}`} initial={paused ? false : { opacity: .3, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: paused ? 0 : .5 }} className="sc-campaign-stage" style={{ '--campaign-accent': campaign.accent } as React.CSSProperties}>
       <div className="sc-campaign-info"><span>{campaign.description}</span><h3>{campaign.name}</h3><p>{campaign.body}</p><span className="sc-campaign-count">0{active + 1} / 04</span></div>
       {campaign.id === 'amazonas' ? <div className="sc-missing-art"><span aria-hidden="true">✳</span><strong>Amazonas</strong><p>Visual da campanha a incluir.</p>{/* ASSET PENDENTE: screenshots e gravações reais da LP Amazonas; não reutilizar outra campanha. */}</div> : <div className="sc-campaign-media">
         <BrowserFrame><CampaignScreenshot campaign={campaign.id}/></BrowserFrame>
-        <div className="sc-campaign-secondary"><Phone campaign={campaign.id} /></div>
+        <div className="sc-campaign-secondary"><Phone campaign={campaign.id} variant="android" /></div>
       </div>}
     </motion.div>
   </section>;
@@ -186,7 +186,7 @@ function CampaignScreenshot({ campaign }: { campaign: string }) {
 
 function MobileScene() {
   const mobileMetric = { ...metrics[1], label: 'acessos mobile, dados posteriores de uso — jan–jun/2025' };
-  return <section id="sc-mobile" className="sc-mobile-section sc-chapter wrap"><div className="sc-mobile-copy"><ChapterTitle>O celular era o principal ponto de acesso.</ChapterTitle><p className="sc-lead">Nos dados posteriores do Clarity, cerca de 96% das sessões analisadas vieram de dispositivos móveis. Isso reforça por que a experiência precisava funcionar bem no celular desde o início.</p><Metric metric={mobileMetric}/></div><div className="sc-mobile-composition" aria-label="Três campanhas mobile; passe o mouse para reproduzir"><Phone campaign="pj" variant="android" playOnHover /><Phone campaign="agro" variant="android" playOnHover /><Phone campaign="cuiaba" variant="android" playOnHover /></div></section>;
+  return <section id="sc-mobile" className="sc-mobile-section sc-chapter wrap"><div className="sc-mobile-copy"><ChapterTitle>O celular era o principal ponto de acesso.</ChapterTitle><SectionLead>Nos dados posteriores do Clarity, cerca de 96% das sessões analisadas vieram de dispositivos móveis. Isso reforça por que a experiência precisava funcionar bem no celular desde o início.</SectionLead><Metric metric={mobileMetric}/></div><div className="sc-mobile-composition" aria-label="Três campanhas mobile; passe o mouse para reproduzir"><Phone campaign="pj" variant="android" playOnHover /><Phone campaign="agro" variant="android" playOnHover /><Phone campaign="cuiaba" variant="android" playOnHover /></div></section>;
 }
 
 export function SicrediCase() {
@@ -219,7 +219,7 @@ export function SicrediCase() {
     <aside className={`sc-chapter-shortcuts ${shortcutsVisible ? 'is-visible' : ''}`} aria-label="Atalhos dos capítulos">{chapters.map(([title,id]) => <a href={`#${id}`} key={id} onClick={event => goToChapter(event, id)} aria-label={title} data-label={title} aria-current={activeChapter === id ? 'location' : undefined}/>)}</aside>
     <Roadmap/>
     {/* DISCOVERY: evidence that changed the channel, not a methods checklist. */}
-    <section id="sc-pesquisa" className="sc-chapter wrap"><div className="sc-initial-hypothesis"><Reveal><ChapterTitle>No começo, a aposta era usar as redes sociais como principal canal.</ChapterTitle><p className="sc-lead">O projeto começou junto aos times de design e mídia paga. A ideia era usar banners, posts e vídeos curtos para apresentar as ofertas e levar as pessoas direto para o atendimento.</p></Reveal><div className="sc-hypothesis-note"><MessageCircle size={27}/><p>Esse mesmo canal também funcionaria para explicar produtos financeiros com mais detalhes?</p></div></div><div className="sc-research-editorial"><Reveal className="sc-interview-count"><strong>150</strong><span>entrevistas</span><ArrowDown size={25}/><p>Clientes + colaboradores + pessoas da região</p></Reveal><div><ChapterTitle>As entrevistas mudaram o rumo do projeto.</ChapterTitle><p className="sc-lead">Falamos com cerca de 150 pessoas entre clientes, colaboradores do Sicredi e moradores da região, incluindo comerciantes, freelancers e pequenos empreendedores.</p><div className="sc-insights">{[
+    <section id="sc-pesquisa" className="sc-chapter wrap"><div className="sc-initial-hypothesis"><Reveal><ChapterTitle>No começo, a aposta era usar as redes sociais como principal canal.</ChapterTitle><SectionLead>O projeto começou junto aos times de design e mídia paga. A ideia era usar banners, posts e vídeos curtos para apresentar as ofertas e levar as pessoas direto para o atendimento.</SectionLead></Reveal><div className="sc-hypothesis-note"><MessageCircle size={27}/><p>Esse mesmo canal também funcionaria para explicar produtos financeiros com mais detalhes?</p></div></div><div className="sc-research-editorial"><Reveal className="sc-interview-count"><strong>150</strong><span>entrevistas</span><ArrowDown size={25}/><p>Clientes + colaboradores + pessoas da região</p></Reveal><div><ChapterTitle>As entrevistas mudaram o rumo do projeto.</ChapterTitle><SectionLead>Falamos com cerca de 150 pessoas entre clientes, colaboradores do Sicredi e moradores da região, incluindo comerciantes, freelancers e pequenos empreendedores.</SectionLead><div className="sc-insights">{[
       ['Redes sociais eram vistas como entretenimento', 'Quando o assunto era trabalho ou dinheiro, as pessoas diziam preferir outro tipo de ambiente para buscar informação.'],
       ['O conteúdo precisava ser fácil de consultar', 'Um link podia ser salvo em uma conversa com o gerente, aberto de novo depois e compartilhado com outra pessoa.'],
       ['A ordem da informação importava', 'Primeiro entender a oferta, depois ver o que era possível fazer e, só então, entrar nos detalhes.'],
@@ -232,15 +232,15 @@ export function SicrediCase() {
     </section>
     <section className="sc-principle"><div className="wrap"><Reveal><p>A rede social continuaria importante para atrair.</p><ChapterTitle>A explicação, porém, precisava acontecer em outro lugar.</ChapterTitle></Reveal></div></section>
     {/* STRATEGY: compare experience choices, without inventing an experiment result. */}
-    <section id="sc-estrategia" className="sc-chapter wrap"><ChapterTitle>Foi daí que surgiu a ideia das landing pages.</ChapterTitle><p className="sc-lead">Com esse aprendizado, passamos a trabalhar também com o time de tecnologia. A proposta foi criar páginas dedicadas para cada campanha, com contexto suficiente para a pessoa entender a oferta antes de falar com o atendimento.</p><div className="sc-flow-comparison"><Flow title="Hipótese inicial" steps={['Mídia / Social', 'Post ou vídeo', 'WhatsApp', 'Bot genérico / dúvidas']}/><ArrowRight className="sc-flow-arrow" aria-hidden="true"/><Flow title="Direção após o discovery" emphasis steps={['Mídia paga', 'Landing page dedicada', 'Oferta + benefícios + FAQ', 'Abrir conta / WhatsApp']}/></div>
-      <div className="sc-flow-test"><div><ChapterTitle>A landing page passou a responder as dúvidas antes do WhatsApp.</ChapterTitle><p className="sc-lead">Em vez de mandar a pessoa direto para um bot de triagem, a página explicava o produto, respondia dúvidas frequentes e deixava mais claro qual seria o próximo passo.</p></div><div className="sc-flow-routes"><p><span>Fluxo A</span>Anúncio → WhatsApp → Bot → dúvidas</p><p><span>Fluxo B</span>Anúncio → Landing page → oferta → benefícios → FAQ → abrir conta / WhatsApp</p><small>Uma decisão de experiência: responder às dúvidas antes de chegar ao atendimento.</small></div></div>
+    <section id="sc-estrategia" className="sc-chapter wrap"><ChapterTitle>Foi daí que surgiu a ideia das landing pages.</ChapterTitle><SectionLead>Com esse aprendizado, passamos a trabalhar também com o time de tecnologia. A proposta foi criar páginas dedicadas para cada campanha, com contexto suficiente para a pessoa entender a oferta antes de falar com o atendimento.</SectionLead><div className="sc-flow-comparison"><Flow title="Hipótese inicial" steps={['Mídia / Social', 'Post ou vídeo', 'WhatsApp', 'Bot genérico / dúvidas']}/><ArrowRight className="sc-flow-arrow" aria-hidden="true"/><Flow title="Direção após o discovery" emphasis steps={['Mídia paga', 'Landing page dedicada', 'Oferta + benefícios + FAQ', 'Abrir conta / WhatsApp']}/></div>
+      <div className="sc-flow-test"><div><ChapterTitle>A landing page passou a responder as dúvidas antes do WhatsApp.</ChapterTitle><SectionLead>Em vez de mandar a pessoa direto para um bot de triagem, a página explicava o produto, respondia dúvidas frequentes e deixava mais claro qual seria o próximo passo.</SectionLead></div><div className="sc-flow-routes"><p><span>Fluxo A</span>Anúncio → WhatsApp → Bot → dúvidas</p><p><span>Fluxo B</span>Anúncio → Landing page → oferta → benefícios → FAQ → abrir conta / WhatsApp</p><small>Uma decisão de experiência: responder às dúvidas antes de chegar ao atendimento.</small></div></div>
     </section>
     <PageArchitecture/><CampaignGallery/><MobileScene/>
     {/* ITERATION: show the decision sequence; private reports never enter the public assets. */}
-    <section id="sc-acompanhamento" className="sc-chapter wrap"><ChapterTitle>Os dados mostraram quando a estrutura precisava mudar.</ChapterTitle><p className="sc-lead">Depois de algumas alterações pedidas pelo cliente, percebi uma queda no tempo de leitura. Revisei a estrutura da página com o time de redação, reorganizamos alguns trechos e acompanhei o comportamento depois da mudança. A nova versão foi mantida porque os dados melhoraram.</p><div className="sc-iteration">{[['Mudança','Ajustes de conteúdo / estrutura solicitados pelo cliente.'],['Sinal','Queda observada no tempo de leitura / retenção.'],['Hipótese','A nova organização podia estar dificultando a leitura.'],['Iteração','Reorganização do conteúdo e revisão dos textos.'],['Validação','Os indicadores melhoraram depois dos ajustes.']].map(([title, body], i) => <Reveal key={title} delay={i * .12}><span className="sc-iteration-dot"/><h3>{title}</h3><p>{body}</p>{i === 4 && <Rocket className="sc-validation-rocket" aria-hidden="true"/>}</Reveal>)}</div></section>
+    <section id="sc-acompanhamento" className="sc-chapter wrap"><ChapterTitle>Os dados mostraram quando a estrutura precisava mudar.</ChapterTitle><SectionLead>Depois de algumas alterações pedidas pelo cliente, percebi uma queda no tempo de leitura. Revisei a estrutura da página com o time de redação, reorganizamos alguns trechos e acompanhei o comportamento depois da mudança. A nova versão foi mantida porque os dados melhoraram.</SectionLead><div className="sc-iteration">{[['Mudança','Ajustes de conteúdo / estrutura solicitados pelo cliente.'],['Sinal','Queda observada no tempo de leitura / retenção.'],['Hipótese','A nova organização podia estar dificultando a leitura.'],['Iteração','Reorganização do conteúdo e revisão dos textos.'],['Validação','Os indicadores melhoraram depois dos ajustes.']].map(([title, body], i) => <Reveal key={title} delay={i * .12}><span className="sc-iteration-dot"/><h3>{title}</h3><p>{body}</p>{i === 4 && <span className="sc-validation-launch" aria-hidden="true"><Rocket fill="currentColor"/></span>}</Reveal>)}</div></section>
     {/* IMPACT: later continuity of use, never claimed as 2024 conversion or unique users. */}
-    <section id="sc-impacto" className="sc-impact sc-chapter"><Reveal className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><p className="sc-lead">Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</p><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><div className="sc-impact-notes"><Reveal className="sc-impact-box" delay={.1}><span>Período e fonte</span><p>{usageNote}</p></Reveal><Reveal className="sc-impact-box sc-impact-box-accent" delay={.2}><strong>592</strong><p>sessões com o evento “Entre em contato conosco”.</p></Reveal></div></Reveal></section>
-    <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><Reveal delay={.1}><p className="sc-lead">Esse projeto me mostrou, na prática, que o trabalho de Product Design <Emphasis>pode começar antes da primeira tela</Emphasis>. Aqui, a principal decisão foi <Emphasis delay={.15}>entender onde a informação deveria estar</Emphasis> e como ela deveria ser apresentada para aquele público.</p></Reveal><Reveal delay={.2}><p className="sc-lead">Também foi um projeto em que aprendi a <Emphasis>usar os dados como parte da conversa com o cliente</Emphasis>. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e <Emphasis delay={.15}>discutir o que estava acontecendo de forma mais objetiva</Emphasis>.</p></Reveal></section>
+    <section id="sc-impacto" className="sc-impact sc-chapter"><div className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><SectionLead>Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</SectionLead><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><Reveal className="sc-impact-box" delay={.1}><span>Período e fonte</span><p>{usageNote}</p></Reveal></div></section>
+    <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><SectionLead>Esse projeto me mostrou, na prática, que o trabalho de Product Design pode começar antes da primeira tela. Aqui, a principal decisão foi entender onde a informação deveria estar e como ela deveria ser apresentada para aquele público.</SectionLead><SectionLead>Também foi um projeto em que aprendi a usar os dados como parte da conversa com o cliente. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e discutir o que estava acontecendo de forma mais objetiva.</SectionLead></section>
     <div className="sc-ending wrap"><a href="/#contato" className="pill primary">Vamos construir algo juntos?<ArrowUpRight size={17}/></a><a className="sc-next" href="/projetos/lwsa">Próximo case · LWSA<ArrowUpRight size={19}/></a></div>
   </main>;
 }
