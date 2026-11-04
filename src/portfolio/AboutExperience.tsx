@@ -21,7 +21,7 @@ export function PhotoStory() {
     {stories.map((story, i) => { const depth = (i - index + stories.length) % stories.length; return <motion.figure className="story-polaroid" key={i} style={{ zIndex: 5 - depth, touchAction: 'pan-y' }}
       animate={{ rotate: depth === 0 ? -4 : depth % 2 ? 7 : -8, y: depth * 7, scale: 1 - depth * .025 }} transition={{ duration: paused ? 0 : .35 }}
       drag={depth === 0 ? 'x' : false} dragConstraints={{ left: 0, right: 0 }} dragElastic={.65} dragMomentum={false} dragSnapToOrigin onDragEnd={(_, info) => { if (Math.abs(info.offset.x) > 55) move(info.offset.x < 0 ? 1 : -1); }}>
-      {i === 0 ? <img src="/assets/mariana.png" alt={t('Mariana Senciani', 'Mariana Senciani', 'Mariana Senciani')} draggable={false} /> : <div className={`story-art story-art-${i}`} aria-hidden="true"><span>0{i + 1}</span><b>{['', '✳', '</>', '↗', '☺'][i]}</b><small>{story.name}</small></div>}<figcaption>{story.name}</figcaption></motion.figure>; })}<span className="story-drag-hint"><MoveHorizontal size={17} />{t('Arraste para conhecer minha história', 'Drag to explore my story', 'Arrastra para conocer mi historia')}</span></div></section>;
+      <img src={`/assets/about/${i + 1}.jpeg`} alt={`${story.name} — Mariana Senciani`} draggable={false} loading={i === 0 ? 'eager' : 'lazy'} /><figcaption>{story.name}</figcaption></motion.figure>; })}<span className="story-drag-hint"><MoveHorizontal size={17} />{t('Arraste para conhecer minha história', 'Drag to explore my story', 'Arrastra para conocer mi historia')}</span></div></section>;
 }
 
 export function AboutExperience() {
