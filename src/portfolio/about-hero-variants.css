@@ -1,0 +1,163 @@
+/* About hero: 100% viewport, wide editorial copy + frontal Polaroid pile. */
+.experience-site .about-experience-hero.about-hero-viewport {
+  position: relative;
+  min-height: calc(100svh - 66px);
+  display: flex;
+  align-items: center;
+  padding-top: clamp(24px, 4.5vh, 52px);
+  padding-bottom: clamp(32px, 5.5vh, 64px);
+  box-sizing: border-box;
+}
+
+.about-hero-v1 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.34fr) minmax(340px, 0.86fr);
+  gap: clamp(32px, 4.2vw, 60px);
+  align-items: center;
+}
+
+.about-v1-copy {
+  width: 100%;
+  max-width: 100%;
+}
+
+.experience-site .about-hero-v1 .word-pull-up {
+  font-size: clamp(44px, 5.3vw, 76px);
+  line-height: 1.06;
+  width: 100%;
+  max-width: 100%;
+  text-wrap: unset;
+}
+
+.experience-site .about-hero-v1 .about-hero-lead {
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.72;
+  color: var(--muted);
+  width: 100%;
+  max-width: 100%;
+  margin: clamp(26px, 3.8vh, 38px) 0 0;
+}
+
+.about-cv-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 32px;
+  margin-top: clamp(34px, 5.2vh, 50px);
+}
+
+.experience-site .about-timeline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+.experience-site .about-timeline-link:hover,
+.experience-site .about-timeline-link:focus-visible {
+  color: var(--lime);
+}
+
+.about-timeline-link svg {
+  transition: transform 0.25s;
+}
+
+.about-timeline-link:hover svg {
+  transform: translateY(3px);
+}
+
+/* Frontal Polaroid Pile ("montinho") */
+.about-v1-pile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 470px;
+  perspective: 1100px;
+  isolation: isolate;
+}
+
+.about-v1-polaroid {
+  grid-area: 1 / 1;
+  width: min(100%, 340px);
+  margin: 0;
+  background: #f4f3e9;
+  padding: 15px 15px 24px;
+  border-radius: 6px;
+  box-shadow: 0 22px 48px #0007;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+.about-v1-polaroid.is-under {
+  width: min(100%, 320px);
+  padding: 13px 13px 18px;
+  box-shadow: 0 16px 36px #0006;
+}
+
+.about-v1-polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1.04;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.about-v1-polaroid figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 18px 6px 0;
+  color: #242c1a;
+}
+
+.about-v1-polaroid figcaption strong {
+  font-family: Alexandria, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.about-v1-polaroid .polaroid-years {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #4a591f;
+}
+
+.about-v1-polaroid .polaroid-line {
+  font-size: 13px;
+  line-height: 1.48;
+  color: #3f4934;
+  margin-top: 4px;
+}
+
+.about-v1-polaroid figcaption.polaroid-mini-caption {
+  padding: 11px 4px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #3f4934;
+}
+
+@media (max-width: 920px) {
+  .about-hero-v1 {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+  .about-v1-pile {
+    min-height: 430px;
+  }
+  .about-v1-polaroid {
+    width: min(100%, 300px);
+  }
+  .about-v1-polaroid.is-under {
+    width: min(100%, 280px);
+  }
+}

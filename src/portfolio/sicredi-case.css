@@ -13,7 +13,7 @@
 .sc-hero { padding-top: 45px; display: flex; flex-direction: column; align-items: center; }
 .sc-hero > :is(.sc-back,.sc-project-name,.sc-heading,.sc-hero-lead,.sc-hero-proof,.sc-hero-caption) { width: 100%; }
 .sicredi-case .sc-project-name { color: var(--lime); margin-top: 30px; font-size: 13px; }
-.sicredi-case .sc-heading { width: 100%; max-width: 100%; margin: 18px 0 0; font-size: clamp(32px, 3.9vw, 56px); line-height: 1.14; text-align: left; overflow-wrap: break-word; text-wrap: pretty; }
+.sicredi-case .sc-heading { width: 100%; max-width: 100%; margin: 18px 0 0; font-size: clamp(38px, 4.8vw, 72px); line-height: 1.12; text-align: left; overflow-wrap: break-word; text-wrap: unset; }
 .sicredi-case .sc-hero-lead { width: 100%; max-width: none; color: var(--muted); font-size: 14px; line-height: 1.85; margin-top: 24px; text-align: left; }
 .sc-hero-proof { display: grid; grid-template-columns: .65fr 2fr; gap: 25px; align-items: center; margin-top: 24px; }
 .sc-hero-metrics { display: grid; gap: 25px; padding-block: 15px; min-width: 0; }
