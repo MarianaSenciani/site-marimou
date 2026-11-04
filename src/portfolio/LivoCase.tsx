@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronDown } from 'lucide-react';
+import { useEffect } from 'react';
+import { ArrowRight, ArrowUpRight, Check, ChevronDown } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
 import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import './livo-case.css';
+import { CaseHero, CaseHighlights, CaseOverview, CaseReading } from './CaseLayout';
 
 const media = '/assets/cases/livo/';
 
@@ -52,37 +53,23 @@ function Evidence({ number, label, title, text }: { number: string; label: strin
 
 export function LivoCase() {
   const paused = useMotionPaused();
-  const [activeChapter, setActiveChapter] = useState('livo-problema');
   useEffect(() => { document.title = 'LIVO · fluxo de compra e análise heurística — Mari Mou'; }, []);
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible) setActiveChapter(visible.target.id);
-    }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, .1, .3] });
-    chapters.forEach(([, id]) => { const node = document.getElementById(id); if (node) observer.observe(node); });
-    return () => observer.disconnect();
-  }, []);
-
-  return <main id="main-content" lang="pt-BR" className={`livo-case ${paused ? 'lv-motion-paused' : ''}`}>
-    <header className="lv-hero wrap">
-      <a className="lv-back" href="/projetos"><ArrowLeft size={16} />Todos os projetos</a>
-      <div className="lv-hero-grid">
-        <div className="lv-hero-copy"><p className="lv-kicker">LIVO Eyewear <span>·</span> E-commerce <span>·</span> 2022–2023</p>
-          <WordPullUp paused={paused} words="Entre escolher e comprar, a jornada estava perdendo pessoas." className="lv-heading" />
-          <p className="lv-hero-lead">A queda de faturamento levou o time a olhar para o fluxo de compra. Mesmo atuando em Marketing, propus uma investigação de UX: combinei dados da VTEX, análise heurística e testes com usuários para redesenhar a jornada até o pagamento.</p>
-          <a className="lv-inline-link" href="#livo-problema">Entenda o diagnóstico <ArrowDown size={17} /></a>
-        </div>
-        <div className="lv-hero-art" aria-label="Telas redesenhadas do e-commerce LIVO em dispositivos móveis">
+  return <main id="main-content" lang="pt-BR" className={`livo-case project-case ${paused ? 'lv-motion-paused' : ''}`}>
+    <CaseHero name="LIVO Eyewear · E-commerce · 2022–2023"
+      title="Entre escolher e comprar, a jornada estava perdendo pessoas."
+      subtitle="A queda de faturamento levou o time a olhar para o fluxo de compra. Mesmo atuando em Marketing, propus uma investigação de UX: combinei dados da VTEX, análise heurística e testes com usuários para redesenhar a jornada até o pagamento."
+      highlights={<CaseHighlights items={[[ '42% → 20%', 'Abandono de carrinho · acompanhamento de 2 meses' ], [ '12 testes', '7 assistidos e 5 não assistidos · colaboradores internos' ], [ '2 pontos de saída', 'Após adicionar ao carrinho e antes de finalizar o checkout' ]]}/>}
+      visual={<div className="lv-hero-art" aria-label="Telas redesenhadas do e-commerce LIVO em dispositivos móveis">
           <span className="lv-hero-art-label">A jornada redesenhada</span>
           <div className="lv-hero-phone lv-hero-phone-back"><img src={`${media}catalogo.png`} alt="Página de produtos redesenhada" /></div>
           <div className="lv-hero-phone lv-hero-phone-front"><img src={`${media}carrinho.png`} alt="Carrinho de compra redesenhado" /></div>
           <div className="lv-hero-stamp"><strong>42% <span>→</span> 20%</strong><span>abandono de carrinho<br />em 2 meses</span></div>
-        </div>
-      </div>
-      <dl className="lv-facts"><div><dt>Meu papel formal</dt><dd>Assistente de Arte · Marketing</dd></div><div><dt>Frente que propus</dt><dd>Auditoria de UX, testes e redesign</dd></div><div><dt>Escopo</dt><dd>Web · desktop e mobile</dd></div><div><dt>Acompanhamento</dt><dd>2 meses após a implementação</dd></div></dl>
-    </header>
-
-    <nav className="lv-chapter-nav" aria-label="Capítulos do case LIVO"><div className="wrap">{chapters.map(([label, id]) => <a href={`#${id}`} key={id} aria-current={activeChapter === id ? 'location' : undefined}>{label}</a>)}</div></nav>
+        </div>}/>
+    <CaseOverview facts={[[ 'Meu papel formal', 'Assistente de Arte · Marketing' ], [ 'Período', '2022–2023' ], [ 'Plataforma', 'Web · desktop e mobile' ], [ 'Escopo', 'Auditoria de UX, testes e redesign' ]]}
+      challenge="Entender onde a jornada de compra deixava de orientar as pessoas e contribuía para o abandono do carrinho."
+      contribution="Propus a frente de UX, cruzei dados da VTEX com análise heurística e testes internos e acompanhei o redesenho das telas até a implementação."
+      approach="Investigar o fluxo completo antes de redesenhar, priorizando navegação, categorias, cores, SKUs e clareza até o pagamento."/>
+    <CaseReading chapters={chapters}>
 
     <section id="livo-problema" className="lv-section wrap lv-problem">
       <div className="lv-section-intro"><Reveal><p className="lv-section-index">01 / O problema</p><Title>A compra se interrompia em dois momentos.</Title></Reveal><Reveal><p>Os relatórios disponíveis na VTEX mostravam pessoas que adicionavam um produto e não avançavam ao carrinho, e outras que chegavam ao checkout sem concluir o pagamento. A taxa de abandono de carrinho acompanhada pelo time estava em <strong>42%</strong>.</p><p>O sinal inicial era a queda de faturamento. A pergunta de UX passou a ser: onde a jornada deixava de orientar a próxima decisão?</p></Reveal></div>
@@ -123,5 +110,6 @@ export function LivoCase() {
 
     <section className="lv-section wrap lv-closing"><div><p className="lv-section-index">O que levo deste projeto</p><Title>Foi o trabalho que antecipou minha transição para Produto.</Title></div><div><p>Eu estava formalmente em Marketing quando identifiquei um problema de negócio, propus a investigação e acompanhei o redesenho até a implementação. Foi uma das primeiras experiências em que conectei dados, comportamento, interface e uma restrição técnica real para melhorar uma jornada completa.</p><a href="/projetos" className="pill primary">Explorar outros projetos <ArrowUpRight size={18}/></a></div></section>
     <div className="lv-next wrap"><a href="/projetos/sicredi">Próximo case · Sicredi <ArrowUpRight size={18}/></a><a href="/projetos">Todos os projetos <ChevronDown size={17}/></a></div>
+    </CaseReading>
   </main>;
 }

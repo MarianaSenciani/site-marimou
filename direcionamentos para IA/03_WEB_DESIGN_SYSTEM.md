@@ -57,6 +57,10 @@ Regras explícitas da Mariana (status: `approved-by-user`, aplicadas primeiro no
 - **Seletores redundantes** (por exemplo, alternar desktop/mobile quando ambos já aparecem) devem ser evitados.
 
 ## 5. Tokens e implementação
+
+### Direção das páginas de projetos · 04/11/2026
+
+Consultar [Padrão visual das páginas de projetos](../docs/padrao-visual-cases.md). Mariana definiu abertura e fechamento consistentes, com narrativa interna adaptada a cada trabalho: hero com título, subtítulo, três highlights à esquerda e mockup/foto; ficha objetiva; resumo em Desafio / Minha contribuição / Caminho escolhido; navegação de capítulos e atalhos laterais; fundo mais escuro sem quadriculado a partir das tabs; fechamento “O que levo deste projeto”. O documento registra espaçamentos, critérios para cenas de uma viewport e contrato de dados para próximos projetos. Aplicação local concluída em Sicredi, LIVO, LWSA e no template de cadastrados via componentes compartilhados; publicação é uma etapa separada. Mockups ilustrativos são autorizados enquanto faltarem assets, com legenda explícita e sem atribuir essas aplicações ao trabalho entregue.
 Consultar `02_DESIGN_TOKENS.json`. É um arquivo inicial com valores observados e nomes semânticos **propostos**, não um espelho de variáveis Figma. Ao implementar, converter os tokens para CSS custom properties e criar camada de componentes; não mapear `observedDesktop.heroFontSize` diretamente para todas as larguras.
 
 ## 6. Pendências para versão de produção

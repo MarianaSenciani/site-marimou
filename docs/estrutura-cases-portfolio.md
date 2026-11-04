@@ -1,5 +1,7 @@
 # Estrutura dos cases do portfólio — registro de ideação
 
+**Atualização visual de 04/11/2026:** consultar [Padrão visual das páginas de projetos](padrao-visual-cases.md) para a nova direção de hero, ficha, resumo, navegação, fundo e espaçamento. O novo registro distingue decisões solicitadas, valores propostos e pontos ainda pendentes. As regras editoriais e de evidência deste documento continuam válidas.
+
 **Estado:** proposta para discussão com Mariana, atualizada em 08/10/2026 após sua revisão dos recortes e da política de evidências. O [índice de projetos](../Wireframes/wireframe-projetos-product-portfolio.html) abre três wireframes individuais: [Sicredi](../Wireframes/wireframe-case-sicredi.html), [LWSA](../Wireframes/wireframe-case-lwsa.html) e [LIVO](../Wireframes/wireframe-case-livo.html). Ainda não é conteúdo aprovado para publicação e não altera o site.
 
 ## Objetivo editorial

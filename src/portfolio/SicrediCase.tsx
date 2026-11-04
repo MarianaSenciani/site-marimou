@@ -1,10 +1,11 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { animate, motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, MessageCircle, Rocket } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, MessageCircle, Rocket } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { Reveal } from '@/components/ui/reveal';
 import './sicredi-case.css';
+import { CaseHero, CaseOverview, CaseReading } from './CaseLayout';
 
 const mediaRoot = '/assets/cases/sicredi/';
 const usageNote = 'Dados posteriores de uso, jan–jun/2025, considerando PJ, Agro e Cuiabá. Somatório sem deduplicação entre URLs.';
@@ -214,15 +215,7 @@ function MobileScene() {
 }
 
 export function SicrediCase() {
-  const paused = useMotionPaused(), [activeChapter, setActiveChapter] = useState('sc-roadmap'), [shortcutsVisible, setShortcutsVisible] = useState(false);
-  const chapterLock = useRef<string | null>(null);
-  const goToChapter = (event: ReactMouseEvent<HTMLAnchorElement>, id: string) => {
-    event.preventDefault();
-    chapterLock.current = id;
-    setActiveChapter(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    window.setTimeout(() => { chapterLock.current = null; }, 1500);
-  };
+  const paused = useMotionPaused();
   useLayoutEffect(() => {
     // Prevent the browser/Fast Refresh from restoring an obsolete position inside a changed sticky scene.
     if (window.location.hash) return;
@@ -236,23 +229,15 @@ export function SicrediCase() {
     };
   }, []);
   useEffect(() => { document.title = 'Sicredi Centro-Norte · pesquisa e experiência digital — Mari Mou'; }, []);
-  useEffect(() => {
-    const updateNavigation = () => {
-      const nav = document.querySelector('.sc-chapter-nav');
-      if (nav) setShortcutsVisible(window.scrollY >= nav.getBoundingClientRect().top + window.scrollY - 80);
-      const current = chapters.map(([, id]) => document.getElementById(id)).filter(Boolean)
-        .filter(node => node!.getBoundingClientRect().top <= window.innerHeight * .42).at(-1);
-      if (current && !chapterLock.current) setActiveChapter(current.id);
-    };
-    updateNavigation(); window.addEventListener('scroll', updateNavigation, { passive: true });
-    return () => window.removeEventListener('scroll', updateNavigation);
-  }, []);
-  return <main id="main-content" lang="pt-BR" className={`sicredi-case ${paused ? 'sc-motion-paused' : ''}`}>
-    {/* HERO: explain the problem and show exactly three later-use highlights. */}
-    <header className="sc-hero wrap"><a href="/projetos" className="sc-back"><ArrowLeft size={16}/>Todos os projetos</a><p className="sc-project-name">Sicredi Centro-Norte · 2024</p><WordPullUp className="sc-heading" paused={paused} words="Como transformamos pesquisa de campo em uma experiência digital para o Sicredi Centro-Norte."/><p className="sc-hero-lead">Durante três meses, atuei como Product Designer no projeto. Começamos investigando como as pessoas da região buscavam informações financeiras e, a partir das entrevistas, mudamos a estratégia: em vez de concentrar tudo nas redes sociais, criamos landing pages dedicadas para cada campanha.</p><div className="sc-hero-proof"><div className="sc-hero-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><HeroVisual/></div></header>
-    <div className="wrap sc-overview"><dl className="sc-facts">{[['Meu papel', 'Product Designer'], ['Período', '2024 · 3 meses'], ['Plataforma', 'Web / Mobile'], ['Escopo', 'Research, síntese, jornada, UI e otimização']].map(([title, body]) => <div key={title}><dt>{title}</dt><dd>{body}</dd></div>)}</dl><div className="sc-at-glance">{[['Desafio', 'Descobrir qual formato funcionaria melhor para explicar produtos financeiros a um público com hábitos digitais diferentes dos que imaginávamos no início.'], ['Meu papel', 'Criei roteiro de entrevistas, participei da pesquisa, sintetizei dados, estruturei personas e jornada e fui responsável pelo design das quatro landing pages.'], ['Caminho escolhido', 'A pesquisa mostrou que a rede social funcionava melhor para atrair. A explicação precisava acontecer em uma página própria, com mais contexto e caminhos claros para continuar.']].map(([title, body]) => <Reveal key={title}><h3>{title}</h3><p>{body}</p></Reveal>)}</div></div>
-    <nav className="sc-chapter-nav" aria-label="Capítulos do case Sicredi"><div className="wrap">{chapters.map(([title,id]) => <a href={`#${id}`} key={id} onClick={event => goToChapter(event, id)} aria-current={activeChapter === id ? 'location' : undefined}>{title}</a>)}</div></nav>
-    <aside className={`sc-chapter-shortcuts ${shortcutsVisible ? 'is-visible' : ''}`} aria-label="Atalhos dos capítulos">{chapters.map(([title,id]) => <a href={`#${id}`} key={id} onClick={event => goToChapter(event, id)} aria-label={title} data-label={title} aria-current={activeChapter === id ? 'location' : undefined}/>)}</aside>
+  return <main id="main-content" lang="pt-BR" className={`sicredi-case project-case ${paused ? 'sc-motion-paused' : ''}`}>
+    <CaseHero name="Sicredi Centro-Norte · 2024" title="Como transformamos pesquisa de campo em uma experiência digital para o Sicredi Centro-Norte." subtitle="Durante três meses, atuei como Product Designer no projeto. Começamos investigando como as pessoas da região buscavam informações financeiras e, a partir das entrevistas, mudamos a estratégia: em vez de concentrar tudo nas redes sociais, criamos landing pages dedicadas para cada campanha."
+      highlights={<div className="sc-hero-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div>}
+      visual={<HeroVisual/>}/>
+    <CaseOverview facts={[[ 'Meu papel', 'Product Designer' ], [ 'Período', '2024 · 3 meses' ], [ 'Plataforma', 'Web / Mobile' ], [ 'Escopo', 'Research, síntese, jornada, UI e otimização' ]]}
+      challenge="Descobrir qual formato funcionaria melhor para explicar produtos financeiros a um público com hábitos digitais diferentes dos que imaginávamos no início."
+      contribution="Criei roteiro de entrevistas, participei da pesquisa, sintetizei dados, estruturei personas e jornada e fui responsável pelo design das quatro landing pages."
+      approach="A pesquisa mostrou que a rede social funcionava melhor para atrair. A explicação precisava acontecer em uma página própria, com mais contexto e caminhos claros para continuar."/>
+    <CaseReading chapters={chapters}>
     <Roadmap/>
     {/* DISCOVERY: evidence that changed the channel, not a methods checklist. */}
     <section id="sc-pesquisa" className="sc-chapter wrap"><div className="sc-initial-hypothesis"><Reveal><ChapterTitle>No começo, a aposta era usar as redes sociais como principal canal.</ChapterTitle><SectionLead>O projeto começou junto aos times de design e mídia paga. A ideia era usar banners, posts e vídeos curtos para apresentar as ofertas e levar as pessoas direto para o atendimento.</SectionLead></Reveal><div className="sc-hypothesis-note"><MessageCircle size={27}/><p>Esse mesmo canal também funcionaria para explicar produtos financeiros com mais detalhes?</p></div></div><div className="sc-research-editorial"><Reveal className="sc-interview-count"><strong>150</strong><span>entrevistas</span><ArrowDown size={25}/><p>Clientes + colaboradores + pessoas da região</p></Reveal><div><ChapterTitle>As entrevistas mudaram o rumo do projeto.</ChapterTitle><SectionLead>Falamos com cerca de 150 pessoas entre clientes, colaboradores do Sicredi e moradores da região, incluindo comerciantes, freelancers e pequenos empreendedores.</SectionLead><div className="sc-insights">{[
@@ -277,5 +262,6 @@ export function SicrediCase() {
     {/* IMPACT: later continuity of use, never claimed as 2024 conversion or unique users. */}
     <section id="sc-impacto" className="sc-impact sc-chapter"><div className="wrap"><ChapterTitle>As páginas continuaram recebendo tráfego depois do projeto.</ChapterTitle><SectionLead>Dados do Microsoft Clarity mostram que as páginas continuavam ativas e recebendo tráfego em 2025, um ano depois do trabalho original.</SectionLead><div className="sc-impact-metrics">{metrics.map((metric, i) => <Metric key={metric.label} metric={metric} index={i}/>)}</div><Reveal className="sc-impact-box" delay={.1}><span>Período e fonte</span><p>{usageNote}</p></Reveal></div></section>
     <section className="sc-reflection sc-chapter wrap"><ChapterTitle>O que eu levo desse projeto</ChapterTitle><SectionLead>Esse projeto me mostrou, na prática, que o trabalho de Product Design pode começar antes da primeira tela. Aqui, a principal decisão foi entender onde a informação deveria estar e como ela deveria ser apresentada para aquele público.</SectionLead><SectionLead>Também foi um projeto em que aprendi a usar os dados como parte da conversa com o cliente. Quando uma mudança afetava o comportamento da página, eu conseguia sair do campo da opinião e discutir o que estava acontecendo de forma mais objetiva.</SectionLead><Ending/></section>
+    </CaseReading>
   </main>;
 }
