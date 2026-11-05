@@ -1,0 +1,41 @@
+.lwsa-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.lwsa-media-space{margin:32px 0 0;min-height:300px;border:1px solid #aeb39d40;border-radius:22px;overflow:hidden;background:#23271c}
+.lwsa-media-grid .lwsa-media-space{margin:0}.lwsa-media-space.is-wide{grid-column:1/-1;min-height:360px}
+.lwsa-media-space>div{min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#aeb39d}.lwsa-media-space.is-wide>div{min-height:320px}
+.lwsa-media-space span{font:500 clamp(18px,2vw,26px)/1.4 Alexandria,sans-serif;color:#f2f1e8}
+.lwsa-media-space figcaption{padding:16px 24px;font-size:12px;line-height:1.6;color:#aeb39d;border-top:1px solid #aeb39d26}
+.lwsa-press{margin-top:48px;padding:clamp(28px,4vw,60px);display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(32px,4vw,64px);align-items:center;border-radius:28px;background:#f2f1e8;color:#1b1d15}
+.lwsa-press-eyebrow{font-size:12px;font-weight:700;letter-spacing:.05em;margin:0 0 20px}.lwsa-press h3{font:600 clamp(25px,2.6vw,38px)/1.2 Alexandria,sans-serif;letter-spacing:-.04em;margin:0 0 24px}
+.lwsa-press-copy>p:not(.lwsa-press-eyebrow){font-size:14px;line-height:1.8;color:#4b5141}.lwsa-press .pill{margin-top:28px;font-weight:700;color:#1b1d15;background:#bddb42}
+
+/* Laptop 16:9 com animação de abertura da tampa (MacBook Safari) */
+.lwsa-laptop-stage{margin:0;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center}
+.lwsa-laptop-perspective{position:relative;width:100%;perspective:1200px;perspective-origin:bottom center}
+.lwsa-laptop-lid{position:relative;width:100%;transform-origin:bottom center;transform-style:preserve-3d;will-change:transform,opacity}
+
+.lwsa-mac-browser{background:#14160f;border-radius:12px 12px 4px 4px;overflow:hidden;border:8px solid #1f2219;border-bottom-width:12px;box-shadow:0 24px 50px #1b1d1538,0 2px 8px #0004}
+.lwsa-mac-bar{height:30px;display:grid;grid-template-columns:auto auto minmax(100px,1fr) auto;align-items:center;gap:10px;padding-inline:10px;background:linear-gradient(#2d3024,#23261c);color:#b9bcae;border-bottom:1px solid #ffffff17;font:9px Inter,sans-serif}
+.lwsa-mac-dots{display:flex;gap:5px}
+.lwsa-mac-dots i{width:8px;height:8px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px #0002}
+.lwsa-mac-dots i:nth-child(1){background:#ff5f57}
+.lwsa-mac-dots i:nth-child(2){background:#febc2e}
+.lwsa-mac-dots i:nth-child(3){background:#28c840}
+.lwsa-mac-nav,.lwsa-mac-actions{white-space:nowrap;font-size:13px;color:#9a9e8e}
+.lwsa-mac-address{min-width:0;padding:4px 14px;overflow:hidden;border-radius:6px;background:#14160f;box-shadow:inset 0 0 0 1px #ffffff1f;text-align:center;text-overflow:ellipsis;white-space:nowrap;font-size:9px;color:#c9ccbd}
+
+.lwsa-mac-viewport{position:relative;width:100%;aspect-ratio:16/9;background:#ffffff;overflow:hidden}
+.lwsa-article-scroll{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+.lwsa-article-scroll::-webkit-scrollbar{width:6px}
+.lwsa-article-scroll::-webkit-scrollbar-track{background:#f1f1f1}
+.lwsa-article-scroll::-webkit-scrollbar-thumb{background:#c1c5b8;border-radius:3px}
+.lwsa-article-scroll img{display:block;width:100%;height:auto}
+
+.lwsa-laptop-base{position:relative;height:12px;margin-inline:-3.5%;border-radius:2px 2px 14px 14px;background:linear-gradient(#aeb39d,#788069);box-shadow:0 12px 24px #1b1d152e,inset 0 1px 0 #ffffff55;display:flex;justify-content:center;align-items:flex-start}
+.lwsa-laptop-notch{width:56px;height:4px;border-radius:0 0 4px 4px;background:#5b624f}
+.lwsa-laptop-stage figcaption{font-size:11px;line-height:1.6;color:#59614d;margin-top:16px;text-align:center}
+
+@media(max-width:960px){.lwsa-press{grid-template-columns:1fr;padding:36px 28px;gap:36px}}
+.lwsa-carousel-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:32px;padding:50px 40px 110px;background:#303625;color:#f2f1e8}
+.lwsa-carousel-placeholder.is-institutional{background:#d5d9c6;color:#23271c}.lwsa-carousel-placeholder.is-digital{background:#23271c}.lwsa-carousel-placeholder.is-details{background:#aeb39d;color:#23271c}
+.lwsa-carousel-art{display:flex;align-items:center;justify-content:center;gap:16px;width:65%;height:42%}.lwsa-carousel-art i{display:block;flex:1;height:80%;border:1px solid currentColor;border-radius:4px;opacity:.25}.is-institutional .lwsa-carousel-art i{transform:rotate(-8deg);height:100%;box-shadow:12px 20px 30px #0002}.is-digital .lwsa-carousel-art i{border-radius:12px;height:85%}.is-digital .lwsa-carousel-art i:nth-child(2){flex:2;height:100%}.is-details .lwsa-carousel-art i{border-radius:50%;aspect-ratio:1;height:auto}
+.lwsa-carousel-placeholder-copy{text-align:center}.lwsa-carousel-placeholder-copy>span{font:500 clamp(20px,3vw,38px)/1.2 Alexandria,sans-serif;letter-spacing:-.04em}.lwsa-carousel-placeholder-copy p{font-size:11px;line-height:1.6;margin-top:14px;opacity:.7}

@@ -3,6 +3,7 @@ import { WordPullUp } from '@/components/ui/word-pull-up';
 import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { caseOpenings, CaseSectionDetails } from './CaseSections';
+import { LwsaMedia } from './LwsaMedia';
 import { CaseHero, CaseHighlights, CaseOverview, CaseReading, CaseReflection, CaseNext, CaseVisualPlaceholder, type CaseFact } from './CaseLayout';
 
 /** New registered projects inherit the framing; optional editorial fields stay project-specific. */
@@ -49,7 +50,7 @@ export function StandardProjectCase({ project }: { project: Project }) {
       {sections.map(([label, title, body], index) => <section className={`case-standard-chapter wrap ${lwsa && index === 3 ? 'case-full-scene' : ''}`} key={chapters[index][1]} id={chapters[index][1]}>
         <Reveal><p className="case-opening-kicker">{String(index + 1).padStart(2, '0')} / {label}</p><WordPullUp as="h2" paused={paused} words={title}/><p>{body}</p></Reveal>
         {opening && <CaseSectionDetails id={project.id} chapter={index}/>}
-        {lwsa && index === 3 && <p className="case-source-link"><a className="text-link" href="https://investnews.com.br/negocios/locaweb-muda-nome-para-lwsa-e-mira-aquisicoes-para-expansao/" target="_blank" rel="noreferrer">Leia a matéria no InvestNews ↗</a></p>}
+        {lwsa && <LwsaMedia chapter={index}/>}
       </section>)}
       {project.demo && <p className="wrap case-demo-note">Estudo visual demonstrativo, sem resultados de negócio atribuídos.</p>}
       <CaseReflection>{reflection}</CaseReflection>

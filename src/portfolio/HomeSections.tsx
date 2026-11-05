@@ -7,6 +7,8 @@ import { useMotionPaused } from '@/components/ui/motion-context';
 import { BadgeExperience } from './BadgeExperience';
 import { useExperience } from './experience-context';
 import { caseStudies, type CaseStudy } from './case-studies';
+import './project-covers.css';
+import { ProjectHover } from './ProjectHover';
 
 function ProcessIcon({ stage }: { stage: number }) {
   if (stage === 0) return <Search strokeWidth={1.7} size={27} />;
@@ -16,7 +18,7 @@ function ProcessIcon({ stage }: { stage: number }) {
 
 export function CaseCard({ project }: { project: CaseStudy; compact?: boolean }) {
   const { t } = useExperience();
-  return <a className={`curated-case case-${project.color}`} href={`/projetos/${project.id}`} aria-label={`${t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')} ${project.brand}`}><div className="curated-case-art"><span className="case-art-star" aria-hidden="true">✳</span><strong>{project.brand}</strong><span className="case-art-category">{project.category}</span><span className="case-art-arrow"><ArrowUpRight size={24} /></span></div><div className="curated-case-copy"><p className="case-focus">{project.category}</p><h3>{project.title}</h3><div className="case-outcome"><strong>{project.metric}</strong><span>{project.metricLabel}</span></div><span className="case-card-cta">{t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')}<ArrowUpRight size={16} /></span></div></a>;
+  return <a className={`curated-case curated-case-editorial case-${project.color}`} href={`/projetos/${project.id}`} aria-label={`${t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')} ${project.brand}`}><div className="curated-case-art"><img src={`/assets/project-covers/${project.id}-editorial.png`} alt="" loading="lazy" decoding="async"/><ProjectHover id={project.id}/></div><div className="curated-case-copy"><div className="case-editorial-meta"><p className="case-focus">{project.category}</p><span aria-hidden="true">{String(caseStudies.findIndex(item => item.id === project.id) + 1).padStart(2, '0')}</span></div><h3>{(project.id === 'sicredi' ? ['Informação financeira', 'que começa pela escuta.'] : project.id === 'lwsa' ? ['Uma marca para', 'acompanhar a expansão.'] : ['Menos fricção entre', 'escolher e comprar.']).map(line => <span className="case-title-line" key={line}>{line}</span>)}</h3><div className="case-outcome"><strong>{project.metric}</strong><span>{project.metricLabel}</span></div><span className="case-card-cta">{t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')}<ArrowUpRight size={16} /></span></div></a>;
 }
 
 export function FeaturedProjects() {

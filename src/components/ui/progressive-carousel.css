@@ -1,0 +1,12 @@
+.progressive-carousel{position:relative;isolation:isolate;overflow:hidden;border:1px solid #aeb39d30;border-radius:22px;background:#23271c;margin-top:40px}
+.progressive-carousel-stage{aspect-ratio:16/10;position:relative;background:#23271c}
+.progressive-carousel-image{position:absolute;inset:0}.progressive-carousel-image>img{display:block;width:100%;height:100%;object-fit:contain}
+.progressive-carousel-captions{position:absolute;inset:auto 0 0;display:flex;overflow-x:auto;scrollbar-width:thin;background:#1b1d15d9;backdrop-filter:blur(18px);z-index:2}
+.progressive-carousel-captions>button{position:relative;flex:1 0 160px;min-width:0;padding:19px 22px;border:0;border-right:1px solid #aeb39d26;background:transparent;color:#aeb39d;font:500 12px/1.5 Inter,sans-serif;text-align:left;cursor:pointer;transition:color .2s}
+.progressive-carousel-captions>button:last-child{border-right:0}.progressive-carousel-captions>button:is(:hover,[aria-pressed=true]){color:#f2f1e8}
+.progressive-carousel-timer{position:absolute;inset:0 0 auto;height:3px;background:#aeb39d20;overflow:hidden}.progressive-carousel-timer>span{display:block;width:100%;height:100%;background:#bddb42;transform-origin:left;animation:carousel-caption-progress linear forwards}
+.progressive-carousel-play{position:absolute;top:18px;right:18px;z-index:3;width:38px;height:38px;display:grid;place-items:center;background:#1b1d15c9;backdrop-filter:blur(12px);border:1px solid #aeb39d55;border-radius:50%;color:#f2f1e8;cursor:pointer}.progressive-carousel-play:disabled{opacity:.5;cursor:default}
+.progressive-carousel button:focus-visible{outline:2px solid #bddb42;outline-offset:-5px}
+@keyframes carousel-caption-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(max-width:760px){.progressive-carousel-stage{aspect-ratio:4/5}.progressive-carousel-captions>button{flex-basis:155px;padding:16px;font-size:11px}.progressive-carousel-play{top:12px;right:12px}}
+@media(prefers-reduced-motion:reduce){.progressive-carousel-timer>span{animation:none;transform:scaleX(1)}.progressive-carousel-captions>button{transition:none}}
