@@ -29,7 +29,11 @@ export function AboutExperience() {
   const { t } = useExperience(), paused = useMotionPaused();
 
   const journey = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: journey, offset: ['start 80%', 'end 65%'] });
+  const lastEntryRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: journey,
+    offset: ['start 80%', 'end 72%'],
+  });
   const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
   const cvHref = import.meta.env.DEV ? '/api/cv/pdf' : '/Mariana-Senciani.pdf';
@@ -64,7 +68,7 @@ export function AboutExperience() {
   ];
 
   return (
-    <main id="main-content">
+    <main id="main-content" className="about-experience-page">
       <section className="about-experience-hero about-hero-viewport wrap">
         <div className="about-hero-v1">
           <div className="about-v1-copy">
@@ -140,51 +144,30 @@ export function AboutExperience() {
       </section>
 
       <section id="jornada" className="career-journey experience-section wrap">
-        <WordPullUp as="h2" paused={paused} words={t('A jornada até aqui', 'The journey so far', 'El camino hasta aquí')} />
         <div className="career-entries" ref={journey}>
           <motion.div className="career-progress" aria-hidden="true" style={{ scaleY: paused ? 1 : progress }} />
-          {experiences.map(([period, title, text], i) => (
-            <Reveal className="career-entry" key={period}>
-              <span className="career-date">{period}</span>
-              <div>
-                <span className="career-dot" aria-hidden="true">{i === experiences.length - 1 ? '✳' : '•'}</span>
-                <span className="career-context">
-                  {['Educação · Liderança criativa', 'Publicidade · Dados e mídia', 'Varejo óptico e e-commerce', 'Ecossistema de tecnologia', 'Projeto Sicredi Centro-Norte', 'B2B SaaS · Gestão de performance e RH'][i]}
-                </span>
-                <h3>{title}</h3>
-                <p>{text}</p>
-                <div className="case-tags">
-                  {[['Liderança criativa', 'Planejamento', 'Educação'], ['Métricas de mídia', 'Análise de dados', 'Apresentações'], ['Heurísticas', 'Testes', 'E-commerce', 'UX'], ['Pesquisa', 'UX web', 'Marca', 'Alinhamento entre áreas'], ['Pesquisa de contexto', 'Mobile-first', 'Arquitetura', 'Métricas'], ['Discovery', 'Priorização', 'PRDs e histórias', 'Design System']][i].map(tag => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-                {i > 1 && i < 5 && (
-                  <a className="career-artifact" href={`/projetos/${['', '', 'livo', 'lwsa', 'sicredi'][i]}`}>
-                    <span className="artifact-thumb">{['', '', 'LIVO', 'LWSA', 'Sicredi'][i]}</span>
-                    <span>
-                      {t('Explore o projeto', 'Explore the project', 'Explora el proyecto')}
-                      <small>{['', '', 'Heurísticas e fluxo de compra', 'Pesquisa e direção visual', 'Da escuta à arquitetura'][i]}</small>
-                    </span>
-                    <ArrowUpRight size={18} />
-                  </a>
-                )}
-                {i === 5 && (
-                  <div className="career-artifact">
-                    <span className="artifact-thumb">✳</span>
-                    <span>
-                      Projeto de produto a selecionar
-                      <small>Próximo case de Product Ownership</small>
-                    </span>
+          {experiences.map(([period, title, text], i) => {
+            const isLast = i === experiences.length - 1;
+            return (
+              <Reveal className={`career-entry ${isLast ? 'career-entry-last' : ''}`} key={period}>
+                <span className="career-date">{period}</span>
+                <div ref={isLast ? lastEntryRef : undefined}>
+                  <span className="career-dot" aria-hidden="true">{isLast ? '✳' : '•'}</span>
+                  <span className="career-context">
+                    {['Educação · Liderança criativa', 'Publicidade · Dados e mídia', 'Varejo óptico e e-commerce', 'Ecossistema de tecnologia', 'Projeto Sicredi Centro-Norte', 'B2B SaaS · Gestão de performance e RH'][i]}
+                  </span>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <div className="case-tags">
+                    {[['Liderança criativa', 'Planejamento', 'Educação'], ['Métricas de mídia', 'Análise de dados', 'Apresentações'], ['Heurísticas', 'Testes', 'E-commerce', 'UX'], ['Pesquisa', 'UX web', 'Marca', 'Alinhamento entre áreas'], ['Pesquisa de contexto', 'Mobile-first', 'Arquitetura', 'Métricas'], ['Discovery', 'Priorização', 'PRDs e histórias', 'Design System']][i].map(tag => (
+                      <span key={tag}>{tag}</span>
+                    ))}
                   </div>
-                )}
-              </div>
-            </Reveal>
-          ))}
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
-        <a className="journey-next" href="/#contato">
-          {t('Seu projeto pode ser o próximo capítulo.', 'Your project could be the next chapter.', 'Tu proyecto puede ser el próximo capítulo.')}
-          <ArrowUpRight />
-        </a>
       </section>
       <PhotoStory />
     </main>
