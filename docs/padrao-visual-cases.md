@@ -99,3 +99,10 @@ Os valores abaixo são uma proposta de engenharia para tornar o ritmo consistent
 - Tabs sticky: 78 px abaixo do topo no desktop, 66 px no mobile; âncoras consideram também a altura das tabs.
 - Seções comuns: `clamp(64px, 6vw, 96px)` de padding vertical no template. Os cases existentes preservam o ritmo interno e as cenas especiais já construídas.
 - Resultados da LWSA recebem destaque em área útil de viewport no desktop; no mobile a altura é natural. Nenhum case passa a travar o scroll apenas para seguir esse padrão.
+
+### Mockups de telefone — padrão Android
+Todos os telefones usam proporção externa 9:19,5 (mais estreita, conforme revisão da Mariana), acabamento verde-escuro (#303625), contorno interno preto fino e câmera circular central superior. Usar o componente compartilhado `AndroidStatus` para horário, notificação, sinal, Wi-Fi e bateria; estilos em `android-device.css`. Aplicável também aos cards e à conversa da seção de contato. Recortes da interface antiga devem continuar identificados como evidências parciais, mesmo quando apresentados em moldura mobile.
+
+
+O telefone de contato preserva as dimensões, o corpo de conversa e a barra superior do layout original, com câmera circular central de Android no lugar do recorte de iPhone.
+

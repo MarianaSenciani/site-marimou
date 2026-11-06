@@ -9,17 +9,46 @@ export function useChapterScroll(home: boolean, paused: boolean) {
     // Home gestures are handled below; Lenis only animates the requested slides.
     const lenis = paused ? null : new Lenis({ autoRaf: true, smoothWheel: !home, virtualScroll: () => !home, lerp: .14, anchors: { offset: 0 } });
     controller.current = lenis;
-    if (!home) return () => { lenis?.destroy(); controller.current = null; document.documentElement.classList.remove('home-chapters'); };
+    if (typeof window !== "undefined") (window as any).__lenis = lenis;
+    if (!home) return () => { lenis?.destroy(); controller.current = null; if (typeof window !== "undefined") delete (window as any).__lenis; document.documentElement.classList.remove('home-chapters'); };
     let lockedUntil = 0, lastWheel = 0, accumulated = 0, lastDirection = 0;
     const nested = (target: EventTarget | null) => target instanceof Element && !!target.closest('[data-lenis-prevent], .compact-menu-panel, input, textarea, select, [contenteditable="true"]');
     const advance = (direction: number) => {
       const nodes = Array.from(document.querySelectorAll<HTMLElement>('#main-content > *, .site-footer'));
       const tops = nodes.map((node, index) => index === 0 ? 0 : Math.min(node.getBoundingClientRect().top + scrollY, document.documentElement.scrollHeight - innerHeight));
       let current = 0;
-      tops.forEach((top, index) => { if (top <= scrollY + 5) current = index; });
-      const next = direction > 0 ? tops[current + 1] : tops[current];
-      let destination = direction > 0 ? Math.min(next ?? scrollY, scrollY + innerHeight) : Math.max(next, scrollY - innerHeight);
-      if (direction < 0 && Math.abs(scrollY - next) < 5) destination = tops[Math.max(0, current - 1)];
+      tops.forEach((top, index) => { if (top <= scrollY + 15) current = index; });
+
+      let destination = scrollY;
+      if (direction > 0) {
+        const currentNode = nodes[current];
+        const isCurrentTall = currentNode && currentNode.offsetHeight > innerHeight + 60;
+        const currentTop = tops[current];
+        const currentBottom = currentTop + (currentNode ? currentNode.offsetHeight : innerHeight);
+
+        if (isCurrentTall && scrollY + innerHeight < currentBottom - 30) {
+          destination = Math.min(scrollY + innerHeight, currentBottom - innerHeight);
+        } else {
+          destination = tops[current + 1] ?? scrollY;
+        }
+      } else {
+        const currentNode = nodes[current];
+        const isCurrentTall = currentNode && currentNode.offsetHeight > innerHeight + 60;
+        const currentTop = tops[current];
+
+        if (isCurrentTall && scrollY > currentTop + 30) {
+          destination = Math.max(currentTop, scrollY - innerHeight);
+        } else {
+          const prevIndex = Math.max(0, current - 1);
+          const prevNode = nodes[prevIndex];
+          const prevTop = tops[prevIndex];
+          if (prevNode && prevNode.offsetHeight > innerHeight + 60) {
+            destination = Math.max(prevTop, prevTop + prevNode.offsetHeight - innerHeight);
+          } else {
+            destination = prevTop;
+          }
+        }
+      }
       if (Math.abs(destination - scrollY) < 2) return;
       lockedUntil = performance.now() + (paused ? 180 : 700);
       if (lenis) lenis.scrollTo(destination, { duration: .7, easing: progress => 1 - Math.pow(1 - progress, 3), force: true });
@@ -77,4 +106,54 @@ export function useChapterScroll(home: boolean, paused: boolean) {
     if (controller.current) controller.current.scrollTo(0, { duration: .85, force: true });
     else window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
+}
+
+/** Smooth scroll to the contact/phone section with ease-in acceleration */
+export function scrollToContact(options?: { onComplete?: () => void }) {
+  if (typeof window === 'undefined') return;
+  const target = document.getElementById('contato');
+  if (!target) return;
+
+  const isReduced =
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    document.documentElement.classList.contains('motion-paused');
+
+  if (isReduced) {
+    target.scrollIntoView({ behavior: 'instant' });
+    options?.onComplete?.();
+    return;
+  }
+
+  const lenis = (window as any).__lenis;
+  // Ease-in easing function: starts gentle and accelerates towards the phone section
+  const easeIn = (t: number) => Math.pow(t, 2.6);
+
+  if (lenis && typeof lenis.scrollTo === 'function') {
+    try { lenis.resize(); } catch {}
+    lenis.scrollTo(target, {
+      duration: 1.4,
+      easing: easeIn,
+      force: true,
+      offset: -10,
+      onComplete: options?.onComplete,
+    });
+  } else {
+    const startY = window.scrollY;
+    const targetY = target.getBoundingClientRect().top + window.scrollY - 10;
+    const distance = targetY - startY;
+    const duration = 1400;
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      window.scrollTo(0, startY + distance * easeIn(progress));
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        options?.onComplete?.();
+      }
+    };
+    requestAnimationFrame(animate);
+  }
 }

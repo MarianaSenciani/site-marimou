@@ -1,3 +1,4 @@
+import { AndroidStatus } from './AndroidStatus';
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { animate, motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowRight, ArrowUpRight, MessageCircle, Rocket } from 'lucide-react';
@@ -77,7 +78,7 @@ function CaseVideo({ campaign, device, eager = false, playOnHover = false }: { c
 
 function Phone({ campaign, className = '', variant = 'default', playOnHover = false }: { campaign: string; className?: string; variant?: 'default' | 'android'; playOnHover?: boolean }) {
   // No external phone frame was supplied. This CSS shell preserves the entire recorded viewport.
-  return <div className={`sc-phone sc-phone-${variant} ${className}`}>{variant === 'android' ? <span className="sc-phone-camera" aria-hidden="true" /> : <span className="sc-phone-speaker" aria-hidden="true" />}<CaseVideo campaign={campaign} device="mobile" playOnHover={playOnHover} /><span className="sc-phone-home" aria-hidden="true" /></div>;
+  return <div className={`sc-phone sc-phone-${variant} ${className}`}><AndroidStatus /><CaseVideo campaign={campaign} device="mobile" playOnHover={playOnHover} /><span className="sc-phone-home" aria-hidden="true" /></div>;
 }
 
 /** Single desktop frame (dark Safari-style) shared by every desktop mockup in the case. */
@@ -265,3 +266,4 @@ export function SicrediCase() {
     </CaseReading>
   </main>;
 }
+

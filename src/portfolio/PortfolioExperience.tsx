@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { MotionConfig } from 'framer-motion';
-import { useChapterScroll } from './useChapterScroll';
+import { useChapterScroll, scrollToContact } from './useChapterScroll';
 import { ArrowUp } from 'lucide-react';
 import { MotionPreference } from '@/components/ui/motion-context';
 import { ExperienceContext, type Language, type Theme } from './experience-context';
@@ -19,10 +19,17 @@ export default function PortfolioExperience({ path }: { path: string }) {
   const [hero, setHero] = useState(1);
   const [paused, setPaused] = useState<boolean>(() => { const stored = readPreference('mari-motion-paused'); if (stored !== null) return stored === 'true'; return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches; });
   const [heroVisible, setHeroVisible] = useState(true), [showTop, setShowTop] = useState(false);
-  const scrollToTop = useChapterScroll(path === '/', paused);
+  const scrollToTop = useChapterScroll(path === '/' || path === '/sobre', paused);
   useEffect(() => { const media = matchMedia('(prefers-reduced-motion: reduce)'); const change = () => { if (readPreference('mari-motion-paused') === null) setPaused(media.matches); }; media.addEventListener('change', change); return () => media.removeEventListener('change', change); }, []);
   useEffect(() => { try { localStorage.setItem('mari-language', lang); localStorage.setItem('mari-theme', theme); localStorage.setItem('mari-motion-paused', String(paused)); } catch { /* Preferences remain available for this visit. */ } document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang; document.documentElement.style.colorScheme = theme; document.documentElement.classList.toggle('dark', theme === 'dark'); document.documentElement.classList.toggle('motion-paused', paused); document.body.style.backgroundColor = theme === 'dark' ? '#1b1d15' : '#f5f6ee'; }, [lang, theme, paused]);
   useEffect(() => { const change = () => setShowTop(scrollY > 550); window.addEventListener('scroll', change, { passive: true }); change(); return () => window.removeEventListener('scroll', change); }, []);
+  useEffect(() => {
+    if (path === '/' && (window.location.hash === '#contato' || sessionStorage.getItem('scroll-contato-easein'))) {
+      sessionStorage.removeItem('scroll-contato-easein');
+      const timer = setTimeout(() => scrollToContact(), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [path]);
   useEffect(() => { document.title = `${path === '/projetos/sicredi' ? 'Sicredi Centro-Norte · pesquisa e experiência digital' : path === '/projetos/livo' ? 'LIVO · fluxo de compra e análise heurística' : path === '/sobre' ? 'Sobre Mariana' : path.startsWith('/projetos') ? 'Projetos' : 'Product Designer & Product Owner'} — Mari Mou`; if (path === '/') setHeroVisible(true); }, [path]);
   return <ExperienceContext.Provider value={{ lang, setLang, theme, setTheme, hero, setHero }}><MotionPreference.Provider value={paused}><MotionConfig reducedMotion={paused ? 'always' : 'user'}><div className={`portfolio-site experience-site ${paused ? 'motion-paused' : ''}`} data-theme={theme}>
     <AmbientGrid /><a href="#main-content" className="skip-link">{({ pt: 'Pular para o conteúdo', en: 'Skip to content', es: 'Saltar al contenido' })[lang]}</a><SiteHeader path={path} onToggleMotion={() => setPaused(!paused)} />

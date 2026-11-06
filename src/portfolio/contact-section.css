@@ -17,7 +17,7 @@
 .contact-option-2 .contact-copy .meeting-duration{order:4;margin:0;font-size:12px}
 .contact-option-2 .contact-copy .contact-text-cta{order:3;margin:0}
 .contact-phone-scene{margin:0;justify-self:center;width:min(100%,320px);min-width:0}
-.contact-phone{position:relative;border:5px solid #303625;border-radius:44px;background:#1b1d15;color:#f2f1e8;box-shadow:0 0 0 1px #aeb39d55,0 30px 60px #0003;overflow:hidden;font-family:Inter,sans-serif}
+.contact-phone{position:relative;border:5px solid #303625;border-radius:44px;background:#1b1d15;color:#f2f1e8;box-shadow:0 0 0 1px rgba(174,179,157,0.3),0 20px 45px -10px rgba(0,0,0,0.75),0 35px 80px -15px rgba(0,0,0,0.85);overflow:hidden;font-family:Inter,sans-serif}
 .phone-status{position:relative;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:11px;font-weight:600}
 .phone-status>i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:85px;height:22px;border-radius:20px;background:#11130e}
 .phone-status>span:last-child{display:flex;gap:4px;align-items:center}
@@ -45,3 +45,17 @@
 .contact-phone-scene figcaption small{display:block;font-size:9px;opacity:.8;margin-top:4px}
 @keyframes phone-dot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-3px);opacity:1}}
 @media(max-width:800px){.contact-option-2 .contact-composition{display:flex;flex-direction:column;gap:40px}.contact-option-2 .contact-copy{order:0;gap:20px}.contact-option-2 .contact-phone-scene{order:1;align-self:center}.experience-site .contact-option-2{padding-inline:0}.contact-option-2 .contact-copy .contact-lead{order:initial}}
+/* Comfortable inset spacing inside the contact handset. */
+.experience-site .contact-phone>.android-status{height:56px;padding:12px 28px;align-items:center}
+.experience-site .contact-phone>.android-status>span{gap:5px}
+.experience-site .contact-phone .phone-chat-header{display:grid;grid-template-columns:19px 40px minmax(0,1fr) 18px 16px;align-items:center;padding:18px 22px;gap:12px}
+.experience-site .contact-phone .phone-chat-header img{width:40px;height:40px;flex:none}
+.experience-site .contact-phone .phone-chat-header small{margin-top:5px}
+.experience-site .contact-phone .phone-chat-header>div{display:flex;flex-direction:column;justify-content:center;align-self:center;text-align:left}
+.experience-site .contact-phone .phone-chat-header strong{margin:0;line-height:1.3}
+.experience-site .contact-phone .phone-chat-header small{line-height:1.3}
+.experience-site .contact-phone .phone-chat-header>svg,.experience-site .contact-phone .phone-chat-header>img{margin:0;align-self:center}
+.experience-site .contact-phone>.android-status>i{margin:0;left:50%;top:50%;transform:translate(-50%,-50%)}
+.experience-site .contact-phone .phone-chat-body{padding:20px 18px}
+.experience-site .contact-phone .phone-composer{padding:14px 20px}
+@media(max-width:380px){.experience-site .contact-phone .phone-chat-header{padding-inline:16px;gap:10px}.experience-site .contact-phone>.android-status{padding-inline:24px}}

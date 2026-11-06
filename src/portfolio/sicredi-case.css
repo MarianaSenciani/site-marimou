@@ -113,9 +113,9 @@
 .sc-persona :is(p,li) { font-size: 13px; color: var(--muted); line-height: 1.8; }
 .sc-persona ul { padding-left: 17px; margin: 20px 0 0; }
 .sc-persona li + li { margin-top: 7px; }
-.sc-principle { min-height: 100svh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--dark); color: var(--ivory); padding-block: var(--sc-section); text-align: center; }
+.sc-principle { min-height: 100svh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--dark); color: var(--ivory); padding-block: var(--sc-section); text-align: left; }
 .sc-principle > .wrap { transform-origin: 50% 100%; }
-.sicredi-case .sc-principle .sc-title { max-width: none; text-align: center; font-size: clamp(42px, 6.4vw, 96px); line-height: 1.08; text-wrap: balance; }
+.sicredi-case .sc-principle .sc-title { width: 100%; max-width: none; text-align: left; font-size: clamp(42px, 6.4vw, 96px); line-height: 1.08; text-wrap: wrap; }
 .sc-principle p { font-size: clamp(15px,1.3vw,19px); color: var(--muted); margin-bottom: var(--sc-title-gap); }
 .sc-flow-comparison { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; gap: 22px; max-width: 1000px; margin: 55px auto 0; }
 .sc-flow { padding: 30px; border: 1px solid var(--hairline); border-radius: 24px; background: var(--surface); }

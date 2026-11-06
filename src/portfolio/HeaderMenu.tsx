@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, ChevronDown, Menu, Moon, Sun, X, Pause, Play } from 'lucide-react';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { useExperience, type Language } from './experience-context';
+import { scrollToContact } from './useChapterScroll';
 
 function LanguageFlag({ language }: { language: Language }) {
   return <svg width="23" height="16" viewBox="0 0 30 20" aria-hidden="true" className="language-flag">
@@ -13,6 +14,16 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
   const { theme, setTheme, lang, setLang, t } = useExperience();
   const paused = useMotionPaused();
   const [menu, setMenu] = useState(false), [scrolled, setScrolled] = useState(false);
+  const handleContactClick = (e: React.MouseEvent) => {
+    setMenu(false);
+    if (path === '/') {
+      e.preventDefault();
+      window.history.pushState({}, '', '/#contato');
+      scrollToContact();
+    } else {
+      sessionStorage.setItem('scroll-contato-easein', 'true');
+    }
+  };
   const ref = useRef<HTMLElement>(null);
   useEffect(() => { const scroll = () => setScrolled(scrollY > 48); scroll(); window.addEventListener('scroll', scroll, { passive: true }); return () => window.removeEventListener('scroll', scroll); }, []);
   useEffect(() => setMenu(false), [path]);
@@ -23,7 +34,7 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
     return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', escape); };
   }, []);
   const controls = (isMobile = false) => <>
-    <a className="pill primary header-talk" href="/#contato" onClick={() => setMenu(false)}>{t('Falar comigo', 'Let’s talk', 'Hablemos')}<ArrowUpRight size={14} /></a>
+    <a className="pill primary header-talk" href="/#contato" onClick={handleContactClick}>{t('Falar comigo', 'Let’s talk', 'Hablemos')}<ArrowUpRight size={14} /></a>
     <details className="header-dropdown language-selector"><summary aria-label={t('Selecionar idioma', 'Select language', 'Elegir idioma')}><LanguageFlag language={lang} /><ChevronDown size={11} /></summary><div className="header-dropdown-panel">{(['pt', 'en', 'es'] as Language[]).map(code => <button key={code} lang={code} aria-pressed={lang === code} onClick={event => { setLang(code); event.currentTarget.closest('details')!.open = false; }}>{({ pt: '🇧🇷 Português', en: '🇬🇧 English', es: '🇪🇸 Español' })[code]}</button>)}</div></details>
     <button className="theme-control" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={theme === 'dark' ? t('Ativar tema claro', 'Use light theme', 'Activar tema claro') : t('Ativar tema escuro', 'Use dark theme', 'Activar tema oscuro')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button>
     {!isMobile && <button className="theme-control motion-control" onClick={onToggleMotion} aria-pressed={paused} aria-label={paused ? t('Retomar motions e animações', 'Resume motion & animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')} title={paused ? t('Retomar motions e animações', 'Resume motion & animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')}>{paused ? <Play size={18} /> : <Pause size={18} />}</button>}
@@ -32,7 +43,7 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
     <div className="header-full">
       <a href="/" className="wordmark" aria-label="Mari Mou — início">mari<span>mou</span><i>✳</i></a>
       <nav className="experience-nav" aria-label={t('Navegação principal', 'Main navigation', 'Navegación principal')}>
-        <a href="/projetos" aria-current={path.startsWith('/projetos') ? 'page' : undefined}>{t('Projetos', 'Projects', 'Proyectos')}</a><a href="/sobre" aria-current={path === '/sobre' ? 'page' : undefined}>{t('Sobre mim', 'About me', 'Sobre mí')}</a>
+        <a href="/sobre" aria-current={path === '/sobre' ? 'page' : undefined}>{t('Sobre mim', 'About me', 'Sobre mí')}</a><a href="/projetos" aria-current={path.startsWith('/projetos') ? 'page' : undefined}>{t('Projetos', 'Projects', 'Proyectos')}</a><a href="/#contato" onClick={handleContactClick}>{t('Contato', 'Contact', 'Contacto')}</a>
       </nav>
       <div className="experience-header-actions">{controls(false)}</div>
     </div>

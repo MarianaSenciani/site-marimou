@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, MoveHorizontal } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
@@ -18,7 +18,7 @@ export function PhotoStory() {
     { name: t('Hoje e o que vem depois', 'Today and what comes next', 'Hoy y lo que viene'), text: t('Hoje atuo em Product Design e Product Ownership. Levo pesquisa, gestão e repertório visual para construir produtos com outras pessoas — e continuo aprendendo a cada projeto.', 'Today I work in Product Design and Product Ownership, bringing research, management, and a visual perspective to building products with others. Every project still teaches me something.', 'Hoy trabajo en Product Design y Product Ownership. Llevo investigación, gestión y experiencia visual para construir productos con outras personas y seguir aprendiendo.') },
   ];
   const move = (direction: number) => setIndex(value => (value + direction + stories.length) % stories.length);
-  return <section className="photo-story experience-section wrap"><div className="photo-story-copy"><WordPullUp as="h2" words={t('O fio que conecta meu trabalho.', 'The thread behind my work.', 'El hilo que conecta mi trabajo.')} paused={paused} /><p className="photo-story-location">{t('De São Paulo, com curiosidade.', 'From São Paulo, with curiosity.', 'Desde São Paulo, con curiosidad.')}</p><motion.p key={index} aria-live="polite" initial={paused ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .35 }}>{stories[index].text}</motion.p><span className="story-index">0{index + 1} / 05 · {stories[index].name}</span></div><div className="photo-story-stack" tabIndex={0} role="group" aria-label={t('Arraste para a direita para avançar. Use as setas no teclado.', 'Drag right to advance. Use arrow keys on a keyboard.', 'Arrastra a la derecha para avanzar. Usa las flechas del teclado.')} onKeyDown={event => { if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1); } }}>
+  return <section className="photo-story experience-section wrap"><div className="photo-story-copy"><WordPullUp as="h2" words={t('O fio que conecta meu trabalho.', 'The thread behind my work.', 'El hilo que conecta mi trabajo.')} paused={paused} /><motion.p key={index} aria-live="polite" initial={paused ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .35 }}>{stories[index].text}</motion.p><span className="story-index">0{index + 1} / 05 · {stories[index].name}</span></div><div className="photo-story-stack" tabIndex={0} role="group" aria-label={t('Arraste para a direita para avançar. Use as setas no teclado.', 'Drag right to advance. Use arrow keys on a keyboard.', 'Arrastra a la derecha para avanzar. Usa las flechas del teclado.')} onKeyDown={event => { if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1); } }}>
     {stories.map((story, i) => { const depth = (i - index + stories.length) % stories.length; return <motion.figure className="story-polaroid" key={i} style={{ zIndex: 5 - depth, touchAction: 'pan-y' }}
       animate={{ rotate: depth === 0 ? -4 : depth % 2 ? 7 : -8, y: depth * 7, scale: 1 - depth * .025 }} transition={{ duration: paused ? 0 : .35 }}
       drag={depth === 0 ? 'x' : false} dragConstraints={{ left: 0, right: 0 }} dragElastic={.65} dragMomentum={false} dragSnapToOrigin onDragEnd={(_, info) => { if (Math.abs(info.offset.x) > 55) move(info.offset.x > 0 ? 1 : -1); }}>
@@ -30,6 +30,26 @@ export function AboutExperience() {
 
   const journey = useRef<HTMLDivElement>(null);
   const lastEntryRef = useRef<HTMLDivElement>(null);
+  const lastDotRef = useRef<HTMLSpanElement>(null);
+  const [lineMaxHeight, setLineMaxHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const measure = () => {
+      if (journey.current && lastDotRef.current) {
+        const jRect = journey.current.getBoundingClientRect();
+        const dRect = lastDotRef.current.getBoundingClientRect();
+        const height = (dRect.top - jRect.top) + (dRect.height / 2) - 8;
+        if (height > 0) setLineMaxHeight(Math.round(height));
+      }
+    };
+    measure();
+    const timer = setTimeout(measure, 300);
+    window.addEventListener('resize', measure);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
   const { scrollYProgress } = useScroll({
     target: journey,
     offset: ['start 80%', 'end 72%'],
@@ -145,14 +165,14 @@ export function AboutExperience() {
 
       <section id="jornada" className="career-journey experience-section wrap">
         <div className="career-entries" ref={journey}>
-          <motion.div className="career-progress" aria-hidden="true" style={{ scaleY: paused ? 1 : progress }} />
+          <motion.div className="career-progress" aria-hidden="true" style={{ height: lineMaxHeight, scaleY: paused ? 1 : progress }} />
           {experiences.map(([period, title, text], i) => {
             const isLast = i === experiences.length - 1;
             return (
               <Reveal className={`career-entry ${isLast ? 'career-entry-last' : ''}`} key={period}>
                 <span className="career-date">{period}</span>
                 <div ref={isLast ? lastEntryRef : undefined}>
-                  <span className="career-dot" aria-hidden="true">{isLast ? '✳' : '•'}</span>
+                  <span className="career-dot" ref={isLast ? lastDotRef : undefined} aria-hidden="true">{isLast ? '✳' : '•'}</span>
                   <span className="career-context">
                     {['Educação · Liderança criativa', 'Publicidade · Dados e mídia', 'Varejo óptico e e-commerce', 'Ecossistema de tecnologia', 'Projeto Sicredi Centro-Norte', 'B2B SaaS · Gestão de performance e RH'][i]}
                   </span>

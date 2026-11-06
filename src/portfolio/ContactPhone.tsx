@@ -1,3 +1,4 @@
+import { AndroidStatus } from './AndroidStatus';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, BatteryFull, CheckCheck, Mic, Plus, Signal, Video, Phone, Wifi } from 'lucide-react';
@@ -37,7 +38,7 @@ export function ContactPhone() {
   const typing = current === 2 || current === 5;
   return <figure ref={ref} className="contact-phone-scene">
     <div className="contact-phone">
-      <div className="phone-status" aria-hidden="true"><span>9:41</span><i /><span><Signal size={12}/><Wifi size={13}/><BatteryFull size={17}/></span></div>
+      <AndroidStatus />
       <div className="phone-chat-header">
         <ArrowLeft size={19} aria-hidden="true"/>
         <img src="/assets/memoji/center-portrait.png" alt="" width="40" height="40"/>
@@ -63,3 +64,4 @@ export function ContactPhone() {
     </div>
   </figure>;
 }
+
