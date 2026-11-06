@@ -113,7 +113,7 @@
 .lwsa-radar-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 1000 / 520;
+  aspect-ratio: 1000 / 560;
   margin-top: 10px;
 }
 
@@ -139,25 +139,26 @@
   stroke: rgba(110, 80, 140, 0.2);
 }
 
+/* Radial connection rays */
 .lwsa-ray {
-  stroke: rgba(186, 170, 210, 0.12);
+  stroke: rgba(186, 170, 210, 0.16);
   stroke-width: 1;
-  stroke-dasharray: 3 4;
+  stroke-dasharray: 4 5;
   fill: none;
-  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: stroke 0.25s ease, stroke-width 0.25s ease;
 }
 
-.lwsa-ray.is-active {
-  stroke: rgba(189, 219, 66, 0.85);
-  stroke-width: 2;
-  stroke-dasharray: none;
-  filter: drop-shadow(0 0 5px rgba(189, 219, 66, 0.7));
+[data-theme='light'] .lwsa-ray {
+  stroke: rgba(110, 80, 140, 0.16);
 }
 
+/* Active/hovered ray: finer stroke, dashed maintained, stronger lime green, NO blur glow */
+.lwsa-ray.is-active,
 .lwsa-ray.is-hovered {
   stroke: #bddb42;
-  stroke-width: 2.4;
-  filter: drop-shadow(0 0 8px rgba(189, 219, 66, 0.9));
+  stroke-width: 1.35;
+  stroke-dasharray: 4 5;
+  filter: none;
 }
 
 /* Satellites Layer */
@@ -176,12 +177,11 @@
   cursor: pointer;
   pointer-events: auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
   outline: none;
   z-index: 10;
-  transition: opacity 0.3s ease, filter 0.3s ease, scale 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: opacity 0.3s ease, filter 0.3s ease, scale 0.22s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .lwsa-satellite-badge.is-dimmed {
@@ -191,10 +191,11 @@
 
 .lwsa-satellite-badge.is-hovered {
   z-index: 25;
-  scale: 1.15;
+  scale: 1.08;
 }
 
 .lwsa-badge-inner {
+  position: relative;
   height: 42px;
   padding: 0 16px;
   background: #ffffff;
@@ -202,15 +203,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 22px -3px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.18);
-  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.18);
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
+/* Hover on badge: crisp 1.5px lime outline, NO blurry neon halo */
 .lwsa-satellite-badge:hover .lwsa-badge-inner,
 .lwsa-satellite-badge:focus-visible .lwsa-badge-inner,
 .lwsa-satellite-badge.is-hovered .lwsa-badge-inner {
-  box-shadow: 0 12px 30px -4px rgba(186, 170, 210, 0.6), 0 0 0 2px #bddb42, 0 0 20px rgba(189, 219, 66, 0.5);
-  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 0 1.5px #bddb42;
 }
 
 .lwsa-brand-img {
@@ -238,7 +239,12 @@
   height: 22px;
 }
 
+/* Mini label placed absolutely below the pill so it doesn't displace the pill's vertical center */
 .lwsa-badge-mini-label {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 9.5px;
   font-weight: 500;
   color: var(--muted);
@@ -251,7 +257,7 @@
   white-space: nowrap;
   pointer-events: none;
   opacity: 0.85;
-  transition: all 0.25s ease;
+  transition: all 0.22s ease;
 }
 
 .lwsa-satellite-badge:hover .lwsa-badge-mini-label,
@@ -263,11 +269,11 @@
   background: var(--surface);
 }
 
-/* Center Anchor (LWSA) */
+/* Center Anchor (LWSA) centered precisely at (500, 500) = (50%, 89.29%) of 1000x560 canvas */
 .lwsa-center-anchor {
   position: absolute;
   left: 50%;
-  top: 92%;
+  top: 89.29%;
   transform: translate(-50%, -50%);
   z-index: 30;
 }
@@ -290,7 +296,7 @@
 .lwsa-center-card:focus-visible,
 .lwsa-center-card.is-hovered {
   border-color: #bddb42;
-  scale: 1.06;
+  scale: 1.05;
 }
 
 .lwsa-center-core {
@@ -415,7 +421,7 @@
     margin: 20px 0 16px;
   }
   .lwsa-radar-wrap {
-    aspect-ratio: 1000 / 580;
+    aspect-ratio: 1000 / 560;
     margin-top: 4px;
   }
   .lwsa-ecosystem-header {
@@ -427,11 +433,14 @@
   .lwsa-badge-inner {
     height: 22px;
     padding: 0 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   }
   .lwsa-brand-img {
     height: 11px;
     max-width: 34px;
+  }
+  .lwsa-center-anchor {
+    top: 89.29%;
   }
   .lwsa-center-card {
     padding: 6px 14px 7px;

@@ -12,8 +12,6 @@ interface BrandNode {
   deg: number;
   x: number;
   y: number;
-  left: number;
-  top: number;
   category: { pt: string; en: string; es: string };
   desc: { pt: string; en: string; es: string };
 }
@@ -28,8 +26,6 @@ const BRANDS: BrandNode[] = [
     deg: 116,
     x: 427.7,
     y: 351.7,
-    left: 42.77,
-    top: 62.8,
     category: {
       pt: 'Presença digital & hospedagem',
       en: 'Digital presence & web hosting',
@@ -49,8 +45,6 @@ const BRANDS: BrandNode[] = [
     deg: 64,
     x: 572.3,
     y: 351.7,
-    left: 57.23,
-    top: 62.8,
     category: {
       pt: 'Plataforma de e-commerce',
       en: 'E-commerce platform',
@@ -72,8 +66,6 @@ const BRANDS: BrandNode[] = [
     deg: 146,
     x: 280.3,
     y: 351.8,
-    left: 28.03,
-    top: 62.82,
     category: {
       pt: 'Gestão & ERP em nuvem',
       en: 'Cloud management & ERP',
@@ -93,8 +85,6 @@ const BRANDS: BrandNode[] = [
     deg: 90,
     x: 500.0,
     y: 235.0,
-    left: 50.0,
-    top: 41.96,
     category: {
       pt: 'Pagamentos recorrentes',
       en: 'Recurring payments',
@@ -114,8 +104,6 @@ const BRANDS: BrandNode[] = [
     deg: 34,
     x: 719.7,
     y: 351.8,
-    left: 71.97,
-    top: 62.82,
     category: {
       pt: 'Logística & fretes',
       en: 'Shipping & logistics',
@@ -137,8 +125,6 @@ const BRANDS: BrandNode[] = [
     deg: 126,
     x: 285.5,
     y: 204.7,
-    left: 28.55,
-    top: 36.56,
     category: {
       pt: 'Social commerce & mobile',
       en: 'Social commerce & mobile',
@@ -158,8 +144,6 @@ const BRANDS: BrandNode[] = [
     deg: 54,
     x: 714.5,
     y: 204.7,
-    left: 71.45,
-    top: 36.56,
     category: {
       pt: 'Atendimento & chat multicanal',
       en: 'Customer service & chat',
@@ -168,7 +152,7 @@ const BRANDS: BrandNode[] = [
     desc: {
       pt: 'Gestão de conversas, help desk e suporte multicanal para equipes de vendas e retenção.',
       en: 'Omnichannel conversation management, help desk, and support for sales and retention teams.',
-      es: 'Gestión de conversaciones, help desk y soporte multicanal para ventas y fidelización.',
+      es: 'Gestión de conversaciones, help desk y suporte multicanal para ventas y fidelización.',
     },
   },
 
@@ -181,8 +165,6 @@ const BRANDS: BrandNode[] = [
     deg: 158,
     x: 68.9,
     y: 325.8,
-    left: 6.89,
-    top: 58.18,
     category: {
       pt: 'Hospedagem & cloud',
       en: 'Hosting & cloud infrastructure',
@@ -202,8 +184,6 @@ const BRANDS: BrandNode[] = [
     deg: 90,
     x: 500.0,
     y: 35.0,
-    left: 50.0,
-    top: 6.25,
     category: {
       pt: 'PDV & automação para varejo',
       en: 'POS & retail management',
@@ -223,8 +203,6 @@ const BRANDS: BrandNode[] = [
     deg: 22,
     x: 931.1,
     y: 325.8,
-    left: 93.11,
-    top: 58.18,
     category: {
       pt: 'Experiência & varejo digital',
       en: 'Digital retail & experience',
@@ -353,21 +331,16 @@ export function LwsaEcosystem() {
           viewBox="0 0 1000 560"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMidYMid meet"
+          preserveAspectRatio="none"
           aria-hidden="true"
         >
           <defs>
             {/* Atmospheric radial gradient behind the arcs */}
             <radialGradient id="lwsa-radar-glow" cx="500" cy="500" r="480" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="var(--lwsa-glow-color, rgba(186, 170, 210, 0.18))" />
-              <stop offset="45%" stopColor="var(--lwsa-glow-color, rgba(186, 170, 210, 0.06))" />
+              <stop offset="0%" stopColor="var(--lwsa-glow-color, rgba(186, 170, 210, 0.16))" />
+              <stop offset="45%" stopColor="var(--lwsa-glow-color, rgba(186, 170, 210, 0.05))" />
               <stop offset="85%" stopColor="transparent" />
             </radialGradient>
-            {/* Ray gradient */}
-            <linearGradient id="lwsa-ray-active" x1="500" y1="500" x2="500" y2="40" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#bddb42" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#baaad2" stopOpacity="1" />
-            </linearGradient>
           </defs>
 
           {/* Atmospheric background aura */}
@@ -401,7 +374,7 @@ export function LwsaEcosystem() {
 
         {/* Satellite brand cards overlaid on the radar */}
         <div className="lwsa-satellites-layer">
-          {BRANDS.map((brand, i) => {
+          {BRANDS.map(brand => {
             const isHovered = active?.id === brand.id;
             const isDimmed = active !== null && !isHovered;
 
@@ -413,26 +386,23 @@ export function LwsaEcosystem() {
                   isDimmed ? 'is-dimmed' : ''
                 }`}
                 style={{
-                  left: `${brand.left}%`,
-                  top: `${brand.top}%`,
+                  left: `${(brand.x / 1000) * 100}%`,
+                  top: `${(brand.y / 560) * 100}%`,
+                  x: '-50%',
+                  y: '-50%',
                 }}
                 animate={
                   paused
                     ? {}
                     : {
-                        y: isHovered ? -4 : [0, Math.sin(brand.deg) * -5, 0],
+                        scale: isHovered ? 1.08 : 1,
                       }
                 }
                 transition={
                   paused
                     ? { duration: 0 }
                     : {
-                        y: {
-                          duration: 3.4 + (i % 3) * 0.6,
-                          repeat: Infinity,
-                          ease: 'easeInOut',
-                          delay: (i * 0.22) % 1.2,
-                        },
+                        scale: { duration: 0.2, ease: 'easeOut' },
                       }
                 }
                 onClick={() => {
@@ -482,11 +452,11 @@ export function LwsaEcosystem() {
                 ? {}
                 : {
                     boxShadow: isCenterActive
-                      ? '0 0 45px rgba(186, 170, 210, 0.6), 0 14px 32px rgba(0,0,0,0.7)'
+                      ? '0 0 25px rgba(186, 170, 210, 0.45), 0 10px 24px rgba(0,0,0,0.6)'
                       : [
-                          '0 0 20px rgba(186, 170, 210, 0.25), 0 10px 25px rgba(0,0,0,0.6)',
-                          '0 0 35px rgba(186, 170, 210, 0.45), 0 12px 30px rgba(0,0,0,0.65)',
-                          '0 0 20px rgba(186, 170, 210, 0.25), 0 10px 25px rgba(0,0,0,0.6)',
+                          '0 0 15px rgba(186, 170, 210, 0.2), 0 8px 20px rgba(0,0,0,0.5)',
+                          '0 0 25px rgba(186, 170, 210, 0.35), 0 10px 24px rgba(0,0,0,0.55)',
+                          '0 0 15px rgba(186, 170, 210, 0.2), 0 8px 20px rgba(0,0,0,0.5)',
                         ],
                   }
             }
