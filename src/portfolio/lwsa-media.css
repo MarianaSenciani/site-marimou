@@ -24,7 +24,7 @@
 .lwsa-mac-address{min-width:0;padding:4px 14px;overflow:hidden;border-radius:6px;background:#14160f;box-shadow:inset 0 0 0 1px #ffffff1f;text-align:center;text-overflow:ellipsis;white-space:nowrap;font-size:9px;color:#c9ccbd}
 
 .lwsa-mac-viewport{position:relative;width:100%;aspect-ratio:16/9;background:#ffffff;overflow:hidden}
-.lwsa-article-scroll{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+.lwsa-article-scroll{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;scroll-behavior:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .lwsa-article-scroll::-webkit-scrollbar{width:6px}
 .lwsa-article-scroll::-webkit-scrollbar-track{background:#f1f1f1}
 .lwsa-article-scroll::-webkit-scrollbar-thumb{background:#c1c5b8;border-radius:3px}
