@@ -240,8 +240,8 @@
 .decision-word::after { content: ''; position: absolute; bottom: -3px; left: 0; right: 0; height: 2px; background: var(--lime); transform: scaleX(0); transform-origin: left; transition: transform .35s; }
 .hero-option-1 .tools-orbit .orbit-tool { width: 85px; }
 .hero-option-1 .orbit-tool > img, .hero-option-1 .tool-model { width: 82px; height: 82px; }
-.hero-option-1 .tools-orbit .orbit-tool-0 { top: 7%; left: -20%; right: auto; bottom: auto; }
-.hero-option-1 .tools-orbit .orbit-tool-1 { top: 7%; right: -20%; left: auto; bottom: auto; }
+.hero-option-1 .tools-orbit .orbit-tool-0 { top: 28%; left: -20%; right: auto; bottom: auto; }
+.hero-option-1 .tools-orbit .orbit-tool-1 { top: 28%; right: -20%; left: auto; bottom: auto; }
 .hero-option-1 .tools-orbit .orbit-tool-2 { top: -8%; left: calc(50% - 42px); right: auto; bottom: auto; }
 .hero-option-1 .tools-orbit .orbit-tool-3 { top: auto; left: -14%; right: auto; bottom: 5%; }
 .hero-option-1 .tools-orbit .orbit-tool-4 { top: auto; right: -14%; left: auto; bottom: 5%; }
@@ -291,8 +291,8 @@
   .experience-site .hero-first-side { translate: none; }
   .hero-option-1 .tools-orbit .orbit-tool { width: 67px; }
   .hero-option-1 .orbit-tool > img, .hero-option-1 .tool-model { width: 64px; height: 64px; }
-  .hero-option-1 .tools-orbit .orbit-tool-0 { left: -4%; top: 9%; }
-  .hero-option-1 .tools-orbit .orbit-tool-1 { right: -4%; top: 9%; }
+  .hero-option-1 .tools-orbit .orbit-tool-0 { left: -4%; top: 24%; }
+  .hero-option-1 .tools-orbit .orbit-tool-1 { right: -4%; top: 24%; }
   .hero-option-1 .tools-orbit .orbit-tool-2 { top: -8%; left: calc(50% - 33px); }
   .hero-option-1 .tools-orbit .orbit-tool-3 { left: 0; bottom: 2%; }
   .hero-option-1 .tools-orbit .orbit-tool-4 { right: 0; bottom: 2%; }

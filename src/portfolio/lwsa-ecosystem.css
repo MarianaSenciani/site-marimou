@@ -1,0 +1,453 @@
+/* LWSA Ecosystem Interactive Radar & Motion Map */
+.lwsa-ecosystem-stage {
+  position: relative;
+  margin: 36px 0 28px;
+  padding: 32px 32px 24px;
+  border-radius: 28px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(186, 170, 210, 0.16) 0%, rgba(27, 29, 21, 0.95) 60%, #161712 100%);
+  border: 1px solid color-mix(in srgb, var(--hairline) 90%, transparent);
+  box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+[data-theme='light'] .lwsa-ecosystem-stage {
+  background: radial-gradient(ellipse at 50% 100%, rgba(186, 170, 210, 0.28) 0%, rgba(247, 247, 240, 0.98) 60%, #ffffff 100%);
+  box-shadow: 0 20px 45px -12px rgba(70, 49, 94, 0.14), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Header Area */
+.lwsa-ecosystem-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.lwsa-ecosystem-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.lwsa-ecosystem-kicker i {
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.lwsa-ecosystem-live-title {
+  min-height: 58px;
+}
+
+.lwsa-active-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lwsa-active-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lwsa-active-name {
+  font-family: Alexandria, sans-serif;
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: var(--ivory);
+  margin: 0;
+  line-height: 1.15;
+}
+
+.lwsa-active-category {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 11px;
+  border-radius: 99px;
+  background: rgba(186, 170, 210, 0.22);
+  color: #baaad2;
+  border: 1px solid rgba(186, 170, 210, 0.35);
+  letter-spacing: 0.02em;
+}
+
+[data-theme='light'] .lwsa-active-category {
+  background: rgba(110, 80, 140, 0.12);
+  color: #46315e;
+  border-color: rgba(110, 80, 140, 0.22);
+}
+
+.lwsa-active-badge-count {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 11px;
+  border-radius: 99px;
+  background: rgba(189, 219, 66, 0.14);
+  color: var(--lime);
+  border: 1px solid rgba(189, 219, 66, 0.3);
+}
+
+.lwsa-active-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 680px;
+  margin: 0;
+}
+
+/* Radar & Canvas Layout */
+.lwsa-radar-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 520;
+  margin-top: 10px;
+}
+
+.lwsa-radar-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Radar lines */
+.lwsa-arc-line {
+  stroke: rgba(186, 170, 210, 0.22);
+  stroke-width: 1.25;
+  stroke-dasharray: 4 6;
+  fill: none;
+  transition: stroke 0.35s ease;
+}
+
+[data-theme='light'] .lwsa-arc-line {
+  stroke: rgba(110, 80, 140, 0.2);
+}
+
+.lwsa-ray {
+  stroke: rgba(186, 170, 210, 0.12);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  fill: none;
+  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.lwsa-ray.is-active {
+  stroke: rgba(189, 219, 66, 0.85);
+  stroke-width: 2;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 5px rgba(189, 219, 66, 0.7));
+}
+
+.lwsa-ray.is-hovered {
+  stroke: #bddb42;
+  stroke-width: 2.4;
+  filter: drop-shadow(0 0 8px rgba(189, 219, 66, 0.9));
+}
+
+/* Satellites Layer */
+.lwsa-satellites-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lwsa-satellite-badge {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  outline: none;
+  z-index: 10;
+  transition: opacity 0.3s ease, filter 0.3s ease, scale 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.lwsa-satellite-badge.is-dimmed {
+  opacity: 0.32;
+  filter: grayscale(60%) blur(0.5px);
+}
+
+.lwsa-satellite-badge.is-hovered {
+  z-index: 25;
+  scale: 1.15;
+}
+
+.lwsa-badge-inner {
+  height: 42px;
+  padding: 0 16px;
+  background: #ffffff;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 22px -3px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.18);
+  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.lwsa-satellite-badge:hover .lwsa-badge-inner,
+.lwsa-satellite-badge:focus-visible .lwsa-badge-inner,
+.lwsa-satellite-badge.is-hovered .lwsa-badge-inner {
+  box-shadow: 0 12px 30px -4px rgba(186, 170, 210, 0.6), 0 0 0 2px #bddb42, 0 0 20px rgba(189, 219, 66, 0.5);
+  transform: translateY(-2px);
+}
+
+.lwsa-brand-img {
+  height: 22px;
+  max-width: 78px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Optical balance adjustments for specific logos */
+.lwsa-img-melhor-envio {
+  height: 20px;
+}
+
+.lwsa-img-wake {
+  height: 18px;
+}
+
+.lwsa-img-bling {
+  height: 20px;
+}
+
+.lwsa-img-vindi {
+  height: 22px;
+}
+
+.lwsa-badge-mini-label {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2px 7px;
+  border-radius: 99px;
+  border: 1px solid var(--hairline);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: all 0.25s ease;
+}
+
+.lwsa-satellite-badge:hover .lwsa-badge-mini-label,
+.lwsa-satellite-badge:focus-visible .lwsa-badge-mini-label,
+.lwsa-satellite-badge.is-hovered .lwsa-badge-mini-label {
+  color: var(--lime);
+  border-color: var(--lime);
+  opacity: 1;
+  background: var(--surface);
+}
+
+/* Center Anchor (LWSA) */
+.lwsa-center-anchor {
+  position: absolute;
+  left: 50%;
+  top: 92%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+}
+
+.lwsa-center-card {
+  position: relative;
+  background: linear-gradient(145deg, #2c253d 0%, #171520 100%);
+  border: 1.5px solid rgba(186, 170, 210, 0.55);
+  border-radius: 999px;
+  padding: 11px 28px 12px;
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.lwsa-center-card:hover,
+.lwsa-center-card:focus-visible,
+.lwsa-center-card.is-hovered {
+  border-color: #bddb42;
+  scale: 1.06;
+}
+
+.lwsa-center-core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.lwsa-center-logo {
+  height: 26px;
+  width: auto;
+  max-width: 105px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+}
+
+.lwsa-center-caption {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #baaad2;
+}
+
+.lwsa-center-card:hover .lwsa-center-caption,
+.lwsa-center-card.is-hovered .lwsa-center-caption {
+  color: var(--lime);
+}
+
+/* Quick interactive chips bar (mobile thumb access and quick filter) */
+.lwsa-brand-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 4px 4px;
+  margin-top: 14px;
+  scrollbar-width: none;
+}
+
+.lwsa-brand-chips-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.lwsa-brand-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
+  border: 1px solid var(--hairline);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.lwsa-brand-chip:hover,
+.lwsa-brand-chip:focus-visible {
+  color: var(--ivory);
+  border-color: rgba(186, 170, 210, 0.45);
+  background: color-mix(in srgb, var(--surface) 95%, transparent);
+}
+
+.lwsa-brand-chip.is-active {
+  color: #161712;
+  background: var(--lime);
+  border-color: var(--lime);
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(189, 219, 66, 0.4);
+}
+
+[data-theme='light'] .lwsa-brand-chip.is-active {
+  color: #171712;
+  background: var(--lime);
+}
+
+/* Footer caption */
+.lwsa-ecosystem-caption {
+  margin: 14px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .lwsa-ecosystem-stage {
+    padding: 24px 20px 18px;
+    border-radius: 20px;
+  }
+  .lwsa-badge-inner {
+    height: 34px;
+    padding: 0 11px;
+  }
+  .lwsa-brand-img {
+    height: 17px;
+    max-width: 60px;
+  }
+  .lwsa-badge-mini-label {
+    display: none;
+  }
+  .lwsa-center-card {
+    padding: 9px 22px 10px;
+  }
+  .lwsa-center-logo {
+    height: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .lwsa-ecosystem-stage {
+    padding: 18px 12px 14px;
+    border-radius: 18px;
+    margin: 20px 0 16px;
+  }
+  .lwsa-radar-wrap {
+    aspect-ratio: 1000 / 580;
+    margin-top: 4px;
+  }
+  .lwsa-ecosystem-header {
+    margin-bottom: 6px;
+  }
+  .lwsa-ecosystem-live-title {
+    min-height: 68px;
+  }
+  .lwsa-badge-inner {
+    height: 22px;
+    padding: 0 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+  .lwsa-brand-img {
+    height: 11px;
+    max-width: 34px;
+  }
+  .lwsa-center-card {
+    padding: 6px 14px 7px;
+  }
+  .lwsa-center-logo {
+    height: 15px;
+  }
+  .lwsa-center-caption {
+    font-size: 7px;
+  }
+  .lwsa-active-desc {
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+  .lwsa-brand-chip {
+    font-size: 10.5px;
+    padding: 3px 9px;
+  }
+}

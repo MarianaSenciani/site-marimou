@@ -45,14 +45,16 @@ export function AboutExperience() {
     measure();
     const timer = setTimeout(measure, 300);
     window.addEventListener('resize', measure);
+    window.addEventListener('scroll', measure, { passive: true });
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', measure);
+      window.removeEventListener('scroll', measure);
     };
   }, []);
   const { scrollYProgress } = useScroll({
     target: journey,
-    offset: ['start 80%', 'end 72%'],
+    offset: ['start 75%', 'end 105%'],
   });
   const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 

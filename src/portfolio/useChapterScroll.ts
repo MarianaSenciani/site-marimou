@@ -26,8 +26,13 @@ export function useChapterScroll(home: boolean, paused: boolean) {
         const currentTop = tops[current];
         const currentBottom = currentTop + (currentNode ? currentNode.offsetHeight : innerHeight);
 
-        if (isCurrentTall && scrollY + innerHeight < currentBottom - 30) {
-          destination = Math.min(scrollY + innerHeight, currentBottom - innerHeight);
+        const maxScrollInNode = currentBottom - innerHeight;
+        const scrollable = Math.max(0, maxScrollInNode - currentTop);
+        const steps = Math.max(2, Math.ceil(scrollable / (innerHeight * 0.55)));
+        const stepSize = scrollable > 0 ? scrollable / steps : innerHeight;
+
+        if (isCurrentTall && scrollY < maxScrollInNode - 20) {
+          destination = Math.min(scrollY + stepSize, maxScrollInNode);
         } else {
           destination = tops[current + 1] ?? scrollY;
         }
@@ -35,9 +40,14 @@ export function useChapterScroll(home: boolean, paused: boolean) {
         const currentNode = nodes[current];
         const isCurrentTall = currentNode && currentNode.offsetHeight > innerHeight + 60;
         const currentTop = tops[current];
+        const currentBottom = currentTop + (currentNode ? currentNode.offsetHeight : innerHeight);
+        const maxScrollInNode = currentBottom - innerHeight;
+        const scrollable = Math.max(0, maxScrollInNode - currentTop);
+        const steps = Math.max(2, Math.ceil(scrollable / (innerHeight * 0.55)));
+        const stepSize = scrollable > 0 ? scrollable / steps : innerHeight;
 
-        if (isCurrentTall && scrollY > currentTop + 30) {
-          destination = Math.max(currentTop, scrollY - innerHeight);
+        if (isCurrentTall && scrollY > currentTop + 20) {
+          destination = Math.max(currentTop, scrollY - stepSize);
         } else {
           const prevIndex = Math.max(0, current - 1);
           const prevNode = nodes[prevIndex];

@@ -5,7 +5,7 @@ export const ExperienceContext = createContext({ lang: 'pt' as Language, theme: 
   setLang: (_: Language) => {}, setTheme: (_: Theme) => {}, setHero: (_: number) => {} });
 export function useExperience() {
   const value = useContext(ExperienceContext);
-  return { ...value, t: (pt: string, en: string, es: string) => ({ pt, en, es })[value.lang] };
+  return { ...value, t: <T,>(pt: T, en: T, es: T): T => ({ pt, en, es })[value.lang] };
 }
 export const email = 'mailto:marianasenciani@gmail.com';
 export const linkedin = 'https://www.linkedin.com/in/mariana-senciani/';

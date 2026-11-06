@@ -6,7 +6,7 @@ import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { BadgeExperience } from './BadgeExperience';
 import { useExperience } from './experience-context';
-import { caseStudies, type CaseStudy } from './case-studies';
+import { caseStudies, localizeCase, type CaseStudy } from './case-studies';
 import './project-covers.css';
 import { ProjectHover } from './ProjectHover';
 
@@ -16,9 +16,10 @@ function ProcessIcon({ stage }: { stage: number }) {
   return <svg className="chart-build" viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path className="chart-bar chart-bar-0" d="M5 28V24"/><path className="chart-bar chart-bar-1" d="M12 28V21"/><path className="chart-bar chart-bar-2" d="M19 28V17"/><path className="chart-bar chart-bar-3" d="M26 28V12"/><path className="chart-line" pathLength="1" d="M4 19L12 13L19 15L28 4M23 4H28V9"/></svg>;
 }
 
-export function CaseCard({ project }: { project: CaseStudy; compact?: boolean }) {
-  const { t } = useExperience();
-  return <a className={`curated-case curated-case-editorial case-${project.color}`} href={`/projetos/${project.id}`} aria-label={`${t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')} ${project.brand}`}><div className="curated-case-art"><img src={`/assets/project-covers/${project.id}-editorial.png`} alt="" loading="lazy" decoding="async"/><ProjectHover id={project.id}/></div><div className="curated-case-copy"><div className="case-editorial-meta"><p className="case-focus">{project.category}</p><span aria-hidden="true">{String(caseStudies.findIndex(item => item.id === project.id) + 1).padStart(2, '0')}</span></div><h3>{(project.id === 'sicredi' ? ['Informação financeira', 'que começa pela escuta.'] : project.id === 'lwsa' ? ['Uma marca para', 'acompanhar a expansão.'] : ['Menos fricção entre', 'escolher e comprar.']).map(line => <span className="case-title-line" key={line}>{line}</span>)}</h3><div className="case-outcome"><strong>{project.metric}</strong><span>{project.metricLabel}</span></div><span className="case-card-cta">{t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')}<ArrowUpRight size={16} /></span></div></a>;
+export function CaseCard({ project: base }: { project: CaseStudy; compact?: boolean }) {
+  const { t, lang } = useExperience();
+  const project = localizeCase(base, lang);
+  return <a className={`curated-case curated-case-editorial case-${project.color}`} href={`/projetos/${project.id}`} aria-label={`${t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')} ${project.brand}`}><div className="curated-case-art"><img src={`/assets/project-covers/${project.id}-editorial.png`} alt="" loading="lazy" decoding="async"/><ProjectHover id={project.id}/></div><div className="curated-case-copy"><div className="case-editorial-meta"><p className="case-focus">{project.category}</p><span aria-hidden="true">{String(caseStudies.findIndex(item => item.id === project.id) + 1).padStart(2, '0')}</span></div><h3>{project.titleLines.map(line => <span className="case-title-line" key={line}>{line}</span>)}</h3><div className="case-outcome"><strong>{project.metric}</strong><span>{project.metricLabel}</span></div><span className="case-card-cta">{t('Conhecer o projeto', 'Explore the project', 'Explorar el proyecto')}<ArrowUpRight size={16} /></span></div></a>;
 }
 
 export function FeaturedProjects() {
