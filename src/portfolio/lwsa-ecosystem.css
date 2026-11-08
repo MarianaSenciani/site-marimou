@@ -460,3 +460,6 @@
     padding: 3px 9px;
   }
 }
+/* Transient hover/focus exploration only. */
+.lwsa-satellite-badge,.lwsa-center-card{cursor:default}
+

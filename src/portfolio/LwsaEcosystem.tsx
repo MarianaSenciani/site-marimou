@@ -226,14 +226,11 @@ const ARCS = [
 export function LwsaEcosystem() {
   const { lang, t } = useExperience();
   const paused = useMotionPaused();
-
-  const [selectedBrand, setSelectedBrand] = useState<BrandNode | null>(null);
   const [hoveredBrand, setHoveredBrand] = useState<BrandNode | null>(null);
-  const [centerSelected, setCenterSelected] = useState(false);
   const [centerHovered, setCenterHovered] = useState(false);
 
-  const active = hoveredBrand ?? selectedBrand;
-  const isCenterActive = !active && (centerHovered || centerSelected);
+  const active = hoveredBrand;
+  const isCenterActive = !active && centerHovered;
 
   return (
     <figure
@@ -313,9 +310,9 @@ export function LwsaEcosystem() {
                 </div>
                 <p className="lwsa-active-desc">
                   {t(
-                    'Passe o mouse ou toque sobre as marcas para conhecer o papel de cada frente na expansão do grupo.',
-                    'Hover or tap on any brand to explore its role in the group’s expansion.',
-                    'Pasa el cursor o toca las marcas para explorar el rol de cada frente en la expansión del grupo.'
+                    'Passe o mouse sobre as marcas para conhecer o papel de cada frente na expansão do grupo.',
+                    'Hover over any brand to explore its role in the group’s expansion.',
+                    'Pasa el cursor sobre las marcas para explorar el rol de cada frente en la expansión del grupo.'
                   )}
                 </p>
               </motion.div>
@@ -379,9 +376,9 @@ export function LwsaEcosystem() {
             const isDimmed = active !== null && !isHovered;
 
             return (
-              <motion.button
+              <motion.div
                 key={brand.id}
-                type="button"
+                tabIndex={0}
                 className={`lwsa-satellite-badge ${isHovered ? 'is-hovered' : ''} ${
                   isDimmed ? 'is-dimmed' : ''
                 }`}
@@ -405,10 +402,6 @@ export function LwsaEcosystem() {
                         scale: { duration: 0.2, ease: 'easeOut' },
                       }
                 }
-                onClick={() => {
-                  setCenterSelected(false);
-                  setSelectedBrand(prev => (prev?.id === brand.id ? null : brand));
-                }}
                 onPointerEnter={() => setHoveredBrand(brand)}
                 onPointerLeave={() => setHoveredBrand(null)}
                 onFocus={() => setHoveredBrand(brand)}
@@ -423,21 +416,17 @@ export function LwsaEcosystem() {
                     loading="lazy"
                   />
                 </div>
-                <span className="lwsa-badge-mini-label">{brand.name}</span>
-              </motion.button>
+                
+              </motion.div>
             );
           })}
         </div>
 
         {/* Central Prominent LWSA Brand Anchor */}
         <div className="lwsa-center-anchor">
-          <motion.button
-            type="button"
+          <motion.div
+            tabIndex={0}
             className={`lwsa-center-card ${isCenterActive ? 'is-hovered' : ''}`}
-            onClick={() => {
-              setSelectedBrand(null);
-              setCenterSelected(prev => !prev);
-            }}
             onPointerEnter={() => setCenterHovered(true)}
             onPointerLeave={() => setCenterHovered(false)}
             onFocus={() => setCenterHovered(true)}
@@ -483,50 +472,11 @@ export function LwsaEcosystem() {
                 {t('Ecossistema', 'Ecosystem', 'Ecosistema')}
               </span>
             </div>
-          </motion.button>
+          </motion.div>
         </div>
       </div>
 
-      {/* Quick brand chips bar (especially convenient on touch screens and mobile) */}
-      <nav
-        className="lwsa-brand-chips-bar"
-        aria-label={t(
-          'Lista rápida de marcas do ecossistema',
-          'Quick list of ecosystem brands',
-          'Lista rápida de marcas del ecosistema'
-        )}
-      >
-        <button
-          type="button"
-          className={`lwsa-brand-chip ${isCenterActive ? 'is-active' : ''}`}
-          onClick={() => {
-            setSelectedBrand(null);
-            setCenterSelected(prev => !prev);
-          }}
-          onPointerEnter={() => setCenterHovered(true)}
-          onPointerLeave={() => setCenterHovered(false)}
-        >
-          LWSA
-        </button>
-        {BRANDS.map(brand => {
-          const isSelected = active?.id === brand.id;
-          return (
-            <button
-              key={`chip-${brand.id}`}
-              type="button"
-              className={`lwsa-brand-chip ${isSelected ? 'is-active' : ''}`}
-              onClick={() => {
-                setCenterSelected(false);
-                setSelectedBrand(prev => (prev?.id === brand.id ? null : brand));
-              }}
-              onPointerEnter={() => setHoveredBrand(brand)}
-              onPointerLeave={() => setHoveredBrand(null)}
-            >
-              {brand.name}
-            </button>
-          );
-        })}
-      </nav>
+
 
       <figcaption className="lwsa-ecosystem-caption">
         {t(
@@ -538,3 +488,4 @@ export function LwsaEcosystem() {
     </figure>
   );
 }
+

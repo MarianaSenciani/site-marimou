@@ -25,7 +25,7 @@ function LwsaLaptopViewer({ paused, t }: { paused: boolean; t: (pt: string, en: 
   const isInView = useInView(stageRef, { amount: 0.35, once: true });
   const [isHovered, setIsHovered] = useState(false);
   const userInteractingRef = useRef(false);
-  const userTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const userTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (paused || !isInView) return;

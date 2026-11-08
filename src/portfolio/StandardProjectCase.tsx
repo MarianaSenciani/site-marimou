@@ -5,6 +5,7 @@ import { useMotionPaused } from '@/components/ui/motion-context';
 import { useCaseOpening, CaseSectionDetails } from './CaseSections';
 import { useExperience } from './experience-context';
 import { LwsaMedia } from './LwsaMedia';
+import { LwsaHeroPhoto } from './LwsaHeroPhoto';
 import { CaseHero, CaseHighlights, CaseOverview, CaseReading, CaseReflection, CaseNext, CaseVisualPlaceholder, type CaseFact } from './CaseLayout';
 
 /** New registered projects inherit the framing; optional editorial fields stay project-specific. */
@@ -46,7 +47,7 @@ export function StandardProjectCase({ project }: { project: Project }) {
   return <main id="main-content" className="project-case standard-project-case">
     <CaseHero name={[project.brand || project.title, project.category, project.year].filter(Boolean).join(' · ')}
       title={project.title} subtitle={project.subtitle || project.description || ''}
-      highlights={<CaseHighlights items={highlights}/>} visual={<Cover project={project}/>}/>
+      highlights={<CaseHighlights items={highlights}/>} visual={lwsa ? <LwsaHeroPhoto/> : <Cover project={project}/>}/>
     <CaseOverview facts={[[ t('Meu papel', 'My role', 'Mi rol'), project.role || curating ], [ t('Período', 'Period', 'Período'), project.year || curating ], [ t('Plataforma', 'Platform', 'Plataforma'), project.platform || curating ], [ t('Escopo', 'Scope', 'Alcance'), project.tags?.join(' · ') || project.category || curating ]]}
       challenge={editorial?.challenge || (lwsa
         ? t('Representar a expansão do grupo com uma identidade alinhada ao novo posicionamento do ecossistema.', 'Representing the group’s expansion with an identity aligned to the ecosystem’s new positioning.', 'Representar la expansión del grupo con una identidad alineada al nuevo posicionamiento del ecosistema.')
