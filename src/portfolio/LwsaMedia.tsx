@@ -1,22 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Image } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { useExperience } from './experience-context';
 import { ProgressiveCarousel } from '@/components/ui/progressive-carousel';
 import './lwsa-media.css';
+import { AndroidStatus } from './AndroidStatus';
 
-function MediaSpace({ title, detail, wide = false }: { title: string; detail: string; wide?: boolean }) {
-  return (
-    <figure className={`lwsa-media-space ${wide ? 'is-wide' : ''}`}>
-      <div aria-hidden="true">
-        <Image size={28} />
-        <span>{title}</span>
-      </div>
-      <figcaption>{detail}</figcaption>
-    </figure>
-  );
+export function LwsaPhoto({ src, title, alt }: { src: string; title: string; alt: string }) {
+return <figure className="lwsa-documentary-photo"><img src={'/assets/cases/lwsa/'+src} alt={alt} loading="lazy" decoding="async"/><figcaption>{title}</figcaption></figure>;
+}
+function DigitalTouchpoints() {
+const { t } = useExperience();
+return <div className="lwsa-digital-stage"><div className="lwsa-digital-browser"><div className="lwsa-digital-toolbar" aria-hidden="true"><span>● ● ●</span><span>lwsa.tech</span></div><div className="lwsa-digital-scroll" tabIndex={0} role="region" aria-label={t('Explore o site LWSA com o scroll','Scroll to explore LWSA','Explora el sitio LWSA')} data-lenis-prevent><img src="/assets/cases/lwsa/website.png" alt="Site LWSA"/></div></div><div className="lwsa-digital-phone"><AndroidStatus/><div className="lwsa-digital-scroll" tabIndex={0} role="region" aria-label={t('Explore o Instagram com o scroll','Scroll to explore Instagram','Explora Instagram')} data-lenis-prevent><img src="/assets/cases/lwsa/instagram.png" alt="Instagram lwsa.tech"/></div></div><p className="lwsa-digital-hint">{t('Explore as telas com o scroll.','Scroll to explore the screens.','Explora las pantallas con el scroll.')}</p></div>;
 }
 
 function LwsaLaptopViewer({ paused, t }: { paused: boolean; t: (pt: string, en: string, es: string) => string }) {
@@ -180,15 +177,7 @@ export function LwsaMedia({ chapter }: { chapter: number }) {
   if (chapter === 1) {
     return (
       <Reveal>
-        <MediaSpace
-          title={t('Referências e pesquisa', 'References and research', 'Referencias e investigación')}
-          detail={t(
-            'Espaço para os registros originais de posicionamento e benchmarking.',
-            'Space for the original positioning and benchmarking records.',
-            'Espacio para los registros originales de posicionamiento y benchmarking.'
-          )}
-          wide
-        />
+        <LwsaPhoto src="reception.jpg" title={t('Referências e pesquisa','References and research','Referencias e investigación')} alt={t('Recepção LWSA com marca no painel de madeira','LWSA reception with branded wooden wall','Recepción LWSA con marca en el panel de madera')}/>
       </Reveal>
     );
   }
@@ -202,22 +191,29 @@ export function LwsaMedia({ chapter }: { chapter: number }) {
             {
               id: 'evolution',
               phrase: t('A evolução da identidade.', 'The evolution of the identity.', 'La evolución de la identidad.'),
-              content: <CarouselSpace variant="evolution" title={t('Evolução do logo', 'Logo evolution', 'Evolución del logo')} />,
+              image: "/assets/cases/lwsa/institutional-team.jpg",
             },
             {
               id: 'institutional',
               phrase: t('A marca no contexto institucional.', 'The brand in an institutional context.', 'La marca en el contexto institucional.'),
-              content: <CarouselSpace variant="institutional" title={t('Aplicação institucional', 'Institutional application', 'Aplicación institucional')} />,
+              image: "/assets/cases/lwsa/signage.jpg",
+            },
+            {
+              id: 'workplace',
+              phrase: t('A identidade acompanha o trabalho.','The identity at work.','La identidad acompaña el trabajo.'),
+              image: '/assets/cases/lwsa/brand-in-use.jpg',
+              alt: t('Mãos no notebook Dell com o site LWSA','Hands on a Dell laptop showing LWSA','Manos en un portátil Dell con LWSA'),
             },
             {
               id: 'digital',
               phrase: t('Uma identidade nos pontos de contato digitais.', 'An identity across digital touchpoints.', 'Una identidad en los puntos de contacto digitales.'),
-              content: <CarouselSpace variant="digital" title={t('Presença digital', 'Digital presence', 'Presencia digital')} />,
+              content: <DigitalTouchpoints />,
             },
             {
-              id: 'details',
-              phrase: t('As formas e os detalhes do sistema visual.', 'The shapes and details of the visual system.', 'Las formas y los detalles del sistema visual.'),
-              content: <CarouselSpace variant="details" title={t('Detalhes da identidade', 'Identity details', 'Detalles de la identidad')} />,
+              id: 'onboarding',
+              phrase: t('A marca no dia a dia · Mockup de onboarding.','The everyday brand · Onboarding mockup.','La marca cotidiana · Mockup de onboarding.'),
+              image: '/assets/cases/lwsa/onboarding.png',
+              alt: t('Mockup ilustrativo: caderno, caneta, notebook Dell e mochila','Illustrative mockup: notebook, pen, Dell laptop and backpack','Mockup ilustrativo: cuaderno, bolígrafo, portátil Dell y mochila'),
             },
           ]}
         />
@@ -262,19 +258,3 @@ export function LwsaMedia({ chapter }: { chapter: number }) {
   );
 }
 
-function CarouselSpace({ variant, title }: { variant: string; title: string }) {
-  const { t } = useExperience();
-  return (
-    <div className={`lwsa-carousel-placeholder is-${variant}`}>
-      <div className="lwsa-carousel-art" aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
-      <div className="lwsa-carousel-placeholder-copy">
-        <span>{title}</span>
-        <p>{t('Espaço reservado para o mockup aprovado', 'Space reserved for the approved mockup', 'Espacio reservado para el mockup aprobado')}</p>
-      </div>
-    </div>
-  );
-}

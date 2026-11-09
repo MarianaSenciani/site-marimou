@@ -106,3 +106,13 @@ Todos os telefones usam proporção externa 9:19,5 (mais estreita, conforme revi
 
 O telefone de contato preserva as dimensões, o corpo de conversa e a barra superior do layout original, com câmera circular central de Android no lugar do recorte de iPhone.
 
+
+## LWSA — imagens e aplicações (2026-11-09)
+- Base sincronizada com origin/main: 3003fe1.
+- Recepção (FAC_1007) em Referências e pesquisa; notebook em uso (FAC_0691) em Marca e sistema em uso.
+- Carrossel: equipe na portaria (FAC_0513), letreiro institucional (FAC_0975), site + Instagram exploráveis por scroll e kit de onboarding ilustrativo.
+- Removido slide de formas/detalhes. Prints digitais preservados, telefone Android com câmera central e status. Navegação por teclado e scroll contido.
+- Fotos exportadas a 1920x1280 para o site, originais preservados. FAC_0965 disponível como entrance.jpg para futura curadoria.
+- Mockup gerado com ferramenta nativa image_gen; arquivo public/assets/cases/lwsa/onboarding.png. Conceito ilustrativo, não registro fotográfico de entrega real.
+- Prompt: fotografia editorial natural 3:2 de kit LWSA sobre mesa de carvalho, caderno azul-marinho com elástico, caneta preta, notebook Dell, mochila de tecido, cordão/crachá e caneca institucional; luz de janela, texturas reais, disposição cotidiana, sem aparência de render 3D.
+- Validação: TypeScript, build web, desktop 1440px e mobile 390px; sem overflow horizontal.
