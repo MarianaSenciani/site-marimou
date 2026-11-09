@@ -42,7 +42,11 @@
   color: var(--muted);
   width: 100%;
   max-width: 100%;
-  margin: clamp(26px, 3.8vh, 38px) 0 0;
+  margin: 20px 0 0;
+}
+
+.experience-site .about-hero-v1 .about-hero-lead + .about-hero-lead {
+  margin-top: 8px;
 }
 
 .about-cv-bar {
@@ -50,7 +54,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 18px 32px;
-  margin-top: clamp(34px, 5.2vh, 50px);
+  margin-top: 20px;
 }
 
 .experience-site .about-timeline-link {
@@ -170,15 +174,15 @@
 
 /* Timeline / Jornada */
 .experience-site #jornada.career-journey {
-  scroll-margin-top: 75px !important;
+  scroll-margin-top: 90px !important;
   scroll-snap-align: none !important;
-  padding-top: 40px !important;
+  padding-top: clamp(85px, 12vh, 120px) !important;
   padding-bottom: 48px !important;
   margin-bottom: 0 !important;
 }
 
 .experience-site #jornada .career-entries {
-  margin-top: 20px !important;
+  margin-top: 0 !important;
   padding-bottom: 0 !important;
 }
 
@@ -236,7 +240,11 @@
   max-width: 100% !important;
   width: 100% !important;
   min-height: 0 !important;
-  margin-top: clamp(20px, 3vh, 32px) !important;
+  margin-top: 20px !important;
+}
+
+.experience-site .photo-story-copy p + p {
+  margin-top: 8px !important;
 }
 
 .experience-site .photo-story-copy .story-index {
@@ -244,7 +252,7 @@
   font-size: 12px !important;
   letter-spacing: 0.1em !important;
   color: var(--lime) !important;
-  margin-top: clamp(20px, 3vh, 32px) !important;
+  margin-top: 20px !important;
 }
 
 @media (max-width: 1100px) {

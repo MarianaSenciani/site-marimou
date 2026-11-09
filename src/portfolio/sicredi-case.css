@@ -1,11 +1,12 @@
 /* Sicredi's editorial layer uses the site's existing type, palette, grid and CTA. */
 .sicredi-case {
   /* One spacing scale for the whole case: section padding, major blocks, content, title -> lead. */
-  --sc-top: 78px; --sc-section: clamp(56px, 6vw, 96px); --sc-space: clamp(72px, 7vw, 112px); --sc-content-gap: clamp(36px, 3.6vw, 52px); --sc-block-gap: clamp(20px, 2vw, 28px); --sc-title-gap: 24px;
+  --sc-top: 78px; --sc-section: clamp(56px, 6vw, 96px); --sc-space: clamp(72px, 7vw, 112px); --sc-content-gap: clamp(36px, 3.6vw, 52px); --sc-block-gap: clamp(20px, 2vw, 28px); --sc-title-gap: 20px;
   padding-bottom: 0; overflow-x: clip;
 }
 .sicredi-case .sc-title { width: 100%; font-size: clamp(30px, 3.65vw, 52px); line-height: 1.18; max-width: none; text-align: left; font-weight: 500; text-wrap: pretty; }
 .sicredi-case .sc-lead { width: 100%; font-size: clamp(14px, 1.2vw, 17px); line-height: 1.85; color: var(--muted); max-width: none; margin-top: var(--sc-title-gap); }
+.sicredi-case .sc-lead + .sc-lead { margin-top: 8px; }
 .sicredi-case .sc-caption { font-size: 11px; line-height: 1.7; color: var(--muted); }
 .sicredi-case .sc-chapter { padding-block: var(--sc-section); scroll-margin-top: var(--sc-top); }
 .sicredi-case .sc-back { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; }
@@ -14,7 +15,7 @@
 .sc-hero > :is(.sc-back,.sc-project-name,.sc-heading,.sc-hero-lead,.sc-hero-proof,.sc-hero-caption) { width: 100%; }
 .sicredi-case .sc-project-name { color: var(--lime); margin-top: 30px; font-size: 13px; }
 .sicredi-case .sc-heading { width: 100%; max-width: 100%; margin: 18px 0 0; font-size: clamp(38px, 4.8vw, 72px); line-height: 1.12; text-align: left; overflow-wrap: break-word; text-wrap: unset; }
-.sicredi-case .sc-hero-lead { width: 100%; max-width: none; color: var(--muted); font-size: 14px; line-height: 1.85; margin-top: 24px; text-align: left; }
+.sicredi-case .sc-hero-lead { width: 100%; max-width: none; color: var(--muted); font-size: 14px; line-height: 1.85; margin-top: 20px; text-align: left; }
 .sc-hero-proof { display: grid; grid-template-columns: .65fr 2fr; gap: 25px; align-items: center; margin-top: 24px; }
 .sc-hero-metrics { display: grid; gap: 25px; padding-block: 15px; min-width: 0; }
 .sc-metric { display: flex; flex-direction: column; gap: 5px; }
@@ -58,7 +59,7 @@
 .sc-facts dt { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
 .sc-facts dd { font-size: 13px; margin: 0; line-height: 1.65; }
 .sc-at-glance { display: grid; grid-template-columns: repeat(3,1fr); gap: 42px; margin-block: 55px 65px; }
-.sc-at-glance h3 { font-size: 18px; margin-bottom: 15px; }
+.sc-at-glance h3 { font-size: 18px; margin-bottom: 20px; }
 .sc-at-glance p { font-size: 13px; color: var(--muted); }
 .sc-chapter-nav { position: relative; z-index: 3; background: var(--dark); border-block: 1px solid var(--hairline); }
 .sc-chapter-nav > div { display: flex; justify-content: center; gap: 10px; overflow-x: auto; padding-block: 14px; scrollbar-width: none; }
@@ -85,7 +86,7 @@
 .sc-month-dot { flex: none; width: 23px; height: 23px; border-radius: 50%; border: 1px solid var(--lime); background: var(--dark); transition: background-color .3s,box-shadow .3s; }
 .is-active .sc-month-dot,.is-complete .sc-month-dot { background: var(--lime); box-shadow: 0 0 24px color-mix(in srgb,var(--lime) 20%,transparent); }
 .sc-months h3 { margin-top: 26px; font-size: 25px; }
-.sc-months p { font-size: 13px; margin-top: 15px; color: var(--muted); min-height: 46px; }
+.sc-months p { font-size: 13px; margin-top: 20px; color: var(--muted); min-height: 46px; }
 .sc-months ol { padding: 0; list-style: none; margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px 7px; }
 .sc-months li { display: flex; align-items: center; gap: 11px; font-size: 13px; }
 .sc-months li > span { padding: 7px 10px; border: 1px solid var(--hairline); border-radius: 14px; font-size: 11px; }
@@ -165,7 +166,7 @@
 .sc-architecture-copy article { display: none; }
 .sc-architecture-copy article.is-active { display: block; animation: sc-copy-reveal .45s ease both; }
 .sc-stage-number { color: var(--lime); font-size: 14px; }
-.sc-architecture-copy h3 { font-size: 40px; margin-block: 15px; }
+.sc-architecture-copy h3 { font-size: 40px; margin-block: 15px 20px; }
 .sc-architecture-copy p { max-width: 360px; font-size: 15px; color: var(--muted); min-height: 72px; }
 .sc-gallery-controls { margin-top: var(--sc-block-gap); display: flex; justify-content: flex-start; gap: 16px; align-items: center; }
 .sc-campaign-tabs { display: flex; gap: 12px; overflow-x: auto; padding: 8px 0; }
@@ -175,7 +176,7 @@
 .sc-campaign-tabs button[aria-pressed=true] { background: var(--lime); color: var(--dark); border-color: var(--lime); font-weight: 700; }
 .sc-campaign-stage { display: grid; grid-template-columns: .55fr 1.8fr; gap: 20px; align-items: center; background: color-mix(in srgb,var(--surface) 88%,transparent); border: 1px solid var(--hairline); border-radius: 28px; padding: 20px 32px; margin-top: 14px; overflow: hidden; }
 .sc-campaign-info > span:first-child { font-size: 11px; color: var(--muted); }
-.sc-campaign-info h3 { font-size: clamp(36px,4.5vw,64px); color: var(--lime); margin-block: 15px; }
+.sc-campaign-info h3 { font-size: clamp(36px,4.5vw,64px); color: var(--lime); margin-block: 15px 20px; }
 .sc-campaign-info p { font-size: 13px; color: var(--muted); }
 .sc-campaign-count { display: block; font-size: 11px; color: var(--muted); margin-top: 45px; }
 .sc-campaign-media { position: relative; display: flex; justify-content: center; padding: 8px 45px 28px 0; background: radial-gradient(ellipse, color-mix(in srgb,var(--campaign-accent) 17%, transparent),transparent 70%); }
@@ -222,8 +223,8 @@
 .sc-impact-box > span { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); }
 .sc-impact-box p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ivory); }
 .sc-reflection { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
-.sc-reflection .sc-lead + .sc-lead { margin-top: var(--sc-block-gap); }
-.sc-ending { display: flex; justify-content: space-between; align-items: center; gap: 30px; margin-top: var(--sc-space); }
+.sc-reflection .sc-lead + .sc-lead { margin-top: 8px; }
+.sc-ending { display: flex; justify-content: space-between; align-items: center; gap: 30px; margin-top: 20px; }
 .sc-next { display: inline-flex; gap: 14px; align-items: center; font-size: 13px; }
 .sc-next:hover { color: var(--lime); }
 @keyframes sc-copy-reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }

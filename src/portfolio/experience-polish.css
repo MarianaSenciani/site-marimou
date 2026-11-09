@@ -10,11 +10,13 @@
 .experience-site .hero-option-1 .hero-first-stage { margin-top: -132px; min-height: min(535px, 74svh); }
 .experience-site .hero-option-1 .hero-first-stage .hero-character-block { max-width: 520px; padding-inline: 0; }
 .experience-site .hero-option-1 .hero-first-stage .character-orbit { width: min(100%, 515px); height: min(515px, 70svh); }
-.experience-site .hero-first-project-link { margin-top: 25px; padding: 12px 19px; font-size: 12px; gap: 12px; }
+.experience-site .hero-first-project-link { margin-top: 20px; padding: 12px 19px; font-size: 12px; gap: 12px; }
 .hero-first-project-link svg { box-sizing: border-box; padding: 0; background: transparent; color: inherit; border-radius: 0; box-shadow: none !important; }
 .hero-first-project-link:hover svg { transform: translate(2px, -2px); }
-.experience-site .all-projects-link { width: fit-content; margin: 23px auto 0; padding: 13px 22px; display: flex; font-size: 12px; gap: 16px; }
-.experience-site .beyond-cta { margin-top: 27px; font-size: 12px; padding: 13px 21px; gap: 16px; }
+.experience-site .all-projects-link { width: fit-content; margin: 20px auto 0; padding: 13px 22px; display: flex; font-size: 12px; gap: 16px; }
+.experience-site .beyond-copy p { margin-top: 4px; }
+.experience-site .beyond-copy p + p { margin-top: 8px; }
+.experience-site .beyond-cta { margin-top: 20px; font-size: 12px; padding: 13px 21px; gap: 16px; }
 .pill svg { transition: transform .25s ease; }
 .pill:hover svg { transform: translate(2px, -2px); }
 
@@ -61,7 +63,7 @@
 .experience-site .projects-viewport > #projetos { min-height: 0; padding: 10px 0 18px; }
 .projects-viewport .experience-section-heading { display: block; text-align: center; margin-bottom: 20px; }
 .experience-site .projects-viewport .experience-section-heading h2 { max-width: none; font-size: clamp(30px, 3vw, 42px); }
-.projects-viewport .experience-section-heading p { max-width: none; margin: 10px 0 0; font-size: 12px; line-height: 1.6; }
+.projects-viewport .experience-section-heading p { max-width: none; margin: 4px 0 0; font-size: 12px; line-height: 1.6; }
 .projects-viewport .curated-case-grid { gap: 23px; }
 .projects-viewport .curated-case-art { aspect-ratio: auto; height: clamp(125px, 18svh, 190px); border-radius: 0; }
 .projects-viewport .curated-case-art > strong { font-size: clamp(36px, 3.3vw, 50px); }
@@ -84,7 +86,7 @@
 .experience-site .process-experience, .experience-site .beyond-experience, .experience-site .recommendations { min-height: 100svh; padding-block: 45px; align-content: center; }
 .experience-site .process-experience { display: grid; grid-template-columns: 1fr; gap: 0; }
 .experience-site .process-heading h2 { font-size: clamp(32px, 3vw, 42px); }
-.process-heading .section-intro { font-size: 12px; margin-top: 12px !important; }
+.process-heading .section-intro { font-size: 12px; margin-top: 4px !important; }
 .process-steps-rail { margin: 28px 0 18px; }
 .process-steps-rail span { width: 32px; height: 32px; }
 .experience-site .roadmap-stage { padding: 22px; }
