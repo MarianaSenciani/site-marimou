@@ -9,11 +9,49 @@ import './lwsa-media.css';
 import { AndroidStatus } from './AndroidStatus';
 
 export function LwsaPhoto({ src, title, alt }: { src: string; title: string; alt: string }) {
-return <figure className="lwsa-documentary-photo"><img src={'/assets/cases/lwsa/'+src} alt={alt} loading="lazy" decoding="async"/><figcaption>{title}</figcaption></figure>;
+  return (
+    <figure className="lwsa-documentary-photo">
+      <div className="lwsa-documentary-photo-frame">
+        <img src={'/assets/cases/lwsa/' + src} alt={alt} loading="lazy" decoding="async" />
+      </div>
+      <figcaption>{title}</figcaption>
+    </figure>
+  );
 }
+
 function DigitalTouchpoints() {
-const { t } = useExperience();
-return <div className="lwsa-digital-stage"><div className="lwsa-digital-browser"><div className="lwsa-digital-toolbar" aria-hidden="true"><span>● ● ●</span><span>lwsa.tech</span></div><div className="lwsa-digital-scroll" tabIndex={0} role="region" aria-label={t('Explore o site LWSA com o scroll','Scroll to explore LWSA','Explora el sitio LWSA')} data-lenis-prevent><img src="/assets/cases/lwsa/website.png" alt="Site LWSA"/></div></div><div className="lwsa-digital-phone"><AndroidStatus/><div className="lwsa-digital-scroll" tabIndex={0} role="region" aria-label={t('Explore o Instagram com o scroll','Scroll to explore Instagram','Explora Instagram')} data-lenis-prevent><img src="/assets/cases/lwsa/instagram.png" alt="Instagram lwsa.tech"/></div></div><p className="lwsa-digital-hint">{t('Explore as telas com o scroll.','Scroll to explore the screens.','Explora las pantallas con el scroll.')}</p></div>;
+  const { t } = useExperience();
+  return (
+    <div className="lwsa-digital-stage">
+      <div className="lwsa-digital-devices">
+        <div className="lwsa-digital-tablet">
+          <AndroidStatus />
+          <div
+            className="lwsa-digital-scroll"
+            tabIndex={0}
+            role="region"
+            aria-label={t('Explore o site LWSA no tablet com o scroll', 'Scroll to explore LWSA on the tablet', 'Explora el sitio LWSA en la tablet')}
+            data-lenis-prevent
+          >
+            <img src="/assets/cases/lwsa/website.png" alt="Site LWSA" />
+          </div>
+        </div>
+        <div className="lwsa-digital-phone">
+          <AndroidStatus />
+          <div
+            className="lwsa-digital-scroll"
+            tabIndex={0}
+            role="region"
+            aria-label={t('Explore o Instagram no celular Android com o scroll', 'Scroll to explore Instagram on the Android phone', 'Explora Instagram en el celular Android')}
+            data-lenis-prevent
+          >
+            <img src="/assets/cases/lwsa/instagram.png" alt="Instagram lwsa.tech" />
+          </div>
+        </div>
+      </div>
+      <p className="lwsa-digital-hint">{t('Explore as telas com o scroll.', 'Scroll to explore the screens.', 'Explora las pantallas con el scroll.')}</p>
+    </div>
+  );
 }
 
 function LwsaLaptopViewer({ paused, t }: { paused: boolean; t: (pt: string, en: string, es: string) => string }) {
@@ -185,38 +223,40 @@ export function LwsaMedia({ chapter }: { chapter: number }) {
   if (chapter === 2) {
     return (
       <Reveal>
-        <ProgressiveCarousel
-          label={t('Estudos e aplicações da identidade LWSA', 'LWSA identity studies and applications', 'Estudios y aplicaciones de la identidad LWSA')}
-          items={[
-            {
-              id: 'evolution',
-              phrase: t('A evolução da identidade.', 'The evolution of the identity.', 'La evolución de la identidad.'),
-              image: "/assets/cases/lwsa/institutional-team.jpg",
-            },
-            {
-              id: 'institutional',
-              phrase: t('A marca no contexto institucional.', 'The brand in an institutional context.', 'La marca en el contexto institucional.'),
-              image: "/assets/cases/lwsa/signage.jpg",
-            },
-            {
-              id: 'workplace',
-              phrase: t('A identidade acompanha o trabalho.','The identity at work.','La identidad acompaña el trabajo.'),
-              image: '/assets/cases/lwsa/brand-in-use.jpg',
-              alt: t('Mãos no notebook Dell com o site LWSA','Hands on a Dell laptop showing LWSA','Manos en un portátil Dell con LWSA'),
-            },
-            {
-              id: 'digital',
-              phrase: t('Uma identidade nos pontos de contato digitais.', 'An identity across digital touchpoints.', 'Una identidad en los puntos de contacto digitales.'),
-              content: <DigitalTouchpoints />,
-            },
-            {
-              id: 'onboarding',
-              phrase: t('A marca no dia a dia · Mockup de onboarding.','The everyday brand · Onboarding mockup.','La marca cotidiana · Mockup de onboarding.'),
-              image: '/assets/cases/lwsa/onboarding.png',
-              alt: t('Mockup ilustrativo: caderno, caneta, notebook Dell e mochila','Illustrative mockup: notebook, pen, Dell laptop and backpack','Mockup ilustrativo: cuaderno, bolígrafo, portátil Dell y mochila'),
-            },
-          ]}
-        />
+        <div className="lwsa-project-gallery">
+          <ProgressiveCarousel
+            label={t('Estudos e aplicações da identidade LWSA', 'LWSA identity studies and applications', 'Estudios y aplicaciones de la identidad LWSA')}
+            items={[
+              {
+                id: 'evolution',
+                phrase: t('A evolução da identidade.', 'The evolution of the identity.', 'La evolución de la identidad.'),
+                image: "/assets/cases/lwsa/institutional-team.jpg",
+              },
+              {
+                id: 'institutional',
+                phrase: t('A marca no contexto institucional.', 'The brand in an institutional context.', 'La marca en el contexto institucional.'),
+                image: "/assets/cases/lwsa/signage.jpg",
+              },
+              {
+                id: 'workplace',
+                phrase: t('A identidade acompanha o trabalho.','The identity at work.','La identidad acompaña el trabajo.'),
+                image: '/assets/cases/lwsa/brand-in-use.jpg',
+                alt: t('Mãos no notebook Dell com o site LWSA','Hands on a Dell laptop showing LWSA','Manos en un portátil Dell con LWSA'),
+              },
+              {
+                id: 'digital',
+                phrase: t('Uma identidade nos pontos de contato digitais.', 'An identity across digital touchpoints.', 'Una identidad en los puntos de contacto digitales.'),
+                content: <DigitalTouchpoints />,
+              },
+              {
+                id: 'onboarding',
+                phrase: t('A marca no dia a dia · Mockup de onboarding.','The everyday brand · Onboarding mockup.','La marca cotidiana · Mockup de onboarding.'),
+                image: '/assets/cases/lwsa/onboarding.png',
+                alt: t('Mockup ilustrativo: caderno, caneca de alumínio azul, bloco de post-its, caneta, notebook Dell e mochila LWSA','Illustrative mockup: notebook, blue aluminum mug, sticky notes pack, pen, Dell laptop and LWSA backpack','Mockup ilustrativo: cuaderno, taza de aluminio azul, paquete de notas adhesivas, bolígrafo, portátil Dell y mochila LWSA'),
+              },
+            ]}
+          />
+        </div>
       </Reveal>
     );
   }

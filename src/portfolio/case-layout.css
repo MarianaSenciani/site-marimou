@@ -47,12 +47,13 @@
 .case-placeholder-card>i{font-size:34px;font-style:normal;color:#c9badf}
 .case-visual-placeholder figcaption{position:absolute;bottom:0;left:0;color:var(--muted);font-size:10px;line-height:1.6}
 .project-case .case-reflection{padding-block:var(--case-section)}
-.project-case .case-reflection h2{font-size:clamp(30px,3.65vw,52px);line-height:1.18;text-align:left;max-width:950px}
-.case-reflection-copy{margin-top:28px;max-width:70ch;color:var(--muted);font-size:15px;line-height:1.85}
+.project-case .case-reflection h2{font-size:clamp(30px,3.65vw,52px);line-height:1.18;text-align:left;width:100%;max-width:none}
+.case-reflection-copy{margin-top:28px;width:100%;max-width:none;color:var(--muted);font-size:15px;line-height:1.85}
+.case-reflection-copy p{width:100%;max-width:none}
 .case-next{padding-block:32px 64px}.case-next>a{display:flex;justify-content:space-between;gap:24px;border-top:1px solid var(--hairline);padding-top:24px;font:500 clamp(20px,2.5vw,32px)/1.4 Alexandria,sans-serif}
 .project-case .case-standard-chapter{padding-block:var(--case-section);border:0}
-.case-standard-chapter h2{font-size:clamp(30px,3.65vw,52px);text-align:left;line-height:1.18;max-width:100%}
-.case-standard-chapter>div>p{max-width:70ch;font-size:15px;line-height:1.85;color:var(--muted);margin-top:24px}
+.case-standard-chapter h2{font-size:clamp(30px,3.65vw,52px);text-align:left;line-height:1.18;width:100%;max-width:none}
+.case-standard-chapter>div>p{width:100%;max-width:none;font-size:15px;line-height:1.85;color:var(--muted);margin-top:24px}
 .case-standard-chapter .case-section-details{margin-top:40px}
 .case-source-link{margin-top:24px}
 .case-full-scene{min-height:calc(100svh - var(--case-anchor-offset));display:flex;flex-direction:column;justify-content:center}

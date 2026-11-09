@@ -44,7 +44,7 @@ Os valores abaixo são uma proposta de engenharia para tornar o ritmo consistent
 
 - Usar o container e as margens laterais existentes; alinhar títulos, texto e artefatos à mesma estrutura.
 - Preferir espaços em múltiplos de 8 px. Um valor fluido pode variar entre os limites da tabela.
-- Limitar parágrafos de leitura longa a cerca de 60–70 caracteres por linha. Não alargar um texto só para acompanhar a largura de uma imagem.
+- Textos em `fill container` (width 100%, sem limite artificial de max-width ch), acompanhando a largura do container da leitura como em todos os cases. Capítulos iniciam direto pelo título e introdução, sem kickers numéricos do tipo `01, 02 / nome da sessão`.
 - Distinguir espaçamento dentro de um grupo e entre capítulos. Evitar somar padding de seção, margem do filho e gap para a mesma separação.
 - Não alternar espaços enormes e blocos apertados sem um motivo editorial.
 
@@ -109,10 +109,8 @@ O telefone de contato preserva as dimensões, o corpo de conversa e a barra supe
 
 ## LWSA — imagens e aplicações (2026-11-09)
 - Base sincronizada com origin/main: 3003fe1.
-- Recepção (FAC_1007) em Referências e pesquisa; notebook em uso (FAC_0691) em Marca e sistema em uso.
-- Carrossel: equipe na portaria (FAC_0513), letreiro institucional (FAC_0975), site + Instagram exploráveis por scroll e kit de onboarding ilustrativo.
-- Removido slide de formas/detalhes. Prints digitais preservados, telefone Android com câmera central e status. Navegação por teclado e scroll contido.
-- Fotos exportadas a 1920x1280 para o site, originais preservados. FAC_0965 disponível como entrance.jpg para futura curadoria.
-- Mockup gerado com ferramenta nativa image_gen; arquivo public/assets/cases/lwsa/onboarding.png. Conceito ilustrativo, não registro fotográfico de entrega real.
-- Prompt: fotografia editorial natural 3:2 de kit LWSA sobre mesa de carvalho, caderno azul-marinho com elástico, caneta preta, notebook Dell, mochila de tecido, cordão/crachá e caneca institucional; luz de janela, texturas reais, disposição cotidiana, sem aparência de render 3D.
+- Recepção (FAC_1007) em Referências e pesquisa com moldura editorial 3:2 sem cortes laterais.
+- Carrossel unificado (provador de imagens do projeto com moldura 3:2): equipe na portaria (FAC_0513), letreiro institucional (FAC_0975), marca e sistema em uso no notebook (FAC_0691), pontos de contato digitais (tablet + celular Android centralizados sobre fundo no azul institucional da marca, exploráveis por scroll) e kit de onboarding ilustrativo.
+- Fotos exportadas a 1920x1280 (3:2) para o site, originais preservados. FAC_0965 disponível como entrance.jpg para futura curadoria.
+- Mockup de onboarding (public/assets/cases/lwsa/onboarding.png): fotografia editorial 3:2 sobre mesa de carvalho com notebook Dell, mochila cinza com logo lwsa, caderno azul institucional com capa geométrica e elástico, caneta preta, caneca de alumínio azul com logo lwsa centralizado e bloco kraft de post-its/marcadores coloridos com logo lwsa centralizado.
 - Validação: TypeScript, build web, desktop 1440px e mobile 390px; sem overflow horizontal.

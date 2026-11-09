@@ -58,7 +58,7 @@ export function StandardProjectCase({ project }: { project: Project }) {
         : t('As decisões e os artefatos específicos deste projeto serão apresentados nos capítulos abaixo.', 'The specific decisions and artifacts of this project will be presented in the chapters below.', 'Las decisiones y los artefactos específicos de este proyecto se presentarán en los capítulos siguientes.'))}/>
     <CaseReading chapters={chapters}>
       {sections.map(([label, title, body], index) => <section className={`case-standard-chapter wrap ${lwsa && index === 3 ? 'case-full-scene' : ''}`} key={chapters[index][1]} id={chapters[index][1]}>
-        <Reveal><p className="case-opening-kicker">{String(index + 1).padStart(2, '0')} / {label}</p><WordPullUp as="h2" paused={paused} words={title}/><p>{body}</p></Reveal>
+        <Reveal><WordPullUp as="h2" paused={paused} words={title}/><p>{body}</p></Reveal>
         {opening && <CaseSectionDetails id={project.id} chapter={index}/>}
         {lwsa && <LwsaMedia chapter={index}/>}
       </section>)}

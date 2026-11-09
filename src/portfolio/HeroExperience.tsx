@@ -76,11 +76,11 @@ export function HeroExperience({ onVisibility }: { onVisibility: (visible: boole
       <div className="hero-first-stage">
         <motion.div className="hero-first-intro hero-first-side" initial={paused ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .45 }}>
           <p className="hero-first-role"><span className="hero-role-line">Product Designer <span className="hero-role-ampersand">&amp;</span></span><br/>Product Owner.</p>
-          <p className="hero-first-description">{t('Conecto pesquisa, design e visão de produto para criar experiências digitais que fazem sentido para as pessoas.', 'I connect research, design, and product thinking to create digital experiences that make sense to people.', 'Conecto investigación, diseño y visión de producto para crear experiencias digitales que tengan sentido para las personas.')}</p>
+          <p className="hero-first-description">{t('Conecto pesquisa, design e visão de produto para criar experiências digitais que fazem a diferença.', 'I connect research, design, and product thinking to create digital experiences that make a difference.', 'Conecto investigación, diseño y visión de producto para crear experiencias digitales que marcan la diferencia.')}</p>
         </motion.div>
         <div className="hero-character-block"><CharacterOrbit /></div>
         <motion.div className="hero-first-action hero-first-side" initial={paused ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .58 }}>
-          <p className="hero-first-prompt">{t('Conheça as ', 'Explore the ', 'Conoce las ')}<span className="decision-word">{t('decisões', 'decisions', 'decisiones')}</span>{t(' por trás dos projetos.', ' behind the projects.', ' detrás de los proyectos.')}</p>
+          <p className="hero-first-prompt">{t('Veja o raciocínio por trás dos projetos.', 'See the reasoning behind the projects.', 'Mira el razonamiento detrás de los proyectos.')}</p>
           <a className="pill primary hero-first-project-link" href="#explorar">{t('Explorar projetos', 'Explore projects', 'Explorar proyectos')}<ArrowUpRight size={17} aria-hidden="true" /></a>
         </motion.div>
       </div>
