@@ -143,6 +143,52 @@
   }
 }
 
+/*
+ * Desktop/notebook fit: the hero ("Oi, sou a Mari" + Memoji + brand marquee)
+ * scales with the viewport HEIGHT so the whole composition fits in one screen
+ * at 100% zoom on short notebook screens (e.g. 1280x600, 1366x625).
+ * Extra class in the selectors makes these win over older layered rules.
+ */
+@media (min-width: 801px) {
+  .experience-site .experience-hero.hero-option-1 {
+    --hero-pad: clamp(10px, 2.5svh, 42px);
+    --hero-title: min(11.8vw, 170px, 21svh);
+    --hero-orbit: clamp(250px, calc(100svh - 230px - var(--hero-pad) - var(--hero-title) * 0.11), 515px);
+    min-height: calc(100svh - 96px);
+    padding-top: var(--hero-pad);
+    padding-bottom: 8px;
+  }
+  .experience-site .experience-hero.hero-option-1 .hero-first-title {
+    font-size: var(--hero-title);
+  }
+  .experience-site .experience-hero.hero-option-1 .hero-first-stage {
+    margin-top: calc(var(--hero-title) * -0.78);
+    min-height: calc(var(--hero-orbit) + 20px);
+  }
+  .experience-site .experience-hero.hero-option-1 .hero-first-stage .character-orbit {
+    width: min(100%, var(--hero-orbit));
+    height: var(--hero-orbit);
+  }
+  .experience-site .experience-hero.hero-option-1 .hero-brands {
+    margin-top: 8px;
+  }
+  .experience-site .experience-hero.hero-option-1 .hero-brands-group {
+    padding-block: 8px;
+  }
+  .experience-site .experience-hero.hero-option-1 .hero-brand-item {
+    min-height: 48px;
+  }
+}
+
+/* Short notebook screens: slightly smaller tool icons around the Memoji. */
+@media (min-width: 801px) and (max-height: 700px) {
+  .experience-site .experience-hero.hero-option-1 .tools-orbit .orbit-tool { width: 68px; }
+  .experience-site .experience-hero.hero-option-1 .orbit-tool > img,
+  .experience-site .experience-hero.hero-option-1 .tool-model { width: 64px; height: 64px; }
+  .experience-site .experience-hero.hero-option-1 .tools-orbit .orbit-tool-2 { left: calc(50% - 34px); }
+  .experience-site .experience-hero.hero-option-1 .hero-brand-stack { max-height: 36px; }
+}
+
 @media (max-width: 800px) {
   .hero-brands {
     margin-top: 18px;

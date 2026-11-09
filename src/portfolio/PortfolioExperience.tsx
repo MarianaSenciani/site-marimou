@@ -13,16 +13,31 @@ import { MariChat } from './MariChat';
 import { AmbientGrid } from './AmbientGrid';
 
 const readPreference = (key: string) => { try { return localStorage.getItem(key); } catch { return null; } };
+
+function BackToTopButton({ lang, onClick }: { lang: Language; onClick: () => void }) {
+  const [showTop, setShowTop] = useState(false);
+  useEffect(() => {
+    const change = () => {
+      const next = window.scrollY > 550;
+      setShowTop(prev => prev === next ? prev : next);
+    };
+    window.addEventListener('scroll', change, { passive: true });
+    change();
+    return () => window.removeEventListener('scroll', change);
+  }, []);
+  if (!showTop) return null;
+  return <button className="experience-back-top" aria-label={({ pt: 'Voltar ao topo', en: 'Back to top', es: 'Volver arriba' })[lang]} onClick={onClick}><ArrowUp size={18} /></button>;
+}
+
 export default function PortfolioExperience({ path }: { path: string }) {
   const [lang, setLang] = useState<Language>(() => { const stored = readPreference('mari-language'); return stored === 'en' || stored === 'es' ? stored : 'pt'; });
   const [theme, setTheme] = useState<Theme>(() => readPreference('mari-theme') === 'light' ? 'light' : 'dark');
   const [hero, setHero] = useState(1);
   const [paused, setPaused] = useState<boolean>(() => { const stored = readPreference('mari-motion-paused'); if (stored !== null) return stored === 'true'; return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches; });
-  const [heroVisible, setHeroVisible] = useState(true), [showTop, setShowTop] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(true);
   const scrollToTop = useChapterScroll(path === '/' || path === '/sobre', paused);
   useEffect(() => { const media = matchMedia('(prefers-reduced-motion: reduce)'); const change = () => { if (readPreference('mari-motion-paused') === null) setPaused(media.matches); }; media.addEventListener('change', change); return () => media.removeEventListener('change', change); }, []);
   useEffect(() => { try { localStorage.setItem('mari-language', lang); localStorage.setItem('mari-theme', theme); localStorage.setItem('mari-motion-paused', String(paused)); } catch { /* Preferences remain available for this visit. */ } document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang; document.documentElement.style.colorScheme = theme; document.documentElement.classList.toggle('dark', theme === 'dark'); document.documentElement.classList.toggle('motion-paused', paused); document.body.style.backgroundColor = theme === 'dark' ? '#1b1d15' : '#f5f6ee'; }, [lang, theme, paused]);
-  useEffect(() => { const change = () => setShowTop(scrollY > 550); window.addEventListener('scroll', change, { passive: true }); change(); return () => window.removeEventListener('scroll', change); }, []);
   useEffect(() => {
     if (path === '/' && (window.location.hash === '#contato' || sessionStorage.getItem('scroll-contato-easein'))) {
       sessionStorage.removeItem('scroll-contato-easein');
@@ -36,6 +51,6 @@ export default function PortfolioExperience({ path }: { path: string }) {
     {path === '/' ? <main id="main-content"><HeroExperience onVisibility={setHeroVisible} /><div id="explorar" className="projects-viewport"><FeaturedProjects /></div><WorkProcess /><BeyondDeliverables /><Recommendations /><ContactSection /></main>
       : path === '/sobre' ? <AboutExperience /> : path === '/projetos' ? <PublicProjects /> : path.startsWith('/projetos/') ? <PublicCase key={path} id={decodeURIComponent(path.split('/')[2])} /> : <main id="main-content" className="public-page-heading wrap"><h1>404</h1><a href="/">{({ pt: 'Voltar ao início', en: 'Back home', es: 'Volver al inicio' })[lang]}</a></main>}
     <SiteFooter /><MariChat visible={path !== '/' || !heroVisible} />
-    {showTop && <button className="experience-back-top" aria-label={({ pt: 'Voltar ao topo', en: 'Back to top', es: 'Volver arriba' })[lang]} onClick={scrollToTop}><ArrowUp size={18} /></button>}
+    <BackToTopButton lang={lang} onClick={scrollToTop} />
   </div></MotionConfig></MotionPreference.Provider></ExperienceContext.Provider>;
 }

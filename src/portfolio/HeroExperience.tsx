@@ -16,7 +16,12 @@ export function CharacterOrbit() {
   const [open, setOpen] = useState(false), [loaded, setLoaded] = useState(false), [tip, setTip] = useState<string | null>(null);
   const tipX = useMotionValue(0), tipY = useMotionValue(0);
   const leaveTimer = useRef<ReturnType<typeof setTimeout>>();
-  useEffect(() => { if (open) setLoaded(true); }, [open]);
+  const scrollingUntil = useRef(0);
+  useEffect(() => {
+    if (!open) return;
+    const tId = setTimeout(() => setLoaded(true), 220);
+    return () => clearTimeout(tId);
+  }, [open]);
   useEffect(() => () => clearTimeout(leaveTimer.current), []);
   const tools = [
     { id: 'claude', name: 'Claude', note: t('Ideação e estudo de problemas', 'Ideation and problem exploration', 'Ideación y estudio de problemas') },
@@ -25,9 +30,18 @@ export function CharacterOrbit() {
     { id: 'github', name: 'GitHub', note: t('Versionamento e colaboração no código', 'Version control and code collaboration', 'Versionado y colaboración en código') },
     { id: 'cursor', name: 'Cursor', note: t('Prototipação e construção de interfaces', 'Prototyping and building interfaces', 'Prototipado y construcción de interfaces') },
   ];
-  useEffect(() => { const hide = () => setTip(null); window.addEventListener('scroll', hide, { passive: true }); return () => window.removeEventListener('scroll', hide); }, []);
+  useEffect(() => {
+    const onScroll = () => {
+      scrollingUntil.current = performance.now() + 160;
+      setTip(null);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   const tooltip = (text: string, x: number, y: number) => { setTip(text); tipX.set(Math.max(10, Math.min(x + 16, innerWidth - 258))); tipY.set(Math.max(10, Math.min(y + 18, innerHeight - 95))); };
-  return <div className={`character-orbit ${open ? 'is-exploring' : ''}`} onPointerEnter={e => { clearTimeout(leaveTimer.current); if (e.pointerType === 'mouse') setOpen(true); }}
+  return <div className={`character-orbit ${open ? 'is-exploring' : ''}`}
+    onPointerEnter={e => { clearTimeout(leaveTimer.current); if (e.pointerType === 'mouse' && performance.now() >= scrollingUntil.current) setOpen(true); }}
+    onPointerMove={e => { if (e.pointerType === 'mouse' && !open && performance.now() >= scrollingUntil.current) setOpen(true); }}
     onPointerLeave={e => { if (e.pointerType === 'mouse') { leaveTimer.current = setTimeout(() => { setOpen(false); setTip(null); }, 180); } }}
     onFocus={e => { if (e.target.matches(':focus-visible')) setOpen(true); }} onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) { setOpen(false); setTip(null); } }}>
     <motion.button className="character-trigger" aria-expanded={open} aria-label={t('Explorar minhas ferramentas', 'Explore my tools', 'Explorar mis herramientas')}

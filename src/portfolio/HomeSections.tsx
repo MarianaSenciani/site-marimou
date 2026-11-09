@@ -1,6 +1,8 @@
 import { ArrowUpRight, Search } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
 import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
@@ -9,6 +11,8 @@ import { useExperience } from './experience-context';
 import { caseStudies, localizeCase, type CaseStudy } from './case-studies';
 import './project-covers.css';
 import { ProjectHover } from './ProjectHover';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function ProcessIcon({ stage }: { stage: number }) {
   if (stage === 0) return <Search strokeWidth={1.7} size={27} />;
@@ -51,12 +55,33 @@ export function WorkProcess() {
     if (roadmap.current) { observer.observe(roadmap.current); roadmap.current.querySelectorAll('.roadmap-stage').forEach(node => observer.observe(node)); }
     measure(); return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const root = roadmap.current;
+    if (!root || paused) return;
+    let t1: ReturnType<typeof setTimeout>, t2: ReturnType<typeof setTimeout>;
+    const st = ScrollTrigger.create({
+      trigger: root,
+      start: 'top 75%',
+      once: true,
+      onEnter: () => {
+        t1 = setTimeout(() => setConnected(prev => Math.max(prev, 1)), 280);
+        t2 = setTimeout(() => setConnected(prev => Math.max(prev, 2)), 620);
+      },
+    });
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      st.kill();
+    };
+  }, [paused]);
+
   const stages = [
     { title: t('Investigar e decidir', 'Investigate and decide', 'Investigar y decidir'), icon: Search, text: t('Começo ouvindo as pessoas e entendendo o contexto. Cruzo dúvidas, dados e objetivos para decidir com o time qual problema vale resolver primeiro.', 'I start by listening and understanding the context. Questions, data, and goals help the team decide which problem to solve first.', 'Empiezo escuchando y entendiendo el contexto. Cruzo preguntas, datos y objetivos para decidir con el equipo qué problema resolver primero.'), tags: ['Research', 'Discovery', 'Priorização'] },
     { title: t('Dar forma à solução', 'Shape the solution', 'Dar forma a la solución'),  text: t('Organizo caminhos, desenho alternativas e coloco as ideias à prova. O protótipo ajuda a conversar, testar e ajustar antes de avançar com o desenvolvimento.', 'I organize flows, design alternatives, and test ideas. Prototypes help us discuss and refine the solution before moving into development.', 'Organizo flujos, diseño alternativas y pruebo ideas. El prototipo ayuda a conversar, probar y ajustar antes de avanzar con el desarrollo.'), tags: ['Fluxos', 'UI', 'Componentes'] },
     { title: t('Aprender com o uso', 'Learn from use', 'Aprender del uso'),  text: t('Acompanho a entrega e os sinais de uso. Reúno feedback, olho para as métricas disponíveis e volto às prioridades para entender o que precisa evoluir.', 'I follow delivery and usage signals. Feedback and available metrics help us revisit priorities and understand what needs to improve.', 'Acompaño la entrega y las señales de uso. Reúno feedback y métricas para revisar prioridades y entender qué debe evolucionar.'), tags: ['Handoff', 'Feedback', 'Métricas'] },
   ];
-  return <section className="experience-section process-experience wrap" id="processo"><div className="process-heading"><WordPullUp as="h2" paused={paused} words={t('Como eu trabalho.', 'How I work.', 'Cómo trabajo.')} /><p className="section-intro">{t("O caminho muda conforme o projeto. Estes são os momentos que costumo conectar.","The path changes with each project. These are the moments I connect.","El camino cambia según el proyecto. Estos son los momentos que conecto.")}</p></div><div ref={roadmap} className="process-roadmap" data-connected={connected}><svg className="process-connections" aria-hidden="true">{connections.map((d, i) => <path key={i} d={d} pathLength="1" className={connected > i ? 'is-connected' : ''} />)}</svg>{stages.map(({ title, text, tags }, i) => <Reveal key={title} className={`roadmap-stage roadmap-stage-${i}`} delay={i * .08} onPointerEnter={() => setConnected(i)} onFocus={() => setConnected(i)} tabIndex={0}><div className="process-card-top"><span className="process-card-icon" aria-hidden="true"><ProcessIcon stage={i} /></span></div><span className="phase-label">{[t('Entender', 'Understand', 'Entender'), t('Construir', 'Build', 'Construir'), t('Evoluir', 'Evolve', 'Evolucionar')][i]}</span><h3>{title}</h3><p>{text}</p><div className="process-stage-list">{[
+  return <section className="experience-section process-experience wrap" id="processo"><div className="process-heading"><WordPullUp as="h2" paused={paused} words={t('Como eu trabalho.', 'How I work.', 'Cómo trabajo.')} /><p className="section-intro">{t("O caminho muda conforme o projeto. Estes são os momentos que costumo conectar.","The path changes with each project. These are the moments I connect.","El camino cambia según el proyecto. Estos son los momentos que conecto.")}</p></div><div ref={roadmap} className="process-roadmap" data-connected={connected}><svg className="process-connections" aria-hidden="true">{connections.map((d, i) => <path key={i} d={d} pathLength="1" className={connected > i ? 'is-connected' : ''} />)}</svg>{stages.map(({ title, text, tags }, i) => <Reveal key={title} className={`roadmap-stage roadmap-stage-${i}`} delay={i * .08} onPointerEnter={() => setConnected(prev => prev === i ? prev : i)} onFocus={() => setConnected(prev => prev === i ? prev : i)} tabIndex={0}><div className="process-card-top"><span className="process-card-icon" aria-hidden="true"><ProcessIcon stage={i} /></span></div><span className="phase-label">{[t('Entender', 'Understand', 'Entender'), t('Construir', 'Build', 'Construir'), t('Evoluir', 'Evolve', 'Evolucionar')][i]}</span><h3>{title}</h3><p>{text}</p><div className="process-stage-list">{[
 [['Escutar e observar','Conversas, dados, uso real e o conhecimento de quem vive o produto.'],['Escolher um foco','O que vale resolver agora, com quais restrições e como vamos reconhecer avanço.']],
 [['Experimentar cedo','Comparar caminhos enquanto mudar ainda custa pouco.'],['Entregar junto','Detalhar regras e estados com Engenharia, sem perder o problema de vista.']],
 [['Ouvir os sinais','Feedbacks e métricas, sem confundir coincidência com causa.'],['Decidir o próximo passo','Priorizar ajustes com o time a partir do que apareceu no uso.']]

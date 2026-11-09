@@ -86,7 +86,7 @@ export function CaseReading({ chapters, children }: { chapters: readonly CaseCha
     }
   }, [active, paused]);
   return <div className="case-reading" ref={root}>
-    <nav ref={nav} className="case-reading-nav" aria-label={t('Capítulos do projeto', 'Project chapters', 'Capítulos del proyecto')}><div className="wrap" data-lenis-prevent>
+    <nav ref={nav} className="case-reading-nav" aria-label={t('Capítulos do projeto', 'Project chapters', 'Capítulos del proyecto')}><div className="wrap">
       {chapters.map(([label, id]) => <a key={id} href={`#${id}`} aria-current={active === id ? 'location' : undefined}>{label}</a>)}
     </div></nav>
     <aside className={`case-reading-shortcuts ${showSide ? 'is-visible' : ''}`} aria-label={t('Atalhos dos capítulos', 'Chapter shortcuts', 'Atajos de capítulos')} {...(!showSide ? { inert: '' } : {})}>

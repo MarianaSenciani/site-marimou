@@ -11,11 +11,11 @@
 .portfolio-site.experience-site .site-footer.restored-footer{background-image:none}
 .restored-footer .footer-bottom{justify-content:flex-end}
 .contact-option-2 .contact-composition{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);gap:clamp(32px,6vw,88px);align-items:center}
-.contact-option-2 .contact-copy{display:flex;flex-direction:column;align-items:flex-start;gap:24px;min-width:0}
-.experience-site .contact-option-2 .contact-copy h2{margin:0!important;line-height:1.18}
-.experience-site .contact-option-2 .contact-copy .contact-lead{margin:0!important;max-width:560px}
-.contact-option-2 .contact-copy .meeting-duration{order:4;margin:0;font-size:12px}
-.contact-option-2 .contact-copy .contact-text-cta{order:3;margin:0}
+.contact-option-2 .contact-copy{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:0}
+.experience-site .contact-option-2 .contact-copy h2{margin:0 0 8px 0!important;line-height:1.18;order:1}
+.experience-site .contact-option-2 .contact-copy .contact-lead{margin:0 0 4px 0!important;max-width:560px;order:2}
+.contact-option-2 .contact-copy .meeting-duration{order:4;margin:0!important;font-size:12px}
+.contact-option-2 .contact-copy .contact-text-cta{order:3;margin:0 0 8px 0!important}
 .contact-phone-scene{margin:0;justify-self:center;width:min(100%,320px);min-width:0}
 .contact-phone{position:relative;border:5px solid #303625;border-radius:44px;background:#1b1d15;color:#f2f1e8;box-shadow:0 0 0 1px rgba(174,179,157,0.3),0 20px 45px -10px rgba(0,0,0,0.75),0 35px 80px -15px rgba(0,0,0,0.85);overflow:hidden;font-family:Inter,sans-serif}
 .phone-status{position:relative;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:11px;font-weight:600}

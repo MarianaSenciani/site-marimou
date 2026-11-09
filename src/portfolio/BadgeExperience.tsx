@@ -26,19 +26,18 @@ export function BadgeExperience() {
     measure(); return () => observer.disconnect();
   }, []);
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>, entered = false, previous = scrollY, down = true;
-    const direction = () => { down = scrollY >= previous; previous = scrollY; };
-    window.addEventListener('scroll', direction, { passive: true });
+    let timer: ReturnType<typeof setTimeout>, entered = false;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= .25 && !entered) {
+      if (entry.isIntersecting && entry.intersectionRatio >= .15 && !entered) {
         entered = true; clearTimeout(timer); setRevealed(false);
-        if (paused) { stop(); x.set(0); y.set(0); setReady(true); return; }
+        if (paused) { stop(); x.set(0); y.set(0); setReady(true); observer.disconnect(); return; }
         x.set(-22); y.set(-410); setReady(false);
-        timer = setTimeout(() => { setReady(true); returnToRest(); }, down ? 500 : 0);
-      } else if (!entry.isIntersecting) { entered = false; clearTimeout(timer); stop(); setReady(false); setRevealed(false); }
-    }, { threshold: [0, .25] });
+        timer = setTimeout(() => { setReady(true); returnToRest(); }, 60);
+        observer.disconnect();
+      }
+    }, { threshold: [0, .15] });
     if (section.current) observer.observe(section.current);
-    return () => { clearTimeout(timer); stop(); observer.disconnect(); window.removeEventListener('scroll', direction); };
+    return () => { clearTimeout(timer); stop(); observer.disconnect(); };
   }, [paused]);
   return <div className="physical-badge" ref={section}>
     <svg className="badge-cord" viewBox={`0 0 ${geometry.width} ${geometry.height}`} style={{ opacity: ready ? 1 : 0 }} aria-hidden="true"><defs><pattern id={pattern} width="550.8" height="22" patternUnits="userSpaceOnUse" patternTransform={`translate(${geometry.width / 2 + 11} 0) rotate(90)`}><image href="/assets/badge/cord.svg?v=2f4e4337" width="550.8" height="22" preserveAspectRatio="none" /></pattern></defs><motion.path d={rope} fill="none" stroke="#bddb42" strokeWidth="24" /><motion.path d={rope} fill="none" stroke="#bddb42" strokeWidth="19" /><motion.path d={rope} fill="none" stroke={`url(#${pattern})`} strokeWidth="24" strokeLinecap="butt" /></svg>

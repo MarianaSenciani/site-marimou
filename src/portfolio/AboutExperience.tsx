@@ -38,18 +38,20 @@ export function AboutExperience() {
       if (journey.current && lastDotRef.current) {
         const jRect = journey.current.getBoundingClientRect();
         const dRect = lastDotRef.current.getBoundingClientRect();
-        const height = (dRect.top - jRect.top) + (dRect.height / 2) - 8;
-        if (height > 0) setLineMaxHeight(Math.round(height));
+        const height = Math.round((dRect.top - jRect.top) + (dRect.height / 2) - 8);
+        if (height > 0) setLineMaxHeight(prev => prev === height ? prev : height);
       }
     };
     measure();
     const timer = setTimeout(measure, 300);
+    const ro = new ResizeObserver(measure);
+    if (journey.current) ro.observe(journey.current);
+    if (lastEntryRef.current) ro.observe(lastEntryRef.current);
     window.addEventListener('resize', measure);
-    window.addEventListener('scroll', measure, { passive: true });
     return () => {
       clearTimeout(timer);
+      ro.disconnect();
       window.removeEventListener('resize', measure);
-      window.removeEventListener('scroll', measure);
     };
   }, []);
   const { scrollYProgress } = useScroll({

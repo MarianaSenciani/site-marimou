@@ -119,7 +119,7 @@
 .experience-site .recommendations h2 { font-size: clamp(30px, 3vw, 42px); }
 .testimonial-stage { display: grid; grid-template-columns: minmax(100px, .26fr) 1fr; gap: 35px; margin-top: 54px; min-height: 310px; align-items: start; }
 .testimonial-number { font-family: Alexandria, sans-serif; font-size: clamp(90px, 10vw, 140px); line-height: .9; font-weight: 200; color: var(--ivory); opacity: .12; letter-spacing: -.09em; }
-.testimonial-story { min-width: 0; touch-action: pan-y; cursor: grab; }
+.testimonial-story { min-width: 0; touch-action: pan-y; cursor: grab; padding-top: 22px; }
 .testimonial-story:active { cursor: grabbing; }
 .experience-site .testimonial-quote { font-family: Alexandria, sans-serif; font-size: clamp(24px, 2.8vw, 37px); font-weight: 300; letter-spacing: -.035em; line-height: 1.5; margin: 0; max-width: 850px; }
 .testimonial-attribution { display: flex; align-items: center; gap: 15px; margin-top: 33px; }
@@ -205,6 +205,7 @@
   .physical-badge-hint { bottom: 12px; }
   .experience-site .recommendations h2 { font-size: 29px; }
   .testimonial-stage { grid-template-columns: 1fr; gap: 20px; min-height: 330px; margin-top: 32px; }
+  .testimonial-story { padding-top: 0; }
   .testimonial-number { font-size: 64px; }
   .experience-site .testimonial-quote { font-size: 23px; line-height: 1.45; }
   .testimonial-attribution { gap: 12px; margin-top: 25px; }
@@ -272,7 +273,8 @@
 .testimonial-media .testimonial-company { position: absolute; left: 31px; bottom: 0; margin: 0; width: 48px; min-height: 26px; padding: 4px; font-size: 6px; line-height: 1.15; border-style: solid; background: var(--surface); border-radius: 7px; }
 .testimonial-attribution .testimonial-media > .testimonial-avatar { margin: 0; display: grid; }
 .testimonial-attribution { gap: 22px; }
-.experience-site :is(.curated-case, .roadmap-stage, .compact-menu-panel, .mari-chat, .mari-chat-launch) { background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.experience-site :is(.curated-case, .roadmap-stage) { background: color-mix(in srgb, var(--surface) 94%, transparent); }
+.experience-site :is(.compact-menu-panel, .mari-chat, .mari-chat-launch) { background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .experience-site .mari-chat-launch { justify-content: flex-start; width: 62px; padding: 6px 7px; border-radius: 999px; overflow: hidden; gap: 0; transition: width .45s cubic-bezier(.22,1,.36,1), opacity .25s, background .25s; }
 .mari-chat-launch > span { position: static; display: block; max-width: 0; opacity: 0; visibility: hidden; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; transform: translateX(10px); overflow: hidden; transition: max-width .45s cubic-bezier(.22,1,.36,1), opacity .25s .08s, transform .4s, visibility .25s; }
 @media (hover: hover) and (pointer: fine) {
@@ -280,7 +282,7 @@
   .mari-chat-launch:hover > span, .mari-chat-launch:focus-visible > span { max-width: 150px; margin-left: 10px; opacity: 1; visibility: visible; transform: none; }
 }
 @media (pointer: coarse) {
-  html.home-chapters { scroll-snap-type: y proximity; }
+  html.home-chapters { scroll-snap-type: none; }
   .home-chapters .experience-header, .home-chapters #main-content > *, .home-chapters .site-footer { scroll-snap-align: start; }
 }
 @media (max-width: 900px) {

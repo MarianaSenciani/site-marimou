@@ -14,7 +14,7 @@ interface WordPullUpProps {
   paused?: boolean;
 }
 
-export function WordPullUp({ words, delayMultiple = .065, wrapperFramerProps,
+export function WordPullUp({ words, delayMultiple = .055, wrapperFramerProps,
   framerProps, className, as = 'h1', id, paused = false }: WordPullUpProps) {
   const reduced = useReducedMotion();
   const still = reduced || paused;
@@ -22,9 +22,9 @@ export function WordPullUp({ words, delayMultiple = .065, wrapperFramerProps,
   return <Heading key={words} id={id} aria-label={words} className={cn('word-pull-up', className)}
     variants={wrapperFramerProps ?? { hidden: {}, show: { transition: { staggerChildren: still ? 0 : delayMultiple } } }}
     initial={still ? false : 'hidden'} whileInView="show" animate={still ? 'show' : undefined}
-    viewport={{ amount: .25 }}>
+    viewport={{ once: true, amount: .2 }}>
     {words.trim().split(/\s+/).map((word, i) => <motion.span key={`${word}-${i}`} aria-hidden="true"
-      className="pull-word" variants={framerProps ?? { hidden: { y: 22, opacity: 0 }, show: { y: 0, opacity: 1, transition: { duration: still ? 0 : .5, ease: [.22, 1, .36, 1] } } }}>
+      className="pull-word" variants={framerProps ?? { hidden: { y: 18, opacity: 0 }, show: { y: 0, opacity: 1, transition: { duration: still ? 0 : .45, ease: [.22, 1, .36, 1] } } }}>
       {word}{' '}
     </motion.span>)}
   </Heading>;

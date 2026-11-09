@@ -10,8 +10,8 @@
   padding-bottom: clamp(20px, 4vh, 40px) !important;
   box-sizing: border-box !important;
   scroll-margin-top: 0 !important;
-  scroll-snap-align: start !important;
-  scroll-snap-stop: always !important;
+  scroll-snap-align: none !important;
+  scroll-snap-stop: normal !important;
   overflow: hidden !important;
 }
 
@@ -171,7 +171,7 @@
 /* Timeline / Jornada */
 .experience-site #jornada.career-journey {
   scroll-margin-top: 75px !important;
-  scroll-snap-align: start !important;
+  scroll-snap-align: none !important;
   padding-top: 40px !important;
   padding-bottom: 48px !important;
   margin-bottom: 0 !important;
@@ -213,8 +213,8 @@
   box-sizing: border-box !important;
   overflow: hidden !important;
   scroll-margin-top: 0 !important;
-  scroll-snap-align: start !important;
-  scroll-snap-stop: always !important;
+  scroll-snap-align: none !important;
+  scroll-snap-stop: normal !important;
 }
 
 .experience-site .photo-story-copy {

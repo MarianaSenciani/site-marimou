@@ -246,18 +246,22 @@ function CampaignScreenshot({ campaign }: { campaign: string }) {
   useEffect(() => { position_.current = 0; setPosition(0); }, [campaign]);
   useEffect(() => {
     const node = frame.current; if (!node) return;
-    // Capture the native wheel before the page can consume it while the cursor is over the mockup.
-    const onWheel = (event: WheelEvent) => {
-      if (!(event.target instanceof Node) || !node.contains(event.target)) return;
-      const next = Math.max(0, Math.min(100, position_.current + event.deltaY * .08));
-      if (next !== position_.current) {
-        event.preventDefault();
-        event.stopPropagation();
-        update(next);
-      }
+    let raf = 0, dir = 1, last = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      const next = Math.max(0, Math.min(100, position_.current + dir * dt * 11));
+      if (next >= 100) dir = -1;
+      else if (next <= 0) dir = 1;
+      update(next);
+      raf = requestAnimationFrame(tick);
     };
-    document.addEventListener('wheel', onWheel, { passive: false, capture: true });
-    return () => document.removeEventListener('wheel', onWheel, { capture: true });
+    const obs = new IntersectionObserver(([e]) => {
+      cancelAnimationFrame(raf);
+      if (e.isIntersecting) { last = performance.now(); raf = requestAnimationFrame(tick); }
+    }, { threshold: 0.25 });
+    obs.observe(node);
+    return () => { cancelAnimationFrame(raf); obs.disconnect(); };
   }, []);
   const move = (delta: number) => update(Math.max(0, Math.min(100, position_.current + delta)));
   return <div ref={frame} className="sc-campaign-screenshot" tabIndex={0} aria-label={t('Role dentro da tela para percorrer a landing page', 'Scroll inside the screen to browse the landing page', 'Desplázate dentro de la pantalla para recorrer la landing page')} onKeyDown={event => {
