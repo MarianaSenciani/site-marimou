@@ -49,11 +49,12 @@ export function BadgeExperience() {
       <motion.div className="badge-turnover" animate={{ rotateY: revealed ? 180 : 0 }} transition={{ duration: paused ? 0 : .85, ease: [.22, 1, .36, 1] }}>
         <div className="badge-face badge-face-front" aria-hidden={revealed}><img src="/assets/badge/front.svg?v=857da831" alt={t('Frente do crachá de Mariana Senciani', 'Front of Mariana Senciani’s badge', 'Frente de la credencial de Mariana Senciani')} draggable={false} /></div>
         <div className="badge-face badge-face-back" aria-hidden={!revealed}><img src="/assets/badge/back.svg?v=89edd69b" alt={t('Verso do crachá de Mariana Senciani', 'Back of Mariana Senciani’s badge', 'Reverso de la credencial de Mariana Senciani')} draggable={false} />
-      <svg className="badge-qr-placeholder" viewBox="0 0 21 21" aria-label={t('QR ilustrativo, link do WhatsApp a definir', 'Sample QR, WhatsApp link pending', 'QR ilustrativo, enlace de WhatsApp por definir')} role="img">
-        <rect width="21" height="21" fill="#f2f1e8"/>
-        {[[1,1],[13,1],[1,13]].map(([left,top]) => <g key={`${left}-${top}`}><rect x={left} y={top} width="7" height="7" fill="#26321c"/><rect x={left+1} y={top+1} width="5" height="5" fill="#f2f1e8"/><rect x={left+2} y={top+2} width="3" height="3" fill="#26321c"/></g>)}
-        {Array.from({length: 19 * 19}, (_, i) => { const cx = i % 19 + 1, cy = Math.floor(i / 19) + 1; if ((cx < 9 && cy < 9) || (cx > 11 && cy < 9) || (cx < 9 && cy > 11) || (cx * 7 + cy * 11 + cx * cy) % 5 > 1) return null; return <rect key={i} x={cx} y={cy} width="1" height="1" fill="#26321c"/>; })}
-      </svg>
+          <img
+            className="badge-qr-code"
+            src="/assets/badge/whatsapp-qr.svg?v=1"
+            alt={t('QR code para WhatsApp de Mariana Senciani (w.app/marimou)', 'QR code for Mariana Senciani’s WhatsApp (w.app/marimou)', 'Código QR para el WhatsApp de Mariana Senciani (w.app/marimou)')}
+            draggable={false}
+          />
         </div>
       </motion.div>
       <img ref={clip} className="badge-clip-art" src="/assets/badge/clip.svg?v=54d6e49a" alt="" draggable={false} />

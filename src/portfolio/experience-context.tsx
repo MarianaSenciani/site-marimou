@@ -9,3 +9,4 @@ export function useExperience() {
 }
 export const email = 'mailto:marianasenciani@gmail.com';
 export const linkedin = 'https://www.linkedin.com/in/mariana-senciani/';
+export const whatsapp = 'https://w.app/marimou';
