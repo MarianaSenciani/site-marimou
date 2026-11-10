@@ -1,20 +1,21 @@
 /* One Android shell across project previews and the contact conversation. */
-.experience-site :is(.lv-android-frame,.lv-android-screen,.lv-hero-phone,.sc-phone,.hover-phone){aspect-ratio:9/19.5!important;height:auto!important;min-height:0!important;box-sizing:border-box;border:5px solid #303625!important;border-radius:25px!important;padding:2px!important;background:#10130e!important;overflow:hidden;display:flex!important;flex-direction:column;container-type:inline-size}
-.experience-site :is(.lv-android-frame,.lv-android-screen,.lv-hero-phone,.hover-phone)>img{width:100%!important;max-width:none!important;height:0!important;min-height:0;flex:1;object-fit:cover!important;object-position:top;transform:none!important;border-radius:0 0 17px 17px}
+.experience-site :is(.lv-android-frame,.lv-android-screen,.lv-hero-phone,.sc-phone,.hover-phone){aspect-ratio:9/19.5!important;height:auto!important;min-height:0!important;box-sizing:border-box;border:3px solid #20241a!important;border-radius:14px!important;padding:1px!important;background:#10130e!important;box-shadow:0 0 0 1px #ffffff24,0 16px 32px #0005;overflow:hidden;display:flex!important;flex-direction:column;container-type:inline-size}
+.experience-site :is(.lv-android-frame,.lv-android-screen,.lv-hero-phone,.hover-phone)>img{width:100%!important;max-width:none!important;height:0!important;min-height:0;flex:1;object-fit:cover!important;object-position:top;transform:none!important;border-radius:0 0 10px 10px}
 .experience-site :is(.lv-android-frame,.lv-android-screen):before{display:none!important}
-.android-status{box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:space-between;flex:none;width:100%;height:26px;padding:0 8px;background:#1b1d15;color:#f2f1e8;border-radius:17px 17px 0 0;font:600 9px/1 Inter,sans-serif;z-index:3}
+.android-status{box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:space-between;flex:none;width:100%;height:22px;padding:0 8px;background:#1b1d15;color:#f2f1e8;border-radius:10px 10px 0 0;font:600 9px/1 Inter,sans-serif;z-index:3}
 .android-status>span{display:flex;align-items:center;gap:3px}
 .android-status svg{width:10px;height:10px;stroke-width:1.8}
-.android-status>i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:7px;height:7px;border-radius:50%;background:#090b08;box-shadow:0 0 0 1px #58604a}
-.experience-site .sc-phone .sc-media-screen{flex:1;min-height:0;height:0;width:100%;border-radius:0 0 17px 17px}
+.android-status>i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:#090b08;box-shadow:0 0 0 1px #58604a}
+.experience-site .sc-phone .sc-media-screen{flex:1;min-height:0;height:0;width:100%;border-radius:0 0 10px 10px}
 .experience-site .sc-phone :is(.sc-phone-home,.sc-phone-camera,.sc-phone-speaker){display:none}
-.experience-site .hover-phone>video{flex:1;width:100%;height:0;min-height:0;object-fit:cover}
+.experience-site .hover-phone{border:2px solid #1d2117!important;border-radius:9px!important;padding:1px!important;box-shadow:0 0 0 1px #ffffff28,0 12px 22px #0006!important}
+.experience-site .hover-phone>img,.experience-site .hover-phone>video{flex:1;width:100%;height:0;min-height:0;object-fit:cover;object-position:top;border-radius:0 0 6px 6px}
 
 
-@container(max-width:160px){.android-status{height:20px;padding-inline:5px;font-size:7px}.android-status svg{width:8px;height:8px}.android-status>i{width:5px;height:5px}}
+@container(max-width:160px){.android-status{height:17px;padding-inline:5px;border-radius:6px 6px 0 0;font-size:6.5px}.android-status svg{width:7.5px;height:7.5px}.android-status>i{width:4.5px;height:4.5px}}
 
 /* Crop the presentation border from the legacy cart, retaining the actual UI. */
-.experience-site .lv-cart-evidence-crop{position:relative;flex:1;min-height:0;overflow:hidden;background:#fff;border-radius:0 0 17px 17px}
+.experience-site .lv-cart-evidence-crop{position:relative;flex:1;min-height:0;overflow:hidden;background:#fff;border-radius:0 0 10px 10px}
 .experience-site .lv-cart-evidence-crop>img{position:absolute;top:-8.5%;left:-16%;width:132%!important;max-width:none!important;height:auto!important;max-height:none!important;transform:none!important}
 
 /* Preserve the original conversation layout with an Android punch-hole camera. */
