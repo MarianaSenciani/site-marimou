@@ -177,6 +177,8 @@
 .sc-missing-art > p { margin-top: 12px; font-size: 13px; }
 .sc-campaign-media > .sc-browser { width: min(100%, calc((100svh - 480px) * 16 / 9)); }
 .sc-campaign-screenshot { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; }
+.experience-site[data-theme=light] .project-case .sc-campaign-screenshot:focus-visible { outline: 3px solid #bddb42; outline-offset: -3px; }
+.experience-site[data-theme=light] .project-case .sc-media-screen:focus-visible { outline: 3px solid #151a14; outline-offset: -3px; }
 .sc-campaign-screenshot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .sc-screen-scroll-hint { position: absolute; right: 12px; bottom: 12px; padding: 7px 10px; border-radius: 999px; background: #151a14d9; color: #fff; font-size: 9px; opacity: 0; transition: opacity .2s; }
 .sc-campaign-screenshot:hover .sc-screen-scroll-hint,.sc-campaign-screenshot:focus-visible .sc-screen-scroll-hint { opacity: 1; }

@@ -2,8 +2,8 @@
 .lv-roadmap-track{position:relative;padding-top:0}
 .lv-roadmap-line{position:absolute;left:0;right:0;top:11px;height:1px;background:#aeb39d33}.lv-roadmap-line>div{height:100%;background:var(--lime);transform-origin:left}
 .lv-roadmap-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px}
-.lv-roadmap-columns article{min-width:0}.lv-roadmap-marker{display:flex;gap:14px;align-items:center;background:#14170f;width:max-content;padding-right:14px;position:relative;color:var(--muted);font-size:11px}
-.lv-roadmap-marker i{width:23px;height:23px;border:1px solid #bddb4244;border-radius:50%;background:#14170f}.lv-roadmap-marker i.is-filled{background:var(--lime);border-color:var(--lime)}
+.lv-roadmap-columns article{min-width:0}.lv-roadmap-marker{display:flex;gap:14px;align-items:center;background:var(--dark);width:max-content;padding-right:14px;position:relative;color:var(--muted);font-size:11px}
+.lv-roadmap-marker i{width:23px;height:23px;border:1px solid #bddb4244;border-radius:50%;background:var(--dark)}.lv-roadmap-marker i.is-filled{background:var(--lime);border-color:var(--lime)}
 .lv-roadmap-columns h3{font:600 clamp(19px,1.8vw,26px)/1.3 Alexandria,sans-serif;letter-spacing:-.05em;margin:28px 0 20px}.lv-roadmap-columns p{font-size:13px;color:var(--muted);margin:0}
 .lv-roadmap-columns ol{display:flex;flex-wrap:wrap;gap:12px 10px;padding:0;margin:48px 0 0;list-style:none}.lv-roadmap-columns li{display:flex;gap:10px;align-items:center;font-size:10px}.lv-roadmap-columns li>span{padding:9px 11px;border:1px solid #bddb4233;border-radius:99px}.lv-roadmap-columns li>svg{color:var(--lime);flex:none}
 @media(max-width:760px){.lv-roadmap-columns{gap:28px;grid-template-columns:1fr}.lv-roadmap-line{left:11px;top:0;bottom:0;right:auto;width:1px;height:auto}.lv-roadmap-line>div{display:none}.lv-roadmap-columns h3{margin-top:14px}.lv-roadmap-columns ol{margin-top:18px}.lv-roadmap-columns article{padding-left:36px}.lv-roadmap-marker{margin-left:-36px}.lv-problem-scene{height:auto!important}.lv-problem-pin{position:static!important}}
@@ -140,6 +140,7 @@
 .lv-checkout-shots .lv-screen{height:440px}
 .lv-checkout-shots .lv-screen:nth-child(2){height:340px;margin-top:60px}
 .lv-result{background:var(--ivory);color:var(--dark)}
+.experience-site[data-theme=light] .project-case .lv-result{background:var(--dark);color:#242c17}
 .lv-result .lv-section-index{color:#60770f}
 .lv-result-top{display:grid;grid-template-columns:1.1fr .55fr;gap:80px;align-items:end}
 .lv-result-top>p{max-width:490px;font-size:15px;color:#51584a;margin:0 0 4px}
