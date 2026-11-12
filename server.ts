@@ -54,11 +54,19 @@ async function startServer() {
     try { await writeLocal('cv.json', content); res.json({ ok: true }); }
     catch { res.status(500).json({ error: 'Não foi possível salvar o currículo.' }); }
   });
-  app.get('/api/cv/pdf', async (_req, res) => {
-    const saved = path.join(dataDir, 'curriculo.pdf');
+  app.get('/api/cv/pdf', async (req, res) => {
+    const lang = typeof req.query.lang === 'string' ? req.query.lang.toLowerCase() : '';
+    const localized = lang === 'en'
+      ? 'EN_Mariana-Senciani.pdf'
+      : (lang === 'pt' || lang === 'es' ? 'PT_Mariana-Senciani.pdf' : '');
     res.set('Cache-Control', 'no-store');
+    if (localized) {
+      try { return res.type('application/pdf').send(await readFile(path.join(process.cwd(), 'public', localized))); }
+      catch { /* fallback to default */ }
+    }
+    const saved = path.join(dataDir, 'curriculo.pdf');
     try { res.type('application/pdf').send(await readFile(saved)); }
-    catch { res.type('application/pdf').send(await readFile(path.join(process.cwd(), 'public', 'Mariana-Senciani.pdf'))); }
+    catch { res.type('application/pdf').send(await readFile(path.join(process.cwd(), 'public', 'PT_Mariana-Senciani.pdf'))); }
   });
   app.put('/api/cv/pdf', express.raw({ type: 'application/pdf', limit: '10mb' }), async (req, res) => {
     const pdf = req.body;

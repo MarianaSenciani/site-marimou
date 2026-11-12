@@ -6,7 +6,7 @@ import { WordPullUp } from '@/components/ui/word-pull-up';
 import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import './livo-case.css';
-import { CaseHero, CaseHighlights, CaseOverview, CaseReading } from './CaseLayout';
+import { CaseHero, CaseHighlights, CaseOverview, CasePrinciple, CaseReading, type PrincipleSegment } from './CaseLayout';
 import { useExperience } from './experience-context';
 
 const media = '/assets/cases/livo/';
@@ -82,6 +82,36 @@ export function LivoCase() {
     { file: 'checkout.png', label: t('Checkout', 'Checkout', 'Checkout'), alt: t('Checkout mobile da LIVO', 'LIVO mobile Checkout', 'Checkout móvil de LIVO') },
   ];
 
+  const principleSegments: readonly PrincipleSegment[] = lang === 'en'
+    ? [
+        { text: 'At every step, people needed to ' },
+        { text: 'understand what they had chosen', highlight: true },
+        { text: ', ' },
+        { text: 'what would happen next', highlight: true },
+        { text: ' and ' },
+        { text: 'how to continue without unnecessary doubt', highlight: true },
+        { text: '.' },
+      ]
+    : lang === 'es'
+      ? [
+          { text: 'En cada etapa, la persona necesitaba ' },
+          { text: 'entender qué eligió', highlight: true },
+          { text: ', ' },
+          { text: 'qué pasaría después', highlight: true },
+          { text: ' y ' },
+          { text: 'cómo continuar sin dudas', highlight: true },
+          { text: ' innecesarias.' },
+        ]
+      : [
+          { text: 'Em cada etapa, a pessoa precisava ' },
+          { text: 'entender o que escolheu', highlight: true },
+          { text: ', ' },
+          { text: 'o que aconteceria depois', highlight: true },
+          { text: ' e ' },
+          { text: 'como continuar sem dúvida', highlight: true },
+          { text: ' desnecessária.' },
+        ];
+
   return <main id="main-content" lang={lang === 'pt' ? 'pt-BR' : lang} className={`livo-case project-case ${paused ? 'lv-motion-paused' : ''}`}>
     <CaseHero name={t('LIVO Eyewear · E-commerce · 2022–2023', 'LIVO Eyewear · E-commerce · 2022–2023', 'LIVO Eyewear · E-commerce · 2022–2023')}
       title={t('Entre escolher e comprar, a jornada estava perdendo pessoas.', 'Between choosing and buying, the journey was losing people.', 'Entre elegir y comprar, el recorrido estaba perdiendo personas.')}
@@ -120,11 +150,16 @@ export function LivoCase() {
       <p className="lv-research-note">{t('Os participantes eram colaboradores da LIVO, não uma amostra representativa de todos os compradores. A auditoria orientou decisões; as telas antigas mostradas abaixo são recortes, não o relatório completo.', 'The participants were LIVO employees, not a representative sample of all shoppers. The audit informed decisions; the old screens shown below are crops, not the full report.', 'Los participantes eran colaboradores de LIVO, no una muestra representativa de todos los compradores. La auditoría orientó decisiones; las pantallas anteriores que se muestran abajo son recortes, no el informe completo.')}</p>
     </div></section>
 
-    <section className="lv-thesis" aria-labelledby="livo-redesign-principle"><div className="wrap"><p>{t('Critério para o redesign', 'Criterion for the redesign', 'Criterio para el rediseño')}</p><h2 id="livo-redesign-principle">{t(
-      <>Em cada etapa, a pessoa precisava <em>entender o que escolheu</em>, <em>o que aconteceria depois</em> e <em>como continuar sem dúvida</em> desnecessária.</>,
-      <>At every step, people needed to <em>understand what they had chosen</em>, <em>what would happen next</em> and <em>how to continue without unnecessary doubt</em>.</>,
-      <>En cada etapa, la persona necesitaba <em>entender qué eligió</em>, <em>qué pasaría después</em> y <em>cómo continuar sin dudas</em> innecesarias.</>,
-    )}</h2></div></section>
+    <CasePrinciple
+      id="livo-redesign-principle"
+      lead={t('Critério para o redesign', 'Criterion for the redesign', 'Criterio para el rediseño')}
+      segments={principleSegments}
+      pill={t(
+        'Direção do fluxo · Clareza nas escolhas da Home até o checkout',
+        'Flow direction · Clearer choices from Home to checkout',
+        'Dirección del flujo · Claridad al elegir de la Home al checkout',
+      )}
+    />
 
     <section className="lv-section wrap lv-home"><div className="lv-section-intro lv-home-intro-card"><Reveal><Title>{t('Dar uma ordem melhor à Home.', 'Giving the Home a better order.', 'Darle un mejor orden a la Home.')}</Title></Reveal><Reveal><p>{t('Óculos de grau, óculos de sol, campanhas sazonais e outlet competiam pela mesma atenção. Reorganizei as seções para separar categorias permanentes da comunicação de campanha e ajustar a copy ao que estava ativo.', 'Prescription glasses, sunglasses, seasonal campaigns and the outlet competed for the same attention. I reorganized the sections to separate permanent categories from campaign messaging and to adjust the copy to what was active.', 'Anteojos recetados, anteojos de sol, campañas estacionales y outlet competían por la misma atención. Reorganicé las secciones para separar las categorías permanentes de la comunicación de campaña y ajustar el copy a lo que estaba activo.')}</p><p className="lv-small">{t('A imagem mostra a tela redesenhada. Os recortes antigos disponíveis não equivalem à Home inteira; por isso esta seção não faz uma comparação direta.', 'The image shows the redesigned screen. The old crops available do not cover the entire Home, so this section does not make a direct comparison.', 'La imagen muestra la pantalla rediseñada. Los recortes anteriores disponibles no equivalen a la Home completa; por eso esta sección no hace una comparación directa.')}</p></Reveal></div><div className="lv-home-stage"><div><span>{t('O princípio', 'The principle', 'El principio')}</span><strong>{t('Categoria para encontrar. Campanha para descobrir.', 'Category to find. Campaign to discover.', 'Categoría para encontrar. Campaña para descubrir.')}</strong><p>{t('A página passou a oferecer caminhos de entrada mais claros antes de levar a pessoa ao catálogo.', 'The page began to offer clearer entry paths before taking people to the catalog.', 'La página pasó a ofrecer caminos de entrada más claros antes de llevar a la persona al catálogo.')}</p></div><div className="lv-android-gallery">{galleryScreens.map(screen => <figure className="lv-android" key={screen.file}><div className="lv-android-screen"><AndroidStatus /><img src={`${media}${screen.file}`} alt={screen.alt} loading="lazy" /></div><figcaption>{screen.label}</figcaption></figure>)}</div></div></section>
 

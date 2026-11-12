@@ -34,13 +34,14 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
     return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', escape); };
   }, []);
 
-  const cvHref = import.meta.env.DEV ? '/api/cv/pdf' : '/Mariana-Senciani.pdf';
+  const cvFile = lang === 'en' ? 'EN_Mariana-Senciani.pdf' : 'PT_Mariana-Senciani.pdf';
+  const cvHref = import.meta.env.DEV ? `/api/cv/pdf?lang=${lang}` : `/${cvFile}`;
 
   const controls = (isMobile = false) => <>
     <a
       className="pill primary header-talk header-cv"
       href={cvHref}
-      download="Mariana-Senciani.pdf"
+      download={cvFile}
       onClick={() => setMenu(false)}
       aria-label={t('Baixar currículo de Mariana Senciani em PDF', 'Download Mariana Senciani’s résumé (PDF)', 'Descargar currículum de Mariana Senciani en PDF')}
     >

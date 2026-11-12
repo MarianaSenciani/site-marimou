@@ -577,6 +577,10 @@ html.lenis { scroll-behavior: auto; }
     font-size: clamp(21px, 2.3vw, 31px) !important;
     line-height: 1.45 !important;
   }
+  .experience-site .testimonial-quote.testimonial-quote--multi {
+    font-size: clamp(16px, min(1.65vw, 2.8svh), 21.5px) !important;
+    line-height: 1.46 !important;
+  }
   .experience-site .testimonial-attribution {
     margin-top: clamp(20px, 3.4svh, 28px) !important;
   }

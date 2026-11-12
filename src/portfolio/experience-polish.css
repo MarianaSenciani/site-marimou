@@ -124,8 +124,13 @@
 .testimonial-story { min-width: 0; touch-action: pan-y; cursor: grab; padding-top: 22px; }
 .testimonial-story:active { cursor: grabbing; }
 .experience-site .testimonial-quote { font-family: Alexandria, sans-serif; font-size: clamp(24px, 2.8vw, 37px); font-weight: 300; letter-spacing: -.035em; line-height: 1.5; margin: 0; max-width: 850px; }
+.experience-site .testimonial-quote p { margin: 0; }
+.experience-site .testimonial-quote p + p { margin-top: .72em; }
+.experience-site .testimonial-quote.testimonial-quote--multi { font-size: clamp(18px, 1.75vw, 24px); letter-spacing: -.025em; line-height: 1.52; }
 .testimonial-attribution { display: flex; align-items: center; gap: 15px; margin-top: 33px; }
-.testimonial-avatar { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: var(--surface-raised); border: 1px solid var(--hairline); color: var(--muted); flex: none; }
+.testimonial-avatar { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; overflow: hidden; background: var(--surface-raised); border: 1px solid var(--hairline); color: var(--muted); flex: none; }
+.testimonial-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
+.testimonial-attribution > div:not(.testimonial-media) { min-width: 0; flex: 1; }
 .testimonial-attribution strong { display: block; font-size: 13px; font-weight: 600; }
 .testimonial-attribution div > span { display: block; font-size: 11px; color: var(--muted); margin-top: 6px; }
 .testimonial-company { margin-left: auto; font-size: 9px; color: var(--muted); border: 1px dashed var(--hairline); border-radius: 9px; padding: 14px 17px; text-align: center; flex: none; }
@@ -210,6 +215,7 @@
   .testimonial-story { padding-top: 0; }
   .testimonial-number { font-size: 64px; }
   .experience-site .testimonial-quote { font-size: 23px; line-height: 1.45; }
+  .experience-site .testimonial-quote.testimonial-quote--multi { font-size: clamp(16.5px, 4.3vw, 19px); line-height: 1.5; letter-spacing: -.02em; }
   .testimonial-attribution { gap: 12px; margin-top: 25px; }
   .testimonial-company { margin-left: 66px; padding: 10px 13px; }
   .testimonial-controls { gap: 18px; margin-top: 32px; }
@@ -273,6 +279,8 @@
 .badge-back-art { background: #26321c; box-shadow: none; }
 .testimonial-media { position: relative; flex: none; padding: 0 20px 14px 0; }
 .testimonial-media .testimonial-company { position: absolute; left: 31px; bottom: 0; margin: 0; width: 48px; min-height: 26px; padding: 4px; font-size: 6px; line-height: 1.15; border-style: solid; background: var(--surface); border-radius: 7px; }
+.testimonial-media .testimonial-company.testimonial-company--logo { display: grid; place-items: center; width: 52px; height: 28px; min-height: 28px; padding: 4px 6px; background: #23271c; border-color: color-mix(in srgb, var(--ivory) 16%, transparent); }
+.testimonial-company--logo img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 .testimonial-attribution .testimonial-media > .testimonial-avatar { margin: 0; display: grid; }
 .testimonial-attribution { gap: 22px; }
 .experience-site :is(.curated-case, .roadmap-stage) { background: color-mix(in srgb, var(--surface) 94%, transparent); }

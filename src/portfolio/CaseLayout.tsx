@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { WordPullUp } from '@/components/ui/word-pull-up';
 import { Reveal } from '@/components/ui/reveal';
 import { useMotionPaused } from '@/components/ui/motion-context';
@@ -104,4 +105,157 @@ export function CaseReflection({ children }: { children: ReactNode }) {
 export function CaseNext({ href = '/projetos', label }: { href?: string; label?: string }) {
   const { t } = useExperience();
   return <div className="case-next wrap"><a href={href}>{label ?? t('Explorar outros projetos', 'Explore other projects', 'Explorar otros proyectos')}<ArrowUpRight size={20}/></a></div>;
+}
+
+export type PrincipleSegment = {
+  readonly text: string;
+  readonly highlight?: boolean;
+};
+
+type PrincipleWordSlice = { text: string; highlight: boolean };
+
+function groupPrincipleWords(segments: readonly PrincipleSegment[]): PrincipleWordSlice[][] {
+  const words: PrincipleWordSlice[][] = [];
+  let current: PrincipleWordSlice[] = [];
+  for (const segment of segments) {
+    const parts = segment.text.split(/(\s+)/);
+    for (const part of parts) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) {
+        if (current.length > 0) {
+          words.push(current);
+          current = [];
+        }
+      } else {
+        current.push({ text: part, highlight: !!segment.highlight });
+      }
+    }
+  }
+  if (current.length > 0) words.push(current);
+  return words;
+}
+
+export function CasePrinciple({
+  id,
+  lead,
+  segments,
+  pill,
+}: {
+  id?: string;
+  lead: string;
+  segments: readonly PrincipleSegment[];
+  pill?: string;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const paused = useMotionPaused();
+  const reduced = useReducedMotion();
+  const still = paused || !!reduced;
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 760px)');
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const [highlighted, setHighlighted] = useState(false);
+  useMotionValueEvent(scrollYProgress, 'change', progress => {
+    setHighlighted(progress >= 0.05);
+  });
+
+  const isHighlighted = still || isMobile || highlighted;
+  const leadOpacity = useTransform(scrollYProgress, [0, .05, .35], [1, 1, .55]);
+  const titleScale = useTransform(scrollYProgress, [0, .35], [1, 1.02]);
+  const pillOpacity = useTransform(scrollYProgress, [0.04, 0.18], [0, 1]);
+  const pillY = useTransform(scrollYProgress, [0.04, 0.18], [16, 0]);
+
+  const fullText = segments.map(segment => segment.text).join('');
+  const words = groupPrincipleWords(segments);
+
+  return (
+    <section
+      ref={ref}
+      className={`case-principle-scene ${still ? 'is-still' : ''}`}
+      aria-labelledby={id}
+    >
+      <div className="case-principle-sticky">
+        <motion.div
+          className="wrap"
+          style={still || isMobile ? { scale: 1 } : { scale: titleScale }}
+        >
+          <motion.p
+            className="case-principle-lead"
+            initial={still ? false : { opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            animate={still ? { opacity: 1, y: 0 } : undefined}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: still ? 0 : 0.6, ease: [0.22, 1, 0.36, 1] }}
+            style={still || isMobile ? { opacity: 1, y: 0 } : { opacity: leadOpacity }}
+          >
+            {lead}
+          </motion.p>
+          <motion.h2
+            key={fullText}
+            id={id}
+            aria-label={fullText}
+            className="case-principle-title"
+            initial={still ? false : 'hidden'}
+            whileInView="show"
+            animate={still ? 'show' : undefined}
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: still ? 0 : 0.045 } },
+            }}
+          >
+            {words.map((unit, i) => (
+              <motion.span
+                key={i}
+                aria-hidden="true"
+                className="case-principle-word"
+                variants={{
+                  hidden: { y: 24, opacity: 0 },
+                  show: {
+                    y: 0,
+                    opacity: 1,
+                    transition: { duration: still ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
+                {unit.map((slice, j) =>
+                  slice.highlight ? (
+                    <span
+                      key={j}
+                      className={`case-principle-highlight ${isHighlighted ? 'is-highlighted' : ''}`}
+                    >
+                      {slice.text}
+                    </span>
+                  ) : (
+                    <span key={j}>{slice.text}</span>
+                  ),
+                )}
+              </motion.span>
+            ))}
+          </motion.h2>
+          {pill && (
+            <motion.div
+              className="case-principle-pill"
+              initial={still ? false : isMobile ? { opacity: 0, y: 16 } : undefined}
+              whileInView={still ? undefined : isMobile ? { opacity: 1, y: 0 } : undefined}
+              animate={still ? { opacity: 1, y: 0 } : undefined}
+              viewport={isMobile ? { once: true, amount: 0.3 } : undefined}
+              transition={isMobile ? { duration: 0.5, delay: 0.18, ease: [0.22, 1, 0.36, 1] } : undefined}
+              style={still || isMobile ? { opacity: 1, y: 0 } : { opacity: pillOpacity, y: pillY }}
+            >
+              <ArrowRight size={14} aria-hidden="true" />
+              <span>{pill}</span>
+            </motion.div>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
 }

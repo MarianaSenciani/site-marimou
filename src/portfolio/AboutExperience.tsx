@@ -26,7 +26,7 @@ export function PhotoStory() {
 }
 
 export function AboutExperience() {
-  const { t } = useExperience(), paused = useMotionPaused();
+  const { t, lang } = useExperience(), paused = useMotionPaused();
 
   const journey = useRef<HTMLDivElement>(null);
   const lastEntryRef = useRef<HTMLDivElement>(null);
@@ -60,7 +60,8 @@ export function AboutExperience() {
   });
   const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  const cvHref = import.meta.env.DEV ? '/api/cv/pdf' : '/Mariana-Senciani.pdf';
+  const cvFile = lang === 'en' ? 'EN_Mariana-Senciani.pdf' : 'PT_Mariana-Senciani.pdf';
+  const cvHref = import.meta.env.DEV ? `/api/cv/pdf?lang=${lang}` : `/${cvFile}`;
 
   const headline = t(
     'Do desenho ao produto.',
@@ -99,7 +100,7 @@ export function AboutExperience() {
             <WordPullUp paused={paused} words={headline} />
             <p className="about-hero-lead">{leadText}</p>
             <div className="about-cv-bar">
-              <a className="pill primary" href={cvHref} download>
+              <a className="pill primary" href={cvHref} download={cvFile}>
                 {t('Baixar currículo', 'Download résumé', 'Descargar currículo')}
               </a>
               <a className="text-link about-timeline-link" href="#jornada">

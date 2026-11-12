@@ -6,7 +6,7 @@ import { WordPullUp } from '@/components/ui/word-pull-up';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { Reveal } from '@/components/ui/reveal';
 import './sicredi-case.css';
-import { CaseHero, CaseOverview, CaseReading } from './CaseLayout';
+import { CaseHero, CaseOverview, CasePrinciple, CaseReading } from './CaseLayout';
 import { useExperience } from './experience-context';
 
 type Translate = (pt: string, en: string, es: string) => string;
@@ -144,10 +144,23 @@ function HeroVisual() {
 }
 
 /** A single scroll timeline per sticky scene; state changes only at chapter boundaries. */
-function useScene(count: number) {
+function useScene(count: number, thresholds?: number[]) {
   const ref = useRef<HTMLDivElement>(null), [active, setActive] = useState(0);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
-  useMotionValueEvent(scrollYProgress, 'change', progress => setActive(Math.min(count - 1, Math.max(0, Math.floor(progress * count)))));
+  useMotionValueEvent(scrollYProgress, 'change', progress => {
+    if (thresholds && thresholds.length === count - 1) {
+      let idx = 0;
+      for (let i = thresholds.length - 1; i >= 0; i--) {
+        if (progress >= thresholds[i]) {
+          idx = i + 1;
+          break;
+        }
+      }
+      setActive(idx);
+    } else {
+      setActive(Math.min(count - 1, Math.max(0, Math.floor(progress * count))));
+    }
+  });
   return { ref, active, setActive, progress: scrollYProgress };
 }
 
@@ -157,9 +170,9 @@ function Roadmap() {
   const ref = useRef<HTMLElement>(null), paused = useMotionPaused();
   // Pinned scene: month 1 on entry, month 2 on the second scroll step, month 3 on the third; then the page releases.
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
-  const lineProgress = useTransform(scrollYProgress, [0, .78], [0, 1]);
+  const lineProgress = useTransform(scrollYProgress, [0, .40], [0, 1]);
   const [active, setActive] = useState(0);
-  useMotionValueEvent(scrollYProgress, 'change', progress => setActive(progress >= .72 ? 2 : progress >= .34 ? 1 : 0));
+  useMotionValueEvent(scrollYProgress, 'change', progress => setActive(progress >= .38 ? 2 : progress >= .05 ? 1 : 0));
   return <section ref={ref} id="sc-roadmap" className={`sc-roadmap ${paused ? 'sc-still' : ''}`}><div className="sc-roadmap-sticky"><div className="wrap">
     <SectionLead>{t('O primeiro mês foi dedicado a entender o comportamento das pessoas. No segundo, transformamos os aprendizados em páginas e colocamos a solução no ar. O terceiro ficou voltado para acompanhar o uso e ajustar o que fosse necessário.', 'The first month was dedicated to understanding people\'s behavior. In the second, we turned what we learned into pages and put the solution live. The third focused on monitoring usage and adjusting whatever was needed.', 'El primer mes se dedicó a entender el comportamiento de las personas. En el segundo, transformamos los aprendizajes en páginas y pusimos la solución en línea. El tercero se enfocó en acompañar el uso y ajustar lo que fuera necesario.')}</SectionLead>
     <div className="sc-roadmap-track">
@@ -174,12 +187,24 @@ function Roadmap() {
 
 function PrincipleSection() {
   const { t } = useExperience();
-  const ref = useRef<HTMLElement>(null), paused = useMotionPaused();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 88%', 'center center'] });
-  const y = useTransform(scrollYProgress, [0, 1], [150, 0]);
-  const opacity = useTransform(scrollYProgress, [0, .72], [0, 1]);
-  const scale = useTransform(scrollYProgress, [0, 1], [.94, 1]);
-  return <section ref={ref} className="sc-principle"><motion.div className="wrap" style={paused ? undefined : { y, opacity, scale }}><p>{t('A rede social continuaria importante para atrair.', 'Social media would still be important for attracting people.', 'La red social seguiría siendo importante para atraer.')}</p><ChapterTitle>{t('A explicação, porém, precisava acontecer em outro lugar.', 'The explanation, however, needed to happen somewhere else.', 'La explicación, sin embargo, necesitaba ocurrir en otro lugar.')}</ChapterTitle></motion.div></section>;
+  return (
+    <CasePrinciple
+      lead={t(
+        'A rede social continuaria importante para atrair.',
+        'Social media would still be important for attracting people.',
+        'La red social seguiría siendo importante para atraer.',
+      )}
+      segments={[
+        { text: t('A explicação, porém, ', 'The explanation, however, ', 'La explicación, sin embargo, ') },
+        { text: t('precisava acontecer em outro lugar.', 'needed to happen somewhere else.', 'necesitaba ocurrir en otro lugar.'), highlight: true },
+      ]}
+      pill={t(
+        'Decisão de canal · Landing pages dedicadas para cada campanha',
+        'Channel decision · Dedicated landing pages for each campaign',
+        'Decisión de canal · Landing pages dedicadas para cada campaña',
+      )}
+    />
+  );
 }
 
 function Ending() {
@@ -194,23 +219,70 @@ function Flow({ title, steps, emphasis = false }: { title: string; steps: string
   return <div className={`sc-flow ${emphasis ? 'sc-flow-chosen' : ''}`}><motion.h3 initial={paused ? false : { opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: paused ? 0 : .45 }}>{title}</motion.h3><ol>{steps.map((step, i) => <motion.li key={i} initial={paused ? false : { opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: paused ? 0 : .45, delay: paused ? 0 : i * .09 }}><span>{step}</span>{i < steps.length - 1 && <ArrowDown size={15} aria-hidden="true"/>}</motion.li>)}</ol></div>;
 }
 
+// Camera scrollY (%) and green-stroke focus rect (%) in pj-desktop.png (1920x3320) inside a 16:10 (1920x1200) viewport.
+const architectureStageFrames = [
+  // 01 · Atração: Header + Hero (y = 10..804)
+  { scrollY: '0%', top: '0.30%', left: '1.25%', width: '97.50%', height: '23.92%', thumbTop: 2 },
+  // 02 · Benefícios: Card + copy centered in 1200px viewport (y = 830..1340, center = 1085 -> top_y = 485)
+  { scrollY: '-14.61%', top: '25.00%', left: '5.50%', width: '89.00%', height: '15.36%', thumbTop: 18 },
+  // 03 · Interatividade: Acordeões + FAQ centered in 1200px viewport (y = 1420..2535, center = 1978 -> top_y = 1378)
+  { scrollY: '-41.50%', top: '42.77%', left: '5.50%', width: '89.00%', height: '33.58%', thumbTop: 42 },
+  // 04 · Próximo passo: CTA Abrir conta + WhatsApp centered in 1200px viewport (y = 2600..2855, center = 2728 -> top_y = 2118)
+  { scrollY: '-63.80%', top: '78.31%', left: '14.00%', width: '72.00%', height: '7.68%', thumbTop: 62 },
+] as const;
 function PageArchitecture() {
   const { t } = useExperience();
   const architecture = getArchitecture(t);
-  const { ref, active, setActive } = useScene(4), paused = useMotionPaused();
+  const { ref, active, setActive } = useScene(4, [0.04, 0.22, 0.45]), paused = useMotionPaused();
+  const frame = architectureStageFrames[active];
   return <section id="sc-estrutura" className="sc-chapter sc-architecture wrap">
     <div ref={ref} className={`sc-architecture-scene ${paused ? 'sc-still' : ''}`}><div className="sc-architecture-sticky">
       <div className="sc-architecture-head"><ChapterTitle>{t('A estrutura seguia a forma como as pessoas diziam procurar informação.', 'The structure followed the way people said they looked for information.', 'La estructura seguía la forma en que las personas decían buscar información.')}</ChapterTitle>
       <SectionLead>{t('Nas entrevistas, um padrão apareceu com frequência: primeiro entender a proposta, depois descobrir o que era possível fazer e só então aprofundar os detalhes. A página foi organizada nessa mesma ordem.', 'In the interviews, one pattern came up often: first understand the proposal, then find out what could be done, and only then dive into the details. The page was organized in that same order.', 'En las entrevistas, apareció con frecuencia un patrón: primero entender la propuesta, luego descubrir qué era posible hacer y solo entonces profundizar en los detalles. La página se organizó en ese mismo orden.')}</SectionLead></div>
       <div className="sc-architecture-body">
-      {/* Conceptual page anatomy, deliberately separate from the real screenshots. */}
-      <BrowserFrame className="sc-anatomy" label={t('Estrutura da experiência', 'Experience structure', 'Estructura de la experiencia')}><div className="sc-anatomy-page">{architecture.map(([title], i) => <button key={i} onClick={() => setActive(i)} aria-pressed={active === i} className={`sc-anatomy-block sc-anatomy-${i} ${active === i ? 'is-active' : ''}`}>
-        <span className="sc-anatomy-label">0{i + 1} · {title}</span>
-        {i === 0 && <div className="sc-anatomy-hero"><div><i/><i/><b/></div><span>✳</span></div>}
-        {i === 1 && <div className="sc-anatomy-benefits"><i/><i/><i/></div>}
-        {i === 2 && <div className="sc-anatomy-faq"><span>{t('Produto e serviços', 'Product and services', 'Producto y servicios')} <b>+</b></span><span>{t('Dúvidas frequentes', 'Frequently asked questions', 'Preguntas frecuentes')} <b>+</b></span></div>}
-        {i === 3 && <div className="sc-anatomy-action"><span>{t('Abrir conta', 'Open an account', 'Abrir cuenta')}</span><span>WhatsApp</span></div>}
-      </button>)}</div></BrowserFrame>
+      <BrowserFrame className="sc-anatomy" label={t('Sicredi · landing page PJ', 'Sicredi · PJ landing page', 'Sicredi · landing page PJ')}>
+        <div className="sc-anatomy-screen">
+          <motion.div
+            className="sc-anatomy-canvas"
+            initial={false}
+            animate={paused ? { y: '0%' } : { y: frame.scrollY }}
+            transition={{ duration: paused ? 0 : 0.85, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <img
+              className="sc-anatomy-shot"
+              src={`${mediaRoot}pj-desktop.png`}
+              alt={t(
+                `Landing page PJ do Sicredi na etapa ${architecture[active][0]}`,
+                `Sicredi PJ landing page at the ${architecture[active][0]} stage`,
+                `Landing page PJ de Sicredi en la etapa ${architecture[active][0]}`,
+              )}
+            />
+            {!paused && (
+              <motion.div
+                className="sc-anatomy-focus"
+                aria-hidden="true"
+                initial={false}
+                animate={{
+                  top: frame.top,
+                  left: frame.left,
+                  width: frame.width,
+                  height: frame.height,
+                }}
+                transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+              />
+            )}
+          </motion.div>
+          {!paused && (
+            <motion.span
+              className="sc-anatomy-scrollbar"
+              aria-hidden="true"
+              initial={false}
+              animate={{ top: `${frame.thumbTop}%` }}
+              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+            />
+          )}
+        </div>
+      </BrowserFrame>
       <div className="sc-architecture-copy"><div className="sc-stage-pips" role="group" aria-label={t('Etapas da estrutura', 'Structure stages', 'Etapas de la estructura')}>{architecture.map(([title], i) => <button key={i} aria-label={title} aria-pressed={i === active} onClick={() => setActive(i)}>0{i + 1}</button>)}</div>
         {architecture.map(([title, body], i) => <article key={i} className={active === i ? 'is-active' : ''}><span className="sc-stage-number">0{i + 1}</span><h3>{title}</h3><p>{body}</p></article>)}
         <span className="sc-scene-note">{t('A ordem do conteúdo faz parte da experiência.', 'The order of the content is part of the experience.', 'El orden del contenido es parte de la experiencia.')}</span>
