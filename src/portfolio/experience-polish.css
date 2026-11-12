@@ -127,12 +127,12 @@
 .experience-site .testimonial-quote p { margin: 0; }
 .experience-site .testimonial-quote p + p { margin-top: .72em; }
 .experience-site .testimonial-quote.testimonial-quote--multi { font-size: clamp(18px, 1.75vw, 24px); letter-spacing: -.025em; line-height: 1.52; }
-.testimonial-attribution { display: flex; align-items: center; gap: 15px; margin-top: 33px; }
+.testimonial-attribution { display: flex; align-items: center; gap: 13px; margin-top: 33px; }
 .testimonial-avatar { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; overflow: hidden; background: var(--surface-raised); border: 1px solid var(--hairline); color: var(--muted); flex: none; }
 .testimonial-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
 .testimonial-attribution > div:not(.testimonial-media) { min-width: 0; flex: 1; }
-.testimonial-attribution strong { display: block; font-size: 13px; font-weight: 600; }
-.testimonial-attribution div > span { display: block; font-size: 11px; color: var(--muted); margin-top: 6px; }
+.testimonial-attribution strong { display: block; font-size: 13px; font-weight: 600; line-height: 1.25; }
+.testimonial-attribution div > span { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.35; }
 .testimonial-company { margin-left: auto; font-size: 9px; color: var(--muted); border: 1px dashed var(--hairline); border-radius: 9px; padding: 14px 17px; text-align: center; flex: none; }
 .testimonial-controls { display: flex; align-items: center; gap: 24px; margin-top: 28px; }
 .testimonial-progress { display: flex; gap: 11px; }
@@ -282,7 +282,7 @@
 .testimonial-media .testimonial-company.testimonial-company--logo { display: grid; place-items: center; width: 52px; height: 28px; min-height: 28px; padding: 4px 6px; background: #23271c; border-color: color-mix(in srgb, var(--ivory) 16%, transparent); }
 .testimonial-company--logo img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 .testimonial-attribution .testimonial-media > .testimonial-avatar { margin: 0; display: grid; }
-.testimonial-attribution { gap: 22px; }
+.testimonial-attribution { gap: 13px; }
 .experience-site :is(.curated-case, .roadmap-stage) { background: color-mix(in srgb, var(--surface) 94%, transparent); }
 .experience-site :is(.compact-menu-panel, .mari-chat, .mari-chat-launch) { background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .experience-site .mari-chat-launch { justify-content: flex-start; width: 62px; padding: 6px 7px; border-radius: 999px; overflow: hidden; gap: 0; transition: width .45s cubic-bezier(.22,1,.36,1), opacity .25s, background .25s; }

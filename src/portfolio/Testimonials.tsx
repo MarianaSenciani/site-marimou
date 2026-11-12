@@ -9,9 +9,8 @@ interface RecommendationEntry {
   paragraphs: string[];
   author: string;
   role: string;
-  companyName: string;
+  companyName?: string;
   avatarSrc?: string;
-  companyLogo?: string;
 }
 
 export function Recommendations() {
@@ -35,7 +34,6 @@ export function Recommendations() {
       role: t('Par no time de Marketing · LIVO', 'Marketing Team Peer · LIVO', 'Par en el equipo de Marketing · LIVO'),
       companyName: 'LIVO',
       avatarSrc: '/assets/testimonials/gustavo-gall.jpg',
-      companyLogo: '/assets/brands/logo-livo.png',
     },
     {
       paragraphs: [
@@ -82,18 +80,9 @@ export function Recommendations() {
             {current.paragraphs.map((paragraph, pIdx) => <p key={pIdx}>{paragraph}</p>)}
           </blockquote>
           <div className="testimonial-attribution">
-            <div className="testimonial-media">
-              <span className="testimonial-avatar" aria-hidden="true">
-                {current.avatarSrc ? <img src={current.avatarSrc} alt="" loading="lazy" draggable={false} /> : <UserRound size={24} />}
-              </span>
-              {current.companyLogo ? (
-                <span className="testimonial-company testimonial-company--logo" title={current.companyName}>
-                  <img src={current.companyLogo} alt={current.companyName} loading="lazy" draggable={false} />
-                </span>
-              ) : (
-                <span className="testimonial-company">{current.companyName}</span>
-              )}
-            </div>
+            <span className="testimonial-avatar" aria-hidden="true">
+              {current.avatarSrc ? <img src={current.avatarSrc} alt="" loading="lazy" draggable={false} /> : <UserRound size={24} />}
+            </span>
             <div>
               <strong>{current.author}</strong>
               <span>{current.role}</span>
