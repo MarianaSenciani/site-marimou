@@ -94,8 +94,8 @@ html.lenis { scroll-behavior: auto; }
   flex: none;
   padding: 9px;
   border-radius: 50%;
-  background: var(--lime);
-  color: var(--dark);
+  background: var(--lime-fill);
+  color: var(--on-lime);
   transition: transform .25s ease, box-shadow .25s ease;
 }
 
@@ -264,8 +264,8 @@ html.lenis { scroll-behavior: auto; }
 .roadmap-stage:hover .process-card-icon,
 .roadmap-stage:focus-within .process-card-icon {
   transform: translateY(-5px) rotate(-8deg);
-  background: var(--lime);
-  color: var(--dark);
+  background: var(--lime-fill);
+  color: var(--on-lime);
 }
 
 .roadmap-stage-1:hover .process-card-icon { transform: translateY(-5px) rotate(7deg); }

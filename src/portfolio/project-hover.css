@@ -18,7 +18,7 @@
 .hover-laptop{position:absolute;inset:25px 8px 15px;perspective:700px}.hover-laptop-lid{height:175px;border:7px solid #23271c;border-radius:12px 12px 4px 4px;background:#fff;overflow:hidden;transform-origin:bottom;transform:rotateX(-82deg);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
 .curated-case-editorial:is(:hover,:focus-visible) .hover-laptop-lid{transform:rotateX(0)}
 .hover-laptop-lid img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}.hover-laptop-base{height:9px;background:#aeb39d;border-radius:2px 2px 50% 50%;margin-inline:-5px}
-.experience-site .curated-case-editorial:focus-visible{outline:2px solid #bddb42;outline-offset:4px}
+.experience-site .curated-case-editorial:focus-visible{outline:2px solid var(--lime);outline-offset:4px}
 .project-hover.is-still,.project-hover.is-still *{transition:none!important}
 @media(hover:none){.project-hover{opacity:1;transform:none}.hover-laptop-lid{transform:none}.experience-site .curated-case-editorial .curated-case-art>img{filter:blur(3px) brightness(.65)}}
 @media(prefers-reduced-motion:reduce){.project-hover,.project-hover *,.experience-site .curated-case-editorial .curated-case-art>img{transition:none}}

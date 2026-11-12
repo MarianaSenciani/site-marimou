@@ -65,7 +65,7 @@
 .sc-chapter-nav > div { display: flex; justify-content: center; gap: 10px; overflow-x: auto; padding-block: 14px; scrollbar-width: none; }
 .sc-chapter-nav a { padding: 9px 17px; border: 1px solid color-mix(in srgb,var(--lime) 58%,transparent); border-radius: 999px; font-size: 11px; color: var(--muted); white-space: nowrap; transition: color .2s,background-color .2s,border-color .2s; }
 .sc-chapter-nav a:hover,.sc-chapter-nav a:focus-visible { color: var(--lime); border-color: var(--lime); }
-.sc-chapter-nav a[aria-current=location] { color: var(--dark); background: var(--lime); border-color: var(--lime); font-weight: 700; }
+.sc-chapter-nav a[aria-current=location] { color: var(--on-lime); background: var(--lime-fill); border-color: var(--lime); font-weight: 700; }
 .sc-chapter-shortcuts { position: fixed; right: 24px; top: 50%; z-index: 18; display: grid; gap: 2px; opacity: 0; visibility: hidden; transform: translateY(-50%) translateX(15px); transition: opacity .25s,transform .25s,visibility .25s; }
 .sc-chapter-shortcuts.is-visible { opacity: 1; visibility: visible; transform: translateY(-50%); }
 .sc-chapter-shortcuts a { position: relative; display: flex; align-items: center; justify-content: flex-end; width: 48px; height: 20px; margin-right: -6px; padding-right: 6px; }
@@ -109,9 +109,10 @@
 .sc-persona:nth-child(2) { margin-top: 0; }
 .sc-persona::after { content: ''; position: absolute; width: 190px; height: 190px; right: -80px; top: -90px; border: 1px solid color-mix(in srgb,var(--lime) 25%,transparent); border-radius: 50%; }
 .sc-persona-top { display: flex; gap: 20px; align-items: center; margin-bottom: 23px; }
-.sc-persona-portrait { display: grid; place-items: center; width: 88px; height: 88px; flex-shrink: 0; border-radius: 50%; background: var(--lime); color: var(--dark); font-size: 24px; font-family: Alexandria,sans-serif; }
+.sc-persona-portrait { display: grid; place-items: center; width: 88px; height: 88px; flex-shrink: 0; border-radius: 50%; background: var(--lime-fill); color: var(--on-lime); font-size: 24px; font-family: Alexandria,sans-serif; }
 .sc-persona-top h3 { font-size: 25px; margin-block: 7px; }
 .sc-persona-top :is(small,div>span) { font-size: 11px; color: var(--muted); }
+.sc-persona-top .sc-persona-portrait { color: var(--on-lime); }
 .sc-persona :is(p,li) { font-size: 13px; color: var(--muted); line-height: 1.8; }
 .sc-persona ul { padding-left: 17px; margin: 20px 0 0; }
 .sc-persona li + li { margin-top: 7px; }
@@ -124,7 +125,7 @@
 .sc-flow li > svg { color: var(--muted); }
 .sc-flow-chosen { border-color: color-mix(in srgb,var(--lime) 50%,transparent); }
 .sc-flow-chosen h3,.sc-flow-chosen svg,.sc-flow-arrow { color: var(--lime); }
-.sc-flow-chosen li:nth-child(2) > span { background: var(--lime); color: var(--dark); font-weight: 700; }
+.sc-flow-chosen li:nth-child(2) > span { background: var(--lime-fill); color: var(--on-lime); font-weight: 700; }
 .sc-flow-arrow { margin-inline: auto; }
 .sc-flow-test { margin-top: var(--sc-space); display: grid; grid-template-columns: 1fr .9fr; gap: 70px; align-items: center; }
 .sc-flow-routes { display: grid; gap: 20px; }
@@ -146,7 +147,7 @@
 .sc-stage-pips { display: flex; gap: 10px; margin-bottom: 26px; }
 .sc-stage-pips button { background: transparent; color: var(--muted); border: 1px solid color-mix(in srgb,var(--lime) 58%,transparent); width: 38px; height: 38px; border-radius: 50%; font-size: 11px; transition: color .2s,background-color .2s,border-color .2s; }
 .sc-stage-pips button:hover,.sc-stage-pips button:focus-visible { color: var(--lime); border-color: var(--lime); }
-.sc-stage-pips button[aria-pressed=true] { background: var(--lime); color: var(--dark); border-color: var(--lime); font-weight: 700; }
+.sc-stage-pips button[aria-pressed=true] { background: var(--lime-fill); color: var(--on-lime); border-color: var(--lime); font-weight: 700; }
 .sc-architecture-copy { position: relative; }
 .sc-architecture-copy article { display: none; }
 .sc-architecture-copy article.is-active { display: block; animation: sc-copy-reveal .45s ease both; }
@@ -158,7 +159,7 @@
 .sc-campaign-tabs { scrollbar-width: none; }
 .sc-campaign-tabs button { border: 1px solid color-mix(in srgb,var(--lime) 58%,transparent); background: transparent; color: var(--muted); padding: 9px 17px; border-radius: 999px; display: flex; align-items: center; gap: 12px; font-size: 11px; white-space: nowrap; transition: color .2s,background-color .2s,border-color .2s; }
 .sc-campaign-tabs button:hover,.sc-campaign-tabs button:focus-visible { color: var(--lime); border-color: var(--lime); }
-.sc-campaign-tabs button[aria-pressed=true] { background: var(--lime); color: var(--dark); border-color: var(--lime); font-weight: 700; }
+.sc-campaign-tabs button[aria-pressed=true] { background: var(--lime-fill); color: var(--on-lime); border-color: var(--lime); font-weight: 700; }
 .sc-campaign-stage { display: grid; grid-template-columns: .55fr 1.8fr; gap: 20px; align-items: center; background: color-mix(in srgb,var(--surface) 88%,transparent); border: 1px solid var(--hairline); border-radius: 28px; padding: 20px 32px; margin-top: 14px; overflow: hidden; }
 .sc-campaign-info > span:first-child { font-size: 11px; color: var(--muted); }
 .sc-campaign-info h3 { font-size: clamp(36px,4.5vw,64px); color: var(--lime); margin-block: 15px 20px; }

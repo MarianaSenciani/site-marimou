@@ -12,7 +12,14 @@
 }
 
 [data-theme='light'] .lwsa-ecosystem-stage {
-  background: radial-gradient(ellipse at 50% 100%, rgba(186, 170, 210, 0.28) 0%, rgba(247, 247, 240, 0.98) 60%, #ffffff 100%);
+  --dark: #f5f6ee;
+  --ivory: #292e21;
+  --lime: #4d6010;
+  --muted: #535b47;
+  --surface: #e9eddf;
+  --surface-raised: #dce3cf;
+  --hairline: #5a722633;
+  background: radial-gradient(ellipse at 50% 100%, rgba(186, 170, 210, 0.28) 0%, rgba(247, 247, 240, 0.98) 60%, #ffffff 100%), #f7f7f0;
   box-shadow: 0 20px 45px -12px rgba(70, 49, 94, 0.14), 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
@@ -155,7 +162,7 @@
 /* Active/hovered ray: finer stroke, dashed maintained, stronger lime green, NO blur glow */
 .lwsa-ray.is-active,
 .lwsa-ray.is-hovered {
-  stroke: #bddb42;
+  stroke: var(--lime);
   stroke-width: 1.35;
   stroke-dasharray: 4 5;
   filter: none;
@@ -279,6 +286,7 @@
 }
 
 .lwsa-center-card {
+  --lime: #bddb42;
   position: relative;
   background: linear-gradient(145deg, #2c253d 0%, #171520 100%);
   border: 1.5px solid rgba(186, 170, 210, 0.55);
@@ -295,7 +303,7 @@
 .lwsa-center-card:hover,
 .lwsa-center-card:focus-visible,
 .lwsa-center-card.is-hovered {
-  border-color: #bddb42;
+  border-color: var(--lime);
   scale: 1.05;
 }
 
@@ -369,7 +377,7 @@
 
 .lwsa-brand-chip.is-active {
   color: #161712;
-  background: var(--lime);
+  background: var(--lime-fill);
   border-color: var(--lime);
   font-weight: 600;
   box-shadow: 0 0 12px rgba(189, 219, 66, 0.4);
@@ -377,7 +385,7 @@
 
 [data-theme='light'] .lwsa-brand-chip.is-active {
   color: #171712;
-  background: var(--lime);
+  background: var(--lime-fill);
 }
 
 /* Footer caption */

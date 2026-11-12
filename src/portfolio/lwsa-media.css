@@ -6,7 +6,7 @@
 .lwsa-media-space figcaption{padding:16px 24px;font-size:12px;line-height:1.6;color:#aeb39d;border-top:1px solid #aeb39d26}
 .lwsa-press{margin-top:48px;padding:clamp(28px,4vw,60px);display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(32px,4vw,64px);align-items:center;border-radius:28px;background:#f2f1e8;color:#1b1d15}
 .lwsa-press-eyebrow{font-size:12px;font-weight:700;letter-spacing:.05em;margin:0 0 20px}.lwsa-press h3{font:600 clamp(25px,2.6vw,38px)/1.2 Alexandria,sans-serif;letter-spacing:-.04em;margin:0 0 20px}
-.lwsa-press-copy>p:not(.lwsa-press-eyebrow){font-size:14px;line-height:1.8;color:#4b5141}.lwsa-press-copy>p:not(.lwsa-press-eyebrow) + p{margin-top:8px}.lwsa-press .pill{margin-top:20px;font-weight:700;color:#1b1d15;background:#bddb42}
+.lwsa-press-copy>p:not(.lwsa-press-eyebrow){font-size:14px;line-height:1.8;color:#4b5141}.lwsa-press-copy>p:not(.lwsa-press-eyebrow) + p{margin-top:8px}.lwsa-press .pill{margin-top:20px;font-weight:700;color:#1b1d15;background:#bddb42}.lwsa-press .pill:focus-visible{outline-color:#1b1d15}
 
 /* Laptop 16:9 com animação de abertura da tampa (MacBook Safari) */
 .lwsa-laptop-stage{margin:0;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center}

@@ -18,13 +18,13 @@
 .case-opening-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:42px;padding-block:48px 64px}
 .case-opening-summary h2{font:600 18px/1.4 Alexandria,sans-serif;letter-spacing:-.03em;margin:0 0 20px}
 .case-opening-summary p{font-size:13px;line-height:1.8;color:var(--muted)}
-.project-case .case-reading{--case-nav-top:78px;--case-anchor-offset:100px;--sc-top:78px;--ivory:#f2f1e8;--muted:#aeb39d;--dark:#14170f;--surface:#1e2318;--surface-raised:#2a3121;position:relative;isolation:isolate;background:#14170f;color:var(--ivory)}
+.project-case .case-reading{--case-nav-top:78px;--case-anchor-offset:100px;--sc-top:78px;--ivory:#f2f1e8;--muted:#aeb39d;--lime:#bddb42;--hairline:#a6bb6133;--dark:#14170f;--surface:#1e2318;--surface-raised:#2a3121;position:relative;isolation:isolate;background:#14170f;color:var(--ivory);color-scheme:dark}
 .experience-site main.project-case .case-reading section[id]{scroll-margin-top:var(--case-anchor-offset)}
 .case-reading-nav{position:relative;z-index:16;background:#14170ff2;backdrop-filter:blur(16px);box-shadow:0 12px 30px #0002;border-block:1px solid var(--hairline)}
 .case-reading-nav>.wrap{display:flex;gap:10px;justify-content:center;overflow-x:auto;padding-block:14px;scrollbar-width:none}
 .case-reading-nav a{display:flex;align-items:center;min-height:40px;padding:9px 17px;border:1px solid #bddb4294;border-radius:999px;white-space:nowrap;font-size:11px;color:var(--muted);transition:background-color .2s,color .2s,border-color .2s}
 .case-reading-nav a:hover,.case-reading-nav a:focus-visible{border-color:var(--lime);color:var(--lime)}
-.case-reading-nav a[aria-current=location]{background:var(--lime);border-color:var(--lime);color:#14170f;font-weight:700}
+.case-reading-nav a[aria-current=location]{background:var(--lime-fill);border-color:var(--lime);color:#14170f;font-weight:700}
 .case-reading-shortcuts{position:fixed;right:18px;top:50%;z-index:18;display:grid;gap:4px;opacity:0;visibility:hidden;transform:translateY(-50%);transition:opacity .25s,visibility .25s}
 .case-reading-shortcuts.is-visible{opacity:1;visibility:visible}
 .case-reading-shortcuts a{position:relative;display:flex;align-items:center;justify-content:flex-end;width:40px;height:30px}
