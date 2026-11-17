@@ -68,9 +68,12 @@ export function useChapterScroll(home: boolean, paused: boolean) {
     // --- VIEWPORT NAVIGATION LOGIC FOR HOME & SOBRE ---
     let isAnimating = false;
     let animationEndTime = 0;
+    let animatingDirection = 0;
     let accumulatedDelta = 0;
     let lastWheelTime = 0;
     let lastDirection = 0;
+    let prevAbsDelta = 0;
+    let gestureConsumed = false;
 
     const isNestedScroll = (target: EventTarget | null) => {
       if (!(target instanceof Element)) return false;
@@ -166,9 +169,10 @@ export function useChapterScroll(home: boolean, paused: boolean) {
       }
 
       const destination = targets[nextIndex];
-      if (Math.abs(destination - currentY) < 2) return;
+      if (!isAnimating && Math.abs(destination - currentY) < 2) return;
 
       isAnimating = true;
+      animatingDirection = dir;
       animationEndTime = performance.now() + 720;
 
       lenis.scrollTo(destination, {
@@ -177,6 +181,7 @@ export function useChapterScroll(home: boolean, paused: boolean) {
         force: true,
         onComplete: () => {
           isAnimating = false;
+          animatingDirection = 0;
         },
       });
     };
@@ -189,37 +194,54 @@ export function useChapterScroll(home: boolean, paused: boolean) {
 
       const now = performance.now();
       const deltaY = event.deltaY * (event.deltaMode === 1 ? 24 : event.deltaMode === 2 ? window.innerHeight : 1);
+      const absDelta = Math.abs(deltaY);
       const direction = Math.sign(deltaY);
       if (!direction) return;
 
       if (isAnimating && now >= animationEndTime) {
         isAnimating = false;
+        animatingDirection = 0;
       }
 
-      const idle = now - lastWheelTime > 130;
+      const idle = now - lastWheelTime > 140;
+      const directionChanged = lastDirection !== 0 && direction !== lastDirection;
       lastWheelTime = now;
 
-      // Direction change or idle resets the accumulator
-      if (idle || (lastDirection !== 0 && direction !== lastDirection)) {
+      // Direction change or idle resets the accumulator and unlocks a new gesture
+      if (idle || directionChanged) {
         accumulatedDelta = 0;
+        gestureConsumed = false;
       }
       lastDirection = direction;
 
-      // If animation is in flight:
       if (isAnimating) {
-        // If direction changed, allow immediate reverse!
-        if (direction !== lastDirection) {
-          accumulatedDelta = deltaY;
-        } else if (now < animationEndTime - 160) {
-          // Ignore momentum tail during early part of slide
+        // If user reverses direction mid-flight, allow immediate reverse
+        if (direction !== animatingDirection) {
+          gestureConsumed = false;
+          accumulatedDelta += deltaY;
+        } else {
+          prevAbsDelta = absDelta;
           return;
         }
+      } else {
+        // Ignore decaying trackpad inertia tail from the same gesture after animation finishes
+        if (gestureConsumed) {
+          if (absDelta > prevAbsDelta * 1.4 && absDelta >= 24) {
+            gestureConsumed = false;
+            accumulatedDelta = 0;
+          } else {
+            prevAbsDelta = absDelta;
+            return;
+          }
+        }
+        accumulatedDelta += deltaY;
       }
 
-      accumulatedDelta += deltaY;
+      prevAbsDelta = absDelta;
 
       // "Meio scroll que seja": small threshold (15px) triggers the smooth glide!
       if (Math.abs(accumulatedDelta) >= 15) {
+        gestureConsumed = true;
         advance(Math.sign(accumulatedDelta));
         accumulatedDelta = 0;
       }
