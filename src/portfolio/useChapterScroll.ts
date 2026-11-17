@@ -16,7 +16,7 @@ export function useChapterScroll(home: boolean, paused: boolean) {
   useEffect(() => {
     document.documentElement.classList.toggle('home-chapters', home);
 
-    if (paused) {
+    if (paused || !home) {
       controller.current = null;
       if (typeof window !== 'undefined') delete (window as any).__lenis;
       return () => {
@@ -26,8 +26,8 @@ export function useChapterScroll(home: boolean, paused: boolean) {
 
     const lenis = new Lenis({
       autoRaf: false,
-      smoothWheel: !home,
-      virtualScroll: () => !home,
+      smoothWheel: false,
+      virtualScroll: () => false,
       lerp: 0.12,
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
@@ -53,17 +53,6 @@ export function useChapterScroll(home: boolean, paused: boolean) {
         ScrollTrigger.refresh();
       } catch {}
     }, 150);
-
-    if (!home) {
-      return () => {
-        window.clearTimeout(refreshTimer);
-        gsap.ticker.remove(update);
-        lenis.destroy();
-        controller.current = null;
-        if (typeof window !== 'undefined') delete (window as any).__lenis;
-        document.documentElement.classList.remove('home-chapters');
-      };
-    }
 
     // --- VIEWPORT NAVIGATION LOGIC FOR HOME & SOBRE ---
     let isAnimating = false;
@@ -306,8 +295,8 @@ export function useChapterScroll(home: boolean, paused: boolean) {
 
   return useCallback(() => {
     if (controller.current) controller.current.scrollTo(0, { duration: 0.85, force: true });
-    else window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    else window.scrollTo({ top: 0, behavior: paused ? 'instant' : 'smooth' });
+  }, [paused]);
 }
 
 /** Smooth scroll to the contact/phone section with ease-in acceleration */
