@@ -1,6 +1,6 @@
 .experience-site .contact-redesign{box-sizing:border-box;padding:clamp(28px,5vw,72px);padding-block:96px 40px;margin-block:0;min-height:100svh;display:grid;align-content:center;text-align:left}
 .contact-redesign h2{text-align:left!important}
-.experience-site .contact-redesign .contact-lead{color:var(--muted);font-family:Inter,sans-serif;font-size:13px!important;font-weight:400;line-height:1.48!important}
+.experience-site .contact-redesign .contact-lead{color:var(--muted);font-family:Inter,sans-serif;font-size:12.5px!important;font-weight:400;line-height:1.42!important}
 .contact-redesign .meeting-duration{color:var(--muted)}
 .contact-redesign .contact-text-cta{font-size:14px;max-width:100%;white-space:normal;text-align:left}
 .contact-redesign .contact-text-cta:focus-visible{outline:2px solid var(--ivory);outline-offset:5px}
@@ -11,9 +11,9 @@
 .portfolio-site.experience-site .site-footer.restored-footer{background-image:none}
 .restored-footer .footer-bottom{justify-content:flex-end}
 .contact-option-2 .contact-composition{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);gap:clamp(32px,6vw,88px);align-items:center}
-.contact-option-2 .contact-copy{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:0}
-.experience-site .contact-option-2 .contact-copy h2{margin:0!important;line-height:1.15;order:1}
-.experience-site .contact-option-2 .contact-copy .contact-lead{margin:18px 0!important;max-width:560px;order:2}
+.contact-option-2 .contact-copy{display:flex;flex-direction:column;align-items:flex-start;gap:0!important;min-width:0}
+.experience-site .contact-option-2 .contact-copy h2{margin:0!important;line-height:1.12!important;order:1}
+.experience-site .contact-option-2 .contact-copy .contact-lead{margin:22px 0 18px 0!important;max-width:520px;order:2}
 .experience-site .contact-option-2 .contact-copy .contact-lead + .contact-lead{margin-top:-10px!important}
 .contact-option-2 .contact-copy .meeting-duration{order:4;margin:8px 0 0 0!important;font-size:12px}
 .contact-option-2 .contact-copy .contact-text-cta{order:3;margin:0!important}
@@ -46,7 +46,7 @@
 .contact-phone-scene figcaption{text-align:center;color:var(--muted);font-size:11px;margin-top:20px;line-height:1.6}
 .contact-phone-scene figcaption small{display:block;font-size:9px;opacity:.8;margin-top:4px}
 @keyframes phone-dot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-3px);opacity:1}}
-@media(max-width:800px){.contact-option-2 .contact-composition{display:flex;flex-direction:column;gap:40px}.contact-option-2 .contact-copy{order:0;gap:20px}.contact-option-2 .contact-phone-scene{order:1;align-self:center}.experience-site .contact-option-2{padding-inline:0}.contact-option-2 .contact-copy .contact-lead{order:initial}}
+@media(max-width:800px){.contact-option-2 .contact-composition{display:flex;flex-direction:column;gap:40px}.contact-option-2 .contact-copy{order:0;gap:0!important}.contact-option-2 .contact-phone-scene{order:1;align-self:center}.experience-site .contact-option-2{padding-inline:0}.contact-option-2 .contact-copy .contact-lead{order:2}}
 /* Comfortable inset spacing inside the contact handset. */
 .experience-site .contact-phone>.android-status{height:56px;padding:12px 28px;align-items:center}
 .experience-site .contact-phone>.android-status>span{gap:5px}

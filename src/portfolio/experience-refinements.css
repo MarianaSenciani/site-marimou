@@ -674,13 +674,15 @@ html.lenis { scroll-behavior: auto; }
   }
   .experience-site .contact-option-2 .contact-copy h2 {
     font-size: clamp(28px, 2.8vw, 36px) !important;
+    line-height: 1.12 !important;
     margin: 0 !important;
     order: 1 !important;
   }
   .experience-site .contact-option-2 .contact-copy .contact-lead {
-    font-size: 13px !important;
-    line-height: 1.48 !important;
-    margin: 18px 0 !important;
+    font-size: 12.5px !important;
+    line-height: 1.42 !important;
+    margin: 22px 0 18px 0 !important;
+    max-width: 520px !important;
     order: 2 !important;
   }
   .experience-site .contact-option-2 .contact-copy .contact-text-cta {

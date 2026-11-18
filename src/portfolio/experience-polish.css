@@ -440,9 +440,8 @@ html.motion-paused .ambient-grid-highlight,
   color: #bddb42;
 }
 
-.portfolio-site.experience-site[data-theme=light] :is(h1, h2, h3):not(.hero-first-title):not(.curated-case-editorial h3):not(.project-card-caption h3),
+.portfolio-site.experience-site[data-theme=light] :is(h1, h2, h3):not(.hero-first-title):not(.curated-case-editorial h3):not(.project-card-caption h3):not(.sc-campaign-info h3):not(.sc-flow-chosen h3),
 .portfolio-site.experience-site[data-theme=light] .hero-first-role,
-.portfolio-site.experience-site[data-theme=light] .hero-first-role .hero-role-ampersand,
 .portfolio-site.experience-site[data-theme=light] .hero-first-prompt {
   color: #11130e;
 }
@@ -516,9 +515,9 @@ html.motion-paused .ambient-grid-highlight,
 .experience-site .livo-case .lv-hero-lead,
 .experience-site .livo-case .lv-section-intro > div:last-child p {
   font-family: Inter, sans-serif !important;
-  font-size: 13px !important;
+  font-size: 12.5px !important;
   font-weight: 400 !important;
-  line-height: 1.65 !important;
+  line-height: 1.62 !important;
   letter-spacing: normal !important;
   color: var(--muted) !important;
 }
@@ -544,19 +543,25 @@ html.motion-paused .ambient-grid-highlight,
   margin-top: 18px !important;
 }
 
+.experience-site .contact-option-2 .contact-copy {
+  gap: 0 !important;
+}
+
 .experience-site .contact-option-2 .contact-copy h2 {
   margin: 0 !important;
+  line-height: 1.12 !important;
 }
 
 .experience-site .experience-contact .contact-lead,
 .experience-site .contact-option-2 .contact-copy .contact-lead {
   font-family: Inter, sans-serif !important;
-  font-size: 13px !important;
+  font-size: 12.5px !important;
   font-weight: 400 !important;
-  line-height: 1.48 !important;
+  line-height: 1.42 !important;
   letter-spacing: normal !important;
   color: var(--muted) !important;
-  margin: 18px 0 !important;
+  max-width: 520px !important;
+  margin: 22px 0 18px 0 !important;
 }
 
 .experience-site .contact-option-2 .contact-copy .contact-text-cta {
@@ -573,6 +578,36 @@ html.motion-paused .ambient-grid-highlight,
   .experience-site .photo-story-copy .word-pull-up,
   .experience-site .project-index-title {
     font-size: clamp(28px, 2.8vw, 36px) !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .experience-site .hero-first-description,
+  .experience-site .projects-viewport .experience-section-heading p,
+  .experience-site .experience-section-heading p,
+  .experience-site .process-heading .section-intro,
+  .experience-site .section-intro,
+  .experience-site .beyond-copy p,
+  .experience-site .about-hero-v1 .about-hero-lead,
+  .experience-site .about-experience-hero > p,
+  .experience-site .career-entry p,
+  .experience-site .photo-story-copy p,
+  .experience-site .public-page-heading > p,
+  .experience-site .project-case .case-opening-subtitle,
+  .experience-site .project-case .case-standard-chapter > div > p,
+  .experience-site .project-case .case-reflection-copy,
+  .experience-site .sicredi-case .sc-lead,
+  .experience-site .livo-case .lv-hero-lead,
+  .experience-site .livo-case .lv-section-intro > div:last-child p {
+    font-size: 11.5px !important;
+    line-height: 1.58 !important;
+  }
+
+  .experience-site .experience-contact .contact-lead,
+  .experience-site .contact-option-2 .contact-copy .contact-lead {
+    font-size: 11.5px !important;
+    line-height: 1.4 !important;
+    margin: 20px 0 16px 0 !important;
   }
 }
 
@@ -613,7 +648,7 @@ html.motion-paused .ambient-grid-highlight,
   .experience-site .experience-contact .contact-lead,
   .experience-site .contact-option-2 .contact-copy .contact-lead {
     font-size: 11px !important;
-    line-height: 1.42 !important;
-    margin: 16px 0 !important;
+    line-height: 1.38 !important;
+    margin: 18px 0 15px 0 !important;
   }
 }

@@ -1,6 +1,6 @@
 /* Mari Mou: shared brand palette, three editorial compositions, restrained motion. */
 .portfolio-site.experience-site{--dark:#1b1d15;--ivory:#f2f1e8;--lime:#bddb42;--muted:#aeb39d;--surface:#23271c;--surface-raised:#303625;--hairline:#a6bb6133;--page-padding:clamp(22px,5vw,80px);background-color:var(--dark);background-image:linear-gradient(rgba(161,178,94,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(161,178,94,.065) 1px,transparent 1px);background-size:54px 54px;color:var(--ivory);overflow:clip;min-height:100vh;cursor:auto;color-scheme:dark}
-.portfolio-site.experience-site[data-theme=light]{--dark:#f5f6ee;--ivory:#292e21;--lime:#4d6010;--muted:#535b47;--surface:#e9eddf;--surface-raised:#dce3cf;--hairline:#5a722633;color-scheme:light;background-image:linear-gradient(#5a722612 1px,transparent 1px),linear-gradient(90deg,#5a722612 1px,transparent 1px)}
+.portfolio-site.experience-site[data-theme=light]{--dark:#f5f6ee;--ivory:#292e21;--lime:#bddb42;--muted:#535b47;--surface:#e9eddf;--surface-raised:#dce3cf;--hairline:#5a722633;color-scheme:light;background-image:linear-gradient(#5a722612 1px,transparent 1px),linear-gradient(90deg,#5a722612 1px,transparent 1px)}
 .experience-site .wrap{width:min(1280px,calc(100% - 2 * var(--page-padding)));margin-inline:auto}
 /* Case chapters switch to a solid canvas after their sub-navigation; the vertical clip keeps the full-bleed fill from covering the hero above. */
 .experience-site :is(.sc-chapter-nav,.lv-chapter-nav,.case-chapter-nav) ~ :not(.sc-chapter-shortcuts){
