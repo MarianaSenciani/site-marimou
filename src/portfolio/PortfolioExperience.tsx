@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { MotionConfig } from 'framer-motion';
 import { useChapterScroll, scrollToContact } from './useChapterScroll';
 import { ArrowUp } from 'lucide-react';
@@ -37,7 +37,7 @@ export default function PortfolioExperience({ path }: { path: string }) {
   const [heroVisible, setHeroVisible] = useState(true);
   const scrollToTop = useChapterScroll(path === '/' || path === '/sobre', paused);
   useEffect(() => { const media = matchMedia('(prefers-reduced-motion: reduce)'); const change = () => { if (readPreference('mari-motion-paused') === null) setPaused(media.matches); }; media.addEventListener('change', change); return () => media.removeEventListener('change', change); }, []);
-  useEffect(() => { try { localStorage.setItem('mari-language', lang); localStorage.setItem('mari-theme', theme); localStorage.setItem('mari-motion-paused', String(paused)); } catch { /* Preferences remain available for this visit. */ } document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang; document.documentElement.style.colorScheme = theme; document.documentElement.classList.toggle('dark', theme === 'dark'); document.documentElement.classList.toggle('motion-paused', paused); document.body.style.backgroundColor = theme === 'dark' ? '#1b1d15' : '#f5f6ee'; }, [lang, theme, paused]);
+  useLayoutEffect(() => { try { localStorage.setItem('mari-language', lang); localStorage.setItem('mari-theme', theme); localStorage.setItem('mari-motion-paused', String(paused)); } catch { /* Preferences remain available for this visit. */ } document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang; document.documentElement.style.colorScheme = theme; document.documentElement.classList.toggle('dark', theme === 'dark'); document.documentElement.classList.toggle('motion-paused', paused); document.body.style.backgroundColor = theme === 'dark' ? '#1b1d15' : '#f5f6ee'; }, [lang, theme, paused]);
   useEffect(() => {
     if (path === '/' && (window.location.hash === '#contato' || sessionStorage.getItem('scroll-contato-easein'))) {
       sessionStorage.removeItem('scroll-contato-easein');

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { ArrowUpRight, ChevronDown, Download, Menu, Moon, Sun, X, Pause, Play } from 'lucide-react';
 import { useMotionPaused } from '@/components/ui/motion-context';
 import { useExperience, type Language } from './experience-context';
@@ -37,6 +38,46 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
   const cvFile = lang === 'en' ? 'EN_Mariana-Senciani.pdf' : 'PT_Mariana-Senciani.pdf';
   const cvHref = import.meta.env.DEV ? `/api/cv/pdf?lang=${lang}` : `/${cvFile}`;
 
+  const handleThemeToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    const doc = document as Document & {
+      startViewTransition?: (callback: () => void) => { ready: Promise<void> };
+    };
+    const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (paused || reduced || !doc.startViewTransition) {
+      setTheme(nextTheme);
+      return;
+    }
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = rect.width > 0 ? rect.left + rect.width / 2 : window.innerWidth - 36;
+    const y = rect.height > 0 ? rect.top + rect.height / 2 : 36;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+    const transition = doc.startViewTransition(() => {
+      flushSync(() => setTheme(nextTheme));
+    });
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${endRadius}px at ${x}px ${y}px)`,
+            ],
+          },
+          {
+            duration: 950,
+            easing: 'cubic-bezier(0.37, 0, 0.2, 1)',
+            fill: 'both',
+            pseudoElement: '::view-transition-new(root)',
+          }
+        );
+      })
+      .catch(() => {});
+  };
+
   const controls = (isMobile = false) => <>
     <a
       className="pill primary header-talk header-cv"
@@ -49,7 +90,7 @@ export function SiteHeader({ path, onToggleMotion, motionDisabled }: { path: str
       <Download size={14} />
     </a>
     <details className="header-dropdown language-selector"><summary aria-label={t('Selecionar idioma', 'Select language', 'Elegir idioma')}><LanguageFlag language={lang} /><ChevronDown size={11} /></summary><div className="header-dropdown-panel">{(['pt', 'en', 'es'] as Language[]).map(code => <button key={code} lang={code} aria-pressed={lang === code} onClick={event => { setLang(code); event.currentTarget.closest('details')!.open = false; }}>{({ pt: '🇧🇷 Português', en: '🇬🇧 English', es: '🇪🇸 Español' })[code]}</button>)}</div></details>
-    <button className="theme-control" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={theme === 'dark' ? t('Ativar tema claro', 'Use light theme', 'Activar tema claro') : t('Ativar tema escuro', 'Use dark theme', 'Activar tema oscuro')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button>
+    <button className="theme-control" onClick={handleThemeToggle} aria-label={theme === 'dark' ? t('Ativar tema claro', 'Use light theme', 'Activar tema claro') : t('Ativar tema escuro', 'Use dark theme', 'Activar tema oscuro')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button>
     {!isMobile && <button className="theme-control motion-control" onClick={onToggleMotion} aria-pressed={paused} aria-label={paused ? t('Retomar motions e animações', 'Resume motion & animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')} title={paused ? t('Retomar motions e animações', 'Resume motion & animations', 'Reanudar animaciones') : t('Pausar motions e animações', 'Pause motion & animations', 'Pausar animaciones')}>{paused ? <Play size={18} /> : <Pause size={18} />}</button>}
   </>;
   return <header ref={ref} className={`experience-header wrap ${scrolled ? 'is-scrolled' : ''}`}>

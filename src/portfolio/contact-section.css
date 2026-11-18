@@ -1,6 +1,6 @@
 .experience-site .contact-redesign{box-sizing:border-box;padding:clamp(28px,5vw,72px);padding-block:96px 40px;margin-block:0;min-height:100svh;display:grid;align-content:center;text-align:left}
 .contact-redesign h2{text-align:left!important}
-.experience-site .contact-redesign .contact-lead{color:var(--muted);font-size:15px;line-height:1.8}
+.experience-site .contact-redesign .contact-lead{color:var(--muted);font-family:Inter,sans-serif;font-size:13px!important;font-weight:400;line-height:1.48!important}
 .contact-redesign .meeting-duration{color:var(--muted)}
 .contact-redesign .contact-text-cta{font-size:14px;max-width:100%;white-space:normal;text-align:left}
 .contact-redesign .contact-text-cta:focus-visible{outline:2px solid var(--ivory);outline-offset:5px}
@@ -12,13 +12,14 @@
 .restored-footer .footer-bottom{justify-content:flex-end}
 .contact-option-2 .contact-composition{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);gap:clamp(32px,6vw,88px);align-items:center}
 .contact-option-2 .contact-copy{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:0}
-.experience-site .contact-option-2 .contact-copy h2{margin:0 0 4px 0!important;line-height:1.18;order:1}
-.experience-site .contact-option-2 .contact-copy .contact-lead{margin:0 0 20px 0!important;max-width:560px;order:2}
-.experience-site .contact-option-2 .contact-copy .contact-lead + .contact-lead{margin-top:-12px!important}
-.contact-option-2 .contact-copy .meeting-duration{order:4;margin:0!important;font-size:12px}
-.contact-option-2 .contact-copy .contact-text-cta{order:3;margin:0 0 4px 0!important}
+.experience-site .contact-option-2 .contact-copy h2{margin:0!important;line-height:1.15;order:1}
+.experience-site .contact-option-2 .contact-copy .contact-lead{margin:18px 0!important;max-width:560px;order:2}
+.experience-site .contact-option-2 .contact-copy .contact-lead + .contact-lead{margin-top:-10px!important}
+.contact-option-2 .contact-copy .meeting-duration{order:4;margin:8px 0 0 0!important;font-size:12px}
+.contact-option-2 .contact-copy .contact-text-cta{order:3;margin:0!important}
 .contact-phone-scene{margin:0;justify-self:center;width:min(100%,320px);min-width:0}
-.contact-phone{position:relative;border:5px solid #303625;border-radius:44px;background:#1b1d15;color:#f2f1e8;box-shadow:0 0 0 1px rgba(174,179,157,0.3),0 20px 45px -10px rgba(0,0,0,0.75),0 35px 80px -15px rgba(0,0,0,0.85);overflow:hidden;font-family:Inter,sans-serif}
+.contact-phone{position:relative;border:5px solid #303625;border-radius:44px;background:#1b1d15;color:#f2f1e8;box-shadow:0 0 0 1px rgba(174,179,157,0.26),0 14px 32px -10px rgba(0,0,0,0.55),0 24px 48px -16px rgba(0,0,0,0.45);overflow:hidden;font-family:Inter,sans-serif}
+.experience-site[data-theme=light] .contact-phone{box-shadow:0 0 0 1px rgba(41,46,33,0.14),0 12px 26px -10px rgba(17,19,14,0.24),0 20px 40px -16px rgba(17,19,14,0.16)}
 .phone-status{position:relative;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:11px;font-weight:600}
 .phone-status>i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:85px;height:22px;border-radius:20px;background:#11130e}
 .phone-status>span:last-child{display:flex;gap:4px;align-items:center}
